@@ -1,0 +1,5 @@
+packages:
+  # Include all packages in direct subdirectories of packages/
+  - 'packages/*'
+  # Include the current package
+  - '.' 

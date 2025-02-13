@@ -1,0 +1,64 @@
+{
+  "name": "@zap/flash-langchain",
+  "description": "FLASH Langchain",
+  "repository": "https://github.com/0xZap/flash",
+  "version": "0.0.1",
+  "author": "Zap Labs",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "npx --yes eslint -c .eslintrc.json src/**/*.ts",
+    "lint:fix": "npx --yes eslint -c .eslintrc.json src/**/*.ts --fix",
+    "format": "npx --yes prettier -c .prettierrc --write \"**/*.{ts,js,cjs,json,md}\"",
+    "format-check": "npx --yes prettier -c .prettierrc --check \"**/*.{ts,js,cjs,json,md}\"",
+    "check": "tsc --noEmit",
+    "test": "npx jest --no-cache --testMatch='**/*_test.ts'",
+    "test:dry-run": "npm install && npm ci && npm publish --dry-run",
+    "test:e2e": "npx jest --no-cache --testMatch=**/e2e.ts --coverageThreshold '{}'",
+    "test:types": "tsd --files src/tests/types.test-d.ts",
+    "clean": "rm -rf dist/*",
+    "prepack": "tsc",
+    "docs": "npx --yes typedoc --entryPoints ./src --entryPointStrategy expand --exclude ./src/tests/**/*.ts",
+    "docs:serve": "http-server ./docs",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "zap",
+    "sdk",
+    "crypto",
+    "zap tools",
+    "ai",
+    "agent",
+    "nodejs",
+    "typescript",
+    "langchain"
+  ],
+  "dependencies": {
+    "@langchain/core": "^0.3.39",
+    "tools": "link:@langchain/core/tools",
+    "viem": "^2.21.51",
+    "@zap/flash": "0.0.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/secp256k1": "^4.0.6",
+    "http-server": "^14.1.1",
+    "jest": "^29.7.0",
+    "mock-fs": "^5.2.0",
+    "ts-jest": "^29.2.5",
+    "tsd": "^0.31.2",
+    "typescript": "^5.7.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  }
+}
