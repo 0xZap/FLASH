@@ -1,5 +1,5 @@
 import { StructuredTool } from "@langchain/core/tools";
-import { ZapAction, ZapActionSchema } from "zap_tools_core";
+import { ZapAction, ZapActionSchema } from "@0xzap/flash";
 import { z } from "zod";
 
 export class ZapTool<TActionSchema extends ZapActionSchema> extends StructuredTool {
