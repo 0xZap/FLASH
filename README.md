@@ -3,7 +3,7 @@
 
 <div align="center">
   
-[Visit our website](https://www.0xzap.com/)          [X](https://x.com/0xZapLab)
+[Visit our website](https://www.0xzap.com/)         [X](https://x.com/0xZapLab)
 
 </div>
 
