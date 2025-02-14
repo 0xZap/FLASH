@@ -1,5 +1,5 @@
 {
-  "name": "@zap/flash",
+  "name": "@0xzap/flash",
   "publishConfig": {
     "access": "public"
   },
