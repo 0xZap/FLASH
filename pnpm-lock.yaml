@@ -54,14 +54,11 @@ importers:
   flash-langchain:
     dependencies:
       '@0xzap/flash':
-        specifier: 0.0.1
-        version: 0.0.1
+        specifier: 0.0.2
+        version: 0.0.2
       '@langchain/core':
         specifier: ^0.3.39
         version: 0.3.40
-      tools:
-        specifier: link:@langchain/core/tools
-        version: link:@langchain/core/tools
       viem:
         specifier: ^2.21.51
         version: 2.23.2(typescript@5.7.3)(zod@3.24.2)
@@ -96,8 +93,8 @@ importers:
 
 packages:
 
-  '@0xzap/flash@0.0.1':
-    resolution: {integrity: sha512-hSqq5Pfehp14UvwMaNHWetm6HLU+IyEmkmnPHt9yMnbAAZw47xK3nXyjRNovfHY2DJ6rvXDkBFkpX2T4/qLTVQ==}
+  '@0xzap/flash@0.0.2':
+    resolution: {integrity: sha512-FbXBY86bSVXLRozPvSkxx4YXoj4cGaY9gArk/qUmaUK2oBT3e/3rnGo1qTLn1RJB6qzCsDcmV/0y8GlpB+VmgQ==}
 
   '@adraffy/ens-normalize@1.11.0':
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
@@ -2398,7 +2395,7 @@ packages:
 
 snapshots:
 
-  '@0xzap/flash@0.0.1':
+  '@0xzap/flash@0.0.2':
     dependencies:
       axios: 1.7.9
       nock: 14.0.1
