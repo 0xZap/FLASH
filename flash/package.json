@@ -1,5 +1,8 @@
 {
   "name": "@zap/flash",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "FLASH Framework-agnostic Library for Agentic System Hubs",
   "repository": "https://github.com/0xZap/flash",
   "version": "0.0.1",
