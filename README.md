@@ -61,3 +61,6 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ## Guides and examples 📚
 
 ## Contributors ✨
+<a href="https://github.com/0xZap/flash/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=0xZap/flash" alt="Flash project contributors" />
+</a>
