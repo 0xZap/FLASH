@@ -17,15 +17,16 @@ const ConfigSchema = z.object({
 });
 
 /**
- *
+ * Configuration class for managing API keys and tokens using the Singleton pattern.
  */
 export class ZapConfig {
   private static instance: ZapConfig | null = null;
   private readonly config: ZapConfigParams;
 
   /**
+   * Private constructor to initialize the configuration with optional parameters.
    *
-   * @param params
+   * @param params - Optional configuration parameters that override environment variables
    */
   private constructor(params?: ZapConfigParams) {
     // First try params, then env vars
@@ -42,8 +43,10 @@ export class ZapConfig {
   }
 
   /**
+   * Gets the singleton instance of ZapConfig, creating it if it doesn't exist.
    *
-   * @param params
+   * @param params - Optional configuration parameters that override environment variables
+   * @returns The singleton instance of ZapConfig
    */
   public static getInstance(params?: ZapConfigParams): ZapConfig {
     if (!ZapConfig.instance) {
@@ -53,14 +56,17 @@ export class ZapConfig {
   }
 
   /**
-   *
+   * Resets the singleton instance to null, allowing for re-initialization.
    */
   public static resetInstance(): void {
     ZapConfig.instance = null;
   }
 
   /**
+   * Retrieves the Hyperbolic API key from the configuration.
    *
+   * @returns The Hyperbolic API key string
+   * @throws Error if the API key is not found
    */
   public getHyperbolicApiKey(): string {
     const apiKey = this.config.hyperbolicApiKey;
@@ -73,7 +79,10 @@ export class ZapConfig {
   }
 
   /**
+   * Retrieves the Google token from the configuration.
    *
+   * @returns The Google token string
+   * @throws Error if the token is not found
    */
   public getGoogleToken(): string {
     const token = this.config.googleToken;
@@ -86,7 +95,10 @@ export class ZapConfig {
   }
 
   /**
+   * Retrieves the EVM API key from the configuration.
    *
+   * @returns The EVM API key string
+   * @throws Error if the API key is not found
    */
   public getEvmApiKey(): string {
     const apiKey = this.config.evmApiKey;
@@ -99,7 +111,10 @@ export class ZapConfig {
   }
 
   /**
+   * Retrieves the Telegram API key from the configuration.
    *
+   * @returns The Telegram API key string
+   * @throws Error if the API key is not found
    */
   public getTelegramApiKey(): string {
     const apiKey = this.config.telegramApiKey;
@@ -112,7 +127,10 @@ export class ZapConfig {
   }
 
   /**
+   * Retrieves the Twitter API key from the configuration.
    *
+   * @returns The Twitter API key string
+   * @throws Error if the API key is not found
    */
   public getTwitterApiKey(): string {
     const apiKey = this.config.twitterApiKey;

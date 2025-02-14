@@ -12,6 +12,9 @@ export class ZapToolkit extends Toolkit {
 
   /**
    * Creates a new Zap Toolkit instance
+   *
+   * @param hyperbolicConfig - Optional configuration for Hyperbolic API
+   * @param googleConfig - Optional configuration for Google API
    */
   constructor(hyperbolicConfig?: HyperbolicConfig, googleConfig?: GoogleConfig) {
     super();
@@ -20,6 +23,11 @@ export class ZapToolkit extends Toolkit {
     this.tools = this.initializeTools();
   }
 
+  /**
+   * Initializes the Zap tools with the provided configurations
+   *
+   * @returns An array of structured tool interfaces
+   */
   private initializeTools(): StructuredToolInterface[] {
     // If hyperbolicConfig is provided, ensure it's set as the instance
     if (this.hyperbolicConfig) {

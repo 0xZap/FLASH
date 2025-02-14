@@ -54,18 +54,12 @@ export async function rentCompute(params: z.infer<typeof RentComputeSchema>) {
       },
     );
 
-    // Validate response data structure
-    if (!response.data?.instance) {
-      throw new Error("Invalid response format: missing instance data");
-    }
-
     // Format response
-    const instance = response.data.instance;
+
     const formattedResponse = `Successfully requested GPU instance:
 - Node: ${params.node_id}
 - Cluster: ${params.cluster_name}
 - GPU Count: ${params.gpu_count}
-- Status: ${instance.status}
 
 Your instance is being provisioned. You can check its status using the GetGPUStatus command.`;
 

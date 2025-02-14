@@ -14,6 +14,7 @@ export class HyperbolicConfig {
 
   /**
    * Creates a new HyperbolicConfig instance.
+   *
    * @param params - Optional configuration parameters for Hyperbolic API
    */
   private constructor(params?: HyperbolicConfigParams) {
@@ -40,6 +41,7 @@ export class HyperbolicConfig {
 
   /**
    * Gets the singleton instance of HyperbolicConfig.
+   *
    * @param params - Optional configuration parameters for Hyperbolic API
    * @returns The HyperbolicConfig instance
    */
@@ -51,7 +53,8 @@ export class HyperbolicConfig {
   }
 
   /**
-   *
+   * Resets the singleton instance of HyperbolicConfig to null.
+   * This allows for re-initialization of the config with new parameters.
    */
   public static resetInstance(): void {
     HyperbolicConfig.instance = null;
@@ -59,6 +62,7 @@ export class HyperbolicConfig {
 
   /**
    * Gets the Hyperbolic API key.
+   *
    * @returns The Hyperbolic API key string
    */
   public getApiKey(): string {

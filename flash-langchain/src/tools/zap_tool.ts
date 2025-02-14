@@ -2,6 +2,10 @@ import { StructuredTool } from "@langchain/core/tools";
 import { ZapAction, ZapActionSchema } from "@0xzap/flash";
 import { z } from "zod";
 
+/**
+ * A tool class that wraps a Zap action for use with LangChain
+ *
+ */
 export class ZapTool<TActionSchema extends ZapActionSchema> extends StructuredTool {
   public schema: TActionSchema;
   public name: string;
@@ -10,6 +14,7 @@ export class ZapTool<TActionSchema extends ZapActionSchema> extends StructuredTo
 
   /**
    * Constructor for the Zap Tool class
+   *
    * @param action - The Zap action to execute
    */
   constructor(action: ZapAction<TActionSchema>) {
@@ -43,8 +48,7 @@ export class ZapTool<TActionSchema extends ZapActionSchema> extends StructuredTo
           // If schema validation fails, fall back to instructions-only mode
           args = input;
         }
-      }
-      else {
+      } else {
         args = input;
       }
 
