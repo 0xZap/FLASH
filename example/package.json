@@ -15,8 +15,8 @@
     "format-check": "prettier -c .prettierrc --check \"**/*.{ts,js,cjs,json,md}\""
   },
   "dependencies": {
-    "@0xzap/flash-langchain": "0.0.1",
-    "@0xzap/flash": "0.0.2",
+    "@0xzap/flash-langchain": "0.0.2",
+    "@0xzap/flash": "0.0.3",
     "@langchain/core": "^0.3.19",
     "@langchain/langgraph": "^0.2.21",
     "@langchain/openai": "^0.3.14",
@@ -24,8 +24,6 @@
     "express": "^4.21.2",
     "google-auth-library": "^9.6.3",
     "googleapis": "^133.0.0",
-    "zap-langchain": "0.0.4",
-    "zap_tools_core": "0.0.9",
     "zod": "^3.22.4"
   },
   "devDependencies": {
