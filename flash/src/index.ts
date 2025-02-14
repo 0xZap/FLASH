@@ -9,5 +9,8 @@ export * from "./actions/google";
 
 export * from "./actions/hyperbolic";
 
-export * from "./config/zap_config";
+export * from "./config/google_config";
 
+export * from "./config/hyperbolic_config";
+
+export * from "./config/zap_config";

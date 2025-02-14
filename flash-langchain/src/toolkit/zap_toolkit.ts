@@ -1,5 +1,5 @@
 import { StructuredToolInterface, BaseToolkit as Toolkit } from "@langchain/core/tools";
-import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig } from "zap_tools_core";
+import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig } from "@0xzap/flash";
 import { ZapTool } from "../tools/zap_tool";
 
 /**
