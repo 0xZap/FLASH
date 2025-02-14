@@ -1,7 +1,7 @@
 import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
-import { HyperbolicConfig } from "./config/hyperbolic_config";
+import { HyperbolicConfig } from "../../config/hyperbolic_config";
 
 // Schema for GPU instance response data
 const GpuInstanceSchema = z.object({
@@ -61,12 +61,12 @@ Important notes:
  * @returns Formatted string of GPU instance statuses.
  */
 export async function getGpuStatus() {
-  const config = HyperbolicConfig.getInstance();
-  const apiKey = config.getApiKey();
+    const config = HyperbolicConfig.getInstance();
+    const apiKey = config.getApiKey();
 
-  if (!apiKey) {
-    throw new Error("Hyperbolic API key not found");
-  }
+    if (!apiKey) {
+        throw new Error("Hyperbolic API key not found");
+    }
 
   try {
     const response = await axios.get("https://api.hyperbolic.xyz/v1/marketplace/instances", {

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
-import { HyperbolicConfig } from "./config/hyperbolic_config";
+import { HyperbolicConfig } from "../../config/hyperbolic_config";
 
 // Schema for spend history response data
 const SpendHistoryEntrySchema = z.object({
@@ -71,23 +71,20 @@ function calculateDurationSeconds(startTime: string, endTime: string): number {
  * @returns Formatted string of spending history.
  */
 export async function getSpendHistory(options?: {}) {
-  const config = HyperbolicConfig.getInstance();
-  const apiKey = config.getApiKey();
+    const config = HyperbolicConfig.getInstance();
+    const apiKey = config.getApiKey();
 
-  if (!apiKey) {
-    throw new Error("Hyperbolic API key not found");
-  }
+    if (!apiKey) {
+        throw new Error("Hyperbolic API key not found");
+    }
 
   try {
-    const response = await axios.get(
-      "https://api.hyperbolic.xyz/v1/marketplace/instances/history",
-      {
+        const response = await axios.get("https://api.hyperbolic.xyz/v1/marketplace/instances/history", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
         },
-      },
-    );
+      });
 
     const instances = z.array(SpendHistoryEntrySchema).parse(response.data.instance_history || []);
     if (instances.length === 0) {

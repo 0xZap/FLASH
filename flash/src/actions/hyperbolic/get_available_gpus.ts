@@ -1,7 +1,7 @@
 import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
-import { HyperbolicConfig } from "./config/hyperbolic_config";
+import { HyperbolicConfig } from "../../config/hyperbolic_config";
 
 // Schema for GPU response data
 const GpuSchema = z.object({
@@ -39,15 +39,16 @@ Important notes:
  * @returns Formatted string of available GPUs.
  */
 export async function getAvailableGpus() {
-  const config = HyperbolicConfig.getInstance();
-  const apiKey = config.getApiKey();
-
-  // Check if API key is found
-  if (!apiKey) {
-    throw new Error("Hyperbolic API key not found");
-  }
-
-  try {
+    
+    const config = HyperbolicConfig.getInstance();
+    const apiKey = config.getApiKey();
+    
+    // Check if API key is found
+    if (!apiKey) {
+        throw new Error("Hyperbolic API key not found");
+    }
+    
+    try {
     const response = await axios.post(
       "https://api.hyperbolic.xyz/v1/marketplace",
       { filters: {} },

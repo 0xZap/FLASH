@@ -1,7 +1,7 @@
 import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
-import { HyperbolicConfig } from "./config/hyperbolic_config";
+import { HyperbolicConfig } from "../../config/hyperbolic_config";
 
 // Schema for rental input
 const RentComputeSchema = z
@@ -35,7 +35,7 @@ export async function rentCompute(params: z.infer<typeof RentComputeSchema>) {
   const apiKey = config.getApiKey();
 
   if (!apiKey) {
-    throw new Error("Hyperbolic API key not found");
+      throw new Error("Hyperbolic API key not found");
   }
 
   try {
@@ -84,10 +84,10 @@ export class RentComputeAction implements ZapAction<typeof RentComputeSchema> {
   public name = "rent_compute";
   public description = RENT_COMPUTE_PROMPT;
   public schema = RentComputeSchema;
-  public func = (args: { [key: string]: any }) =>
+  public func = (args: { [key: string]: any }) => 
     rentCompute({
       node_id: args.node_id,
       cluster_name: args.cluster_name,
-      gpu_count: args.gpu_count,
+      gpu_count: args.gpu_count
     });
 }

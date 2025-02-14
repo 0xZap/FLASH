@@ -1,4 +1,4 @@
-import { HyperbolicConfig } from "../config/hyperbolic_config";
+import { HyperbolicConfig } from "../../../config/hyperbolic_config";
 
 export const getApiKey = () => {
   const apiKey = HyperbolicConfig.getInstance().getApiKey();

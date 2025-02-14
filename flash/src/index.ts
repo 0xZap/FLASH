@@ -11,6 +11,3 @@ export * from "./actions/hyperbolic";
 
 export * from "./config/zap_config";
 
-export * from "./actions/google/config/google_config";
-
-export * from "./actions/hyperbolic/config/hyperbolic_config";
