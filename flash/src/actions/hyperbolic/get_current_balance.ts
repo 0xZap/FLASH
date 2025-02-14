@@ -37,12 +37,12 @@ No input parameters required.
  * @returns Formatted string of current balance and purchase history.
  */
 export async function getCurrentBalance(httpClient = axios) {
-    const config = HyperbolicConfig.getInstance();
-    const apiKey = config.getApiKey();
-    if (!apiKey) {
-        throw new Error("Hyperbolic API key not found");
-    }
-    try {
+  const config = HyperbolicConfig.getInstance();
+  const apiKey = config.getApiKey();
+  if (!apiKey) {
+    throw new Error("Hyperbolic API key not found");
+  }
+  try {
     // Get current balance
     const balanceResponse = await httpClient.get(
       "https://api.hyperbolic.xyz/v1/billing/get_current_balance",

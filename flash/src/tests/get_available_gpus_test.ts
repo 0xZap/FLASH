@@ -7,41 +7,56 @@ import axios from "axios";
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+/**
+ *
+ */
 class GetAvailableGpusTest {
   OLD_ENV: NodeJS.ProcessEnv;
 
+  /**
+   *
+   */
   constructor() {
     this.OLD_ENV = process.env;
   }
 
+  /**
+   *
+   */
   beforeEach() {
     // Reset modules and environment before each test
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
-    
+
     // Reset singleton instances
     ZapConfig.resetInstance();
     HyperbolicConfig.resetInstance();
-    
+
     // Set up required environment variables
     process.env.HYPERBOLIC_API_KEY = "test-api-key";
-    
+
     // Initialize configs with test values if needed
     ZapConfig.getInstance({
       hyperbolicApiKey: "test-api-key",
     });
-    
+
     // Initialize HyperbolicConfig after ZapConfig
     HyperbolicConfig.getInstance({
-      apiKey: "test-api-key"
+      apiKey: "test-api-key",
     });
   }
 
+  /**
+   *
+   */
   afterEach() {
     // Clean up after each test
     jest.clearAllMocks();
   }
 
+  /**
+   *
+   */
   async testFetchGpuInformation() {
     // Your test implementation
     const mockResponse = {
@@ -51,9 +66,9 @@ class GetAvailableGpusTest {
             id: "test-node",
             status: "ready",
             // ... rest of your mock data
-          }
-        ]
-      }
+          },
+        ],
+      },
     };
 
     mockedAxios.post.mockResolvedValueOnce(mockResponse);
@@ -82,8 +97,6 @@ describe("Get Available GPUs", () => {
     HyperbolicConfig.resetInstance();
     delete process.env.HYPERBOLIC_API_KEY;
 
-    await expect(getAvailableGpus()).rejects.toThrow(
-      "Hyperbolic API key not found"
-    );
+    await expect(getAvailableGpus()).rejects.toThrow("Hyperbolic API key not found");
   });
 });

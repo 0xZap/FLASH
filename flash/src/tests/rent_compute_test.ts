@@ -17,13 +17,22 @@ const MOCK_RENT_RESPONSE = {
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+/**
+ *
+ */
 class RentComputeTest {
   OLD_ENV: NodeJS.ProcessEnv;
 
+  /**
+   *
+   */
   constructor() {
     this.OLD_ENV = process.env;
   }
 
+  /**
+   *
+   */
   beforeEach() {
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
@@ -34,11 +43,17 @@ class RentComputeTest {
     HyperbolicConfig.getInstance({ apiKey: "test-api-key" });
   }
 
+  /**
+   *
+   */
   afterEach() {
     process.env = this.OLD_ENV;
     jest.clearAllMocks();
   }
 
+  /**
+   *
+   */
   async testRentGpuCompute() {
     mockedAxios.post.mockResolvedValueOnce({ data: MOCK_RENT_RESPONSE });
 
@@ -94,9 +109,7 @@ describe("Rent Compute", () => {
       gpu_count: 2,
     };
 
-    await expect(rentCompute(params)).rejects.toThrow(
-      "Failed to rent compute",
-    );
+    await expect(rentCompute(params)).rejects.toThrow("Failed to rent compute");
   });
 
   it("should handle API errors appropriately", async () => {

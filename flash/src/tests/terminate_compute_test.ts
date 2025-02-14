@@ -12,13 +12,22 @@ const MOCK_TERMINATE_RESPONSE = {
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+/**
+ *
+ */
 class TerminateComputeTest {
   OLD_ENV: NodeJS.ProcessEnv;
 
+  /**
+   *
+   */
   constructor() {
     this.OLD_ENV = process.env;
   }
 
+  /**
+   *
+   */
   beforeEach() {
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
@@ -29,11 +38,17 @@ class TerminateComputeTest {
     HyperbolicConfig.getInstance({ apiKey: "test-api-key" });
   }
 
+  /**
+   *
+   */
   afterEach() {
     process.env = this.OLD_ENV;
     jest.clearAllMocks();
   }
 
+  /**
+   *
+   */
   async testTerminateCompute() {
     mockedAxios.post.mockResolvedValueOnce({ data: MOCK_TERMINATE_RESPONSE });
 

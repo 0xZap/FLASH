@@ -1,6 +1,10 @@
 import { z } from "zod";
 import axios from "axios";
-import { insertCalendarEvent, GoogleInsertCalendarEventRequest, CalendarEventResponse } from "../../actions/google/insert_calendar_events";
+import {
+  insertCalendarEvent,
+  GoogleInsertCalendarEventRequest,
+  CalendarEventResponse,
+} from "../../actions/google/insert_calendar_events";
 import { GoogleConfig } from "../../actions/google/config/google_config";
 
 jest.mock("axios");
@@ -17,16 +21,16 @@ class InsertCalendarEventTest {
     // Reset modules and environment before each test
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
-    
+
     // Reset singleton instance
     GoogleConfig.resetInstance();
-    
+
     // Set up required environment variables
     process.env.GOOGLE_API_TOKEN = "test-token";
-    
+
     // Initialize config with test values
     GoogleConfig.getInstance({
-      token: "test-token"
+      token: "test-token",
     });
   }
 
@@ -45,7 +49,7 @@ class InsertCalendarEventTest {
       end_datetime: "2024-02-11T11:00:00Z",
       attendees: ["attendee1@example.com", "attendee2@example.com"],
       send_updates: "none",
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -60,68 +64,68 @@ class InsertCalendarEventTest {
       description: "Test Description",
       creator: {
         email: "creator@example.com",
-        displayName: "Test Creator"
+        displayName: "Test Creator",
       },
       organizer: {
         email: "organizer@example.com",
-        displayName: "Test Organizer"
+        displayName: "Test Organizer",
       },
       start: {
         dateTime: "2024-02-11T10:00:00Z",
-        timeZone: "UTC"
+        timeZone: "UTC",
       },
       end: {
         dateTime: "2024-02-11T11:00:00Z",
-        timeZone: "UTC"
+        timeZone: "UTC",
       },
       attendees: [
         {
           email: "attendee1@example.com",
           displayName: "Test Attendee 1",
-          responseStatus: "needsAction"
+          responseStatus: "needsAction",
         },
         {
           email: "attendee2@example.com",
           displayName: "Test Attendee 2",
-          responseStatus: "needsAction"
-        }
+          responseStatus: "needsAction",
+        },
       ],
-      ...overrides
+      ...overrides,
     };
   }
 
   async testSuccessfulEventCreation() {
     const params = this.getValidEventParams();
     const mockResponse = this.getMockEventResponse();
-    
+
     mockedAxios.post.mockResolvedValueOnce({
-      data: mockResponse
+      data: mockResponse,
     });
 
-    const result = await insertCalendarEvent(params) as CalendarEventResponse;
-    
+    const result = (await insertCalendarEvent(params)) as CalendarEventResponse;
+
     expect(mockedAxios.post).toHaveBeenCalledWith(
       `https://www.googleapis.com/calendar/v3/calendars/${params.calendar_id}/events`,
       {
         summary: params.summary,
         description: params.description,
         start: {
-          dateTime: params.start_datetime
+          dateTime: params.start_datetime,
         },
         end: {
-          dateTime: params.end_datetime
+          dateTime: params.end_datetime,
         },
-        attendees: params.attendees.map(email => ({ email }))
+        attendees: params.attendees.map(email => ({ email })),
       },
       {
         params: {
-          sendUpdates: params.send_updates
+          sendUpdates: params.send_updates,
         },
         headers: {
           Authorization: "Bearer test-token",
-          "Content-Type": "application/json"
-        }
-      }
+          "Content-Type": "application/json",
+        },
+      },
     );
 
     expect(result.id).toBe("event123");
@@ -136,54 +140,52 @@ class InsertCalendarEventTest {
 
     const params = this.getValidEventParams();
     const result = await insertCalendarEvent(params);
-    
+
     expect(result).toBe("failed to insert calendar event. error: token not found");
     expect(mockedAxios.post).not.toHaveBeenCalled();
   }
 
   async testInvalidCalendarId() {
     const params = this.getValidEventParams({
-      calendar_id: "invalid-calendar-id" // Not in email format
+      calendar_id: "invalid-calendar-id", // Not in email format
     });
 
     await expect(insertCalendarEvent(params)).rejects.toThrow(
-      /Calendar ID must be in email format/
+      /Calendar ID must be in email format/,
     );
   }
 
   async testInvalidDateTime() {
     const params = this.getValidEventParams({
       start_datetime: "invalid-date",
-      end_datetime: "2024-02-11T11:00:00Z"
+      end_datetime: "2024-02-11T11:00:00Z",
     });
 
-    await expect(insertCalendarEvent(params)).rejects.toThrow(
-      /Must be RFC3339 format/
-    );
+    await expect(insertCalendarEvent(params)).rejects.toThrow(/Must be RFC3339 format/);
   }
 
   async testInvalidAttendeeEmail() {
     const params = this.getValidEventParams({
-      attendees: ["not-an-email", "valid@example.com"]
+      attendees: ["not-an-email", "valid@example.com"],
     });
 
     await expect(insertCalendarEvent(params)).rejects.toThrow(
-      /Each attendee must be a valid email/
+      /Each attendee must be a valid email/,
     );
   }
 
   async testApiError() {
     const params = this.getValidEventParams();
-    
+
     mockedAxios.post.mockRejectedValueOnce({
       isAxiosError: true,
       response: {
         data: {
           error: {
-            message: "Calendar not found"
-          }
-        }
-      }
+            message: "Calendar not found",
+          },
+        },
+      },
     });
 
     const result = await insertCalendarEvent(params);
@@ -192,7 +194,7 @@ class InsertCalendarEventTest {
 
   async testNonAxiosError() {
     const params = this.getValidEventParams();
-    
+
     mockedAxios.post.mockRejectedValueOnce(new Error("Unknown error"));
 
     const result = await insertCalendarEvent(params);
@@ -202,31 +204,31 @@ class InsertCalendarEventTest {
   async testOptionalFields() {
     const params = this.getValidEventParams({
       description: undefined,
-      attendees: []
+      attendees: [],
     });
 
     const mockResponse = this.getMockEventResponse({
       description: undefined,
-      attendees: undefined
+      attendees: undefined,
     });
 
     mockedAxios.post.mockResolvedValueOnce({
-      data: mockResponse
+      data: mockResponse,
     });
 
-    const result = await insertCalendarEvent(params) as CalendarEventResponse;
-    
+    const result = (await insertCalendarEvent(params)) as CalendarEventResponse;
+
     expect(result.description).toBeUndefined();
     expect(result.attendees).toBeUndefined();
   }
 
   async testSendUpdatesOptions() {
     const params = this.getValidEventParams({
-      send_updates: "all"
+      send_updates: "all",
     });
 
     mockedAxios.post.mockResolvedValueOnce({
-      data: this.getMockEventResponse()
+      data: this.getMockEventResponse(),
     });
 
     await insertCalendarEvent(params);
@@ -236,9 +238,9 @@ class InsertCalendarEventTest {
       expect.any(Object),
       expect.objectContaining({
         params: {
-          sendUpdates: "all"
-        }
-      })
+          sendUpdates: "all",
+        },
+      }),
     );
   }
 }

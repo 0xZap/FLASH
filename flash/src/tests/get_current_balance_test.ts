@@ -24,42 +24,57 @@ const MOCK_HISTORY_RESPONSE = {
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+/**
+ *
+ */
 class GetCurrentBalanceTest {
   OLD_ENV: NodeJS.ProcessEnv;
 
+  /**
+   *
+   */
   constructor() {
     this.OLD_ENV = process.env;
   }
 
+  /**
+   *
+   */
   beforeEach() {
     // Save the current environment variables
     this.OLD_ENV = { ...process.env };
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
-    
+
     // Reset singleton instances
     ZapConfig.resetInstance();
     HyperbolicConfig.resetInstance();
-    
+
     // Set up required environment variables
     process.env.HYPERBOLIC_API_KEY = "test-api-key";
-    
+
     // Initialize configs with test values if needed
     ZapConfig.getInstance({
       hyperbolicApiKey: "test-api-key",
     });
-    
+
     // Initialize HyperbolicConfig after ZapConfig
     HyperbolicConfig.getInstance({
-      apiKey: "test-api-key"
+      apiKey: "test-api-key",
     });
   }
 
+  /**
+   *
+   */
   afterEach() {
     process.env = this.OLD_ENV;
     jest.clearAllMocks();
   }
 
+  /**
+   *
+   */
   async testFetchAndFormatBalanceInformation() {
     mockedAxios.get
       .mockResolvedValueOnce({ data: MOCK_BALANCE_RESPONSE })
@@ -121,9 +136,7 @@ describe("Get Current Balance", () => {
   it("should throw error when API key is missing", async () => {
     delete process.env.HYPERBOLIC_API_KEY;
 
-    await expect(getCurrentBalance()).rejects.toThrow(
-      "Failed to fetch balance data",
-    );
+    await expect(getCurrentBalance()).rejects.toThrow("Failed to fetch balance data");
   });
 
   it("should handle API errors appropriately", async () => {

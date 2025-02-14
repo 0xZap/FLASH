@@ -27,12 +27,12 @@ Important notes:
  * @returns Formatted response from the API
  */
 export async function linkWalletAddress(wallet_address: string) {
-    const config = HyperbolicConfig.getInstance();
-    const apiKey = config.getApiKey();
+  const config = HyperbolicConfig.getInstance();
+  const apiKey = config.getApiKey();
 
-    if (!apiKey) {
-        throw new Error("Hyperbolic API key not found");
-    }
+  if (!apiKey) {
+    throw new Error("Hyperbolic API key not found");
+  }
 
   try {
     const response = await axios.post(

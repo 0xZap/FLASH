@@ -16,10 +16,14 @@ const CalendarEntrySchema = z.object({
   primary: z.boolean().optional(),
   deleted: z.boolean().optional(),
   accessRole: z.string().optional(),
-  defaultReminders: z.array(z.object({
-    method: z.string(),
-    minutes: z.number()
-  })).optional()
+  defaultReminders: z
+    .array(
+      z.object({
+        method: z.string(),
+        minutes: z.number(),
+      }),
+    )
+    .optional(),
 });
 
 // Schema for the calendar list response
@@ -28,7 +32,7 @@ const CalendarListResponseSchema = z.object({
   etag: z.string().optional(),
   nextPageToken: z.string().optional(),
   nextSyncToken: z.string().optional(),
-  items: z.array(CalendarEntrySchema).optional()
+  items: z.array(CalendarEntrySchema).optional(),
 });
 
 // Input schema (empty as no inputs required)
@@ -49,10 +53,12 @@ Important notes:
  * Get list of calendars from Google Calendar
  * @returns Calendar list data or error message
  */
-export async function getCalendarList(): Promise<string | z.infer<typeof CalendarListResponseSchema>> {
+export async function getCalendarList(): Promise<
+  string | z.infer<typeof CalendarListResponseSchema>
+> {
   const config = GoogleConfig.getInstance();
   const token = config.getToken();
-  
+
   if (!token) {
     return "failed to get calendar list. error: token not found";
   }
@@ -63,30 +69,29 @@ export async function getCalendarList(): Promise<string | z.infer<typeof Calenda
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      }
+          "Content-Type": "application/json",
+        },
+      },
     );
 
     // Parse and validate response data
     const parsedResponse = CalendarListResponseSchema.parse(response.data);
-    
+
     // If no calendars found, return empty list
     if (!parsedResponse.items) {
       return {
         items: [],
-        kind: "calendar#calendarList"
+        kind: "calendar#calendarList",
       };
     }
 
     return parsedResponse;
-
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const errorMessage = error.response?.data?.error?.message || error.message;
       return `failed to get calendar list. error: ${errorMessage}`;
     }
-    return `failed to get calendar list. error: ${error instanceof Error ? error.message : 'Unknown error'}`;
+    return `failed to get calendar list. error: ${error instanceof Error ? error.message : "Unknown error"}`;
   }
 }
 
@@ -99,7 +104,7 @@ export class GetCalendarListAction implements ZapAction<typeof GetCalendarListSc
   public schema = GetCalendarListSchema;
   public func = async (args: {}) => {
     const result = await getCalendarList();
-    return typeof result === 'string' ? result : JSON.stringify(result);
+    return typeof result === "string" ? result : JSON.stringify(result);
   };
 }
 

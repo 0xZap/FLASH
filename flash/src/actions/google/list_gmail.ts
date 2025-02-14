@@ -13,19 +13,21 @@ const GmailMessageSchema = z.object({
   internalDate: z.string().optional(),
   payload: z.any().optional(), // Can be detailed further if needed
   sizeEstimate: z.number().optional(),
-  raw: z.string().optional()
+  raw: z.string().optional(),
 });
 
 const GmailListResponseSchema = z.object({
   messages: z.array(GmailMessageSchema).optional(),
   nextPageToken: z.string().optional(),
-  resultSizeEstimate: z.number().optional()
+  resultSizeEstimate: z.number().optional(),
 });
 
 // Input schema for the list Gmail function
-const ListGmailSchema = z.object({
-  q: z.string().optional().describe("Gmail query string for filtering messages")
-}).strict();
+const ListGmailSchema = z
+  .object({
+    q: z.string().optional().describe("Gmail query string for filtering messages"),
+  })
+  .strict();
 
 const LIST_GMAIL_PROMPT = `
 This tool will list Gmail messages using the Gmail API.
@@ -52,53 +54,49 @@ Important notes:
  * @returns Gmail messages data or error message
  */
 export async function listGmail(
-  params: z.infer<typeof ListGmailSchema>
+  params: z.infer<typeof ListGmailSchema>,
 ): Promise<string | z.infer<typeof GmailListResponseSchema>> {
   const config = GoogleConfig.getInstance();
   const token = config.getToken();
-  
+
   if (!token) {
     return "failed to get mail list. error: token not found";
   }
 
   try {
-    const response = await axios.get(
-      "https://gmail.googleapis.com/gmail/v1/users/me/messages",
-      {
-        params: {
-          q: params.q
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
+    const response = await axios.get("https://gmail.googleapis.com/gmail/v1/users/me/messages", {
+      params: {
+        q: params.q,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     // Parse and validate response data
     const parsedResponse = GmailListResponseSchema.parse(response.data);
-    
+
     // Format messages if present
     if (parsedResponse.messages) {
       // Add any additional processing or formatting here if needed
       return {
         messages: parsedResponse.messages,
         nextPageToken: parsedResponse.nextPageToken,
-        resultSizeEstimate: parsedResponse.resultSizeEstimate
+        resultSizeEstimate: parsedResponse.resultSizeEstimate,
       };
     }
 
     return {
       messages: [],
-      resultSizeEstimate: 0
+      resultSizeEstimate: 0,
     };
-
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const errorMessage = error.response?.data?.error?.message || error.message;
       return `failed to get mail list. error: ${errorMessage}`;
     }
-    return `failed to get mail list. error: ${error instanceof Error ? error.message : 'Unknown error'}`;
+    return `failed to get mail list. error: ${error instanceof Error ? error.message : "Unknown error"}`;
   }
 }
 
@@ -111,7 +109,7 @@ export class ListGmailAction implements ZapAction<typeof ListGmailSchema> {
   public schema = ListGmailSchema;
   public func = async (args: { q?: string }) => {
     const result = await listGmail(args);
-    return typeof result === 'string' ? result : JSON.stringify(result);
+    return typeof result === "string" ? result : JSON.stringify(result);
   };
 }
 

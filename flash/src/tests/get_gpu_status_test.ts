@@ -8,13 +8,22 @@ import { HyperbolicConfig } from "../actions/hyperbolic/config/hyperbolic_config
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+/**
+ *
+ */
 class GetGpuStatusTest {
   OLD_ENV: NodeJS.ProcessEnv;
 
+  /**
+   *
+   */
   constructor() {
     this.OLD_ENV = process.env;
   }
 
+  /**
+   *
+   */
   beforeEach() {
     // Save the current environment variables
     this.OLD_ENV = { ...process.env };
@@ -27,10 +36,16 @@ class GetGpuStatusTest {
     HyperbolicConfig.getInstance({ apiKey: "test-api-key" });
   }
 
+  /**
+   *
+   */
   afterEach() {
     process.env = this.OLD_ENV;
   }
 
+  /**
+   *
+   */
   async testFetchAndFormatGpuStatus() {
     // Mock successful API response
     mockedAxios.get.mockResolvedValueOnce({
@@ -71,6 +86,9 @@ class GetGpuStatusTest {
     expect(result).toContain("Price: $1.00/hour");
   }
 
+  /**
+   *
+   */
   async testHandleEmptyInstances() {
     // Mock API response with empty instances
     mockedAxios.get.mockResolvedValueOnce({
@@ -83,6 +101,9 @@ class GetGpuStatusTest {
     expect(result).toBe("No active GPU instances found.");
   }
 
+  /**
+   *
+   */
   async testThrowErrorWhenAPIKeyIsMissing() {
     // Remove API key from environment
     delete process.env.HYPERBOLIC_API_KEY;
@@ -90,6 +111,9 @@ class GetGpuStatusTest {
     await expect(getGpuStatus()).rejects.toThrow("Failed to fetch GPU status");
   }
 
+  /**
+   *
+   */
   async testHandleAPIErrors() {
     // Mock API error
     mockedAxios.get.mockRejectedValueOnce(new Error("API Error"));

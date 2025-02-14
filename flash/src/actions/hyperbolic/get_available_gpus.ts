@@ -39,16 +39,15 @@ Important notes:
  * @returns Formatted string of available GPUs.
  */
 export async function getAvailableGpus() {
-    
-    const config = HyperbolicConfig.getInstance();
-    const apiKey = config.getApiKey();
-    
-    // Check if API key is found
-    if (!apiKey) {
-        throw new Error("Hyperbolic API key not found");
-    }
-    
-    try {
+  const config = HyperbolicConfig.getInstance();
+  const apiKey = config.getApiKey();
+
+  // Check if API key is found
+  if (!apiKey) {
+    throw new Error("Hyperbolic API key not found");
+  }
+
+  try {
     const response = await axios.post(
       "https://api.hyperbolic.xyz/v1/marketplace",
       { filters: {} },

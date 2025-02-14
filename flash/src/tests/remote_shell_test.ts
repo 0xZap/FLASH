@@ -11,11 +11,20 @@ jest.mock("../actions/hyperbolic/helpers/ssh_manager", () => ({
   },
 }));
 
+/**
+ *
+ */
 class RemoteShellTest {
+  /**
+   *
+   */
   beforeEach() {
     jest.clearAllMocks();
   }
 
+  /**
+   *
+   */
   async testExecuteRemoteCommand() {
     // ... existing test logic ...
   }

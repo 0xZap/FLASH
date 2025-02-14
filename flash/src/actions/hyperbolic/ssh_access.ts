@@ -59,11 +59,12 @@ export class SSHAccessAction implements ZapAction<typeof SSHAccessSchema> {
   public name = "ssh_connect";
   public description = SSH_ACCESS_PROMPT;
   public schema = SSHAccessSchema;
-  public func = (args: { [key: string]: any }) => connectSSH({
-    host: args.host,
-    username: args.username,
-    port: args.port,
-    password: args.password,
-    private_key_path: args.private_key_path
-  });
+  public func = (args: { [key: string]: any }) =>
+    connectSSH({
+      host: args.host,
+      username: args.username,
+      port: args.port,
+      password: args.password,
+      private_key_path: args.private_key_path,
+    });
 }

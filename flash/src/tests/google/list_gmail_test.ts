@@ -1,6 +1,10 @@
 import { z } from "zod";
 import axios from "axios";
-import { listGmail, GoogleListGmailRequest, GmailListResponse } from "../../actions/google/list_gmail";
+import {
+  listGmail,
+  GoogleListGmailRequest,
+  GmailListResponse,
+} from "../../actions/google/list_gmail";
 import { GoogleConfig } from "../../actions/google/config/google_config";
 
 jest.mock("axios");
@@ -17,16 +21,16 @@ class ListGmailTest {
     // Reset modules and environment before each test
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
-    
+
     // Reset singleton instance
     GoogleConfig.resetInstance();
-    
+
     // Set up required environment variables
     process.env.GOOGLE_API_TOKEN = "test-token";
-    
+
     // Initialize config with test values
     GoogleConfig.getInstance({
-      token: "test-token"
+      token: "test-token",
     });
   }
 
@@ -45,41 +49,41 @@ class ListGmailTest {
       historyId: "12345",
       internalDate: "1644567890000",
       sizeEstimate: 52000,
-      ...overrides
+      ...overrides,
     };
   }
 
   async testSuccessfulMessageListing() {
     const params: GoogleListGmailRequest = {};
     const mockMessage = this.getMockGmailMessage();
-    
+
     mockedAxios.get.mockResolvedValueOnce({
       data: {
         messages: [mockMessage],
         nextPageToken: "next_token",
-        resultSizeEstimate: 1
-      }
+        resultSizeEstimate: 1,
+      },
     });
 
-    const result = await listGmail(params) as GmailListResponse;
-    
+    const result = (await listGmail(params)) as GmailListResponse;
+
     expect(mockedAxios.get).toHaveBeenCalledWith(
       "https://gmail.googleapis.com/gmail/v1/users/me/messages",
       {
         params: {
-          q: undefined
+          q: undefined,
         },
         headers: {
           Authorization: "Bearer test-token",
-          "Content-Type": "application/json"
-        }
-      }
+          "Content-Type": "application/json",
+        },
+      },
     );
 
     expect(result.messages?.[0]).toMatchObject({
       id: "msg123",
       threadId: "thread123",
-      labelIds: ["INBOX", "UNREAD"]
+      labelIds: ["INBOX", "UNREAD"],
     });
     expect(result.nextPageToken).toBe("next_token");
     expect(result.resultSizeEstimate).toBe(1);
@@ -87,14 +91,14 @@ class ListGmailTest {
 
   async testQueryFiltering() {
     const params: GoogleListGmailRequest = {
-      q: "in:inbox is:unread"
+      q: "in:inbox is:unread",
     };
-    
+
     mockedAxios.get.mockResolvedValueOnce({
       data: {
         messages: [this.getMockGmailMessage()],
-        resultSizeEstimate: 1
-      }
+        resultSizeEstimate: 1,
+      },
     });
 
     await listGmail(params);
@@ -103,24 +107,24 @@ class ListGmailTest {
       expect.any(String),
       expect.objectContaining({
         params: {
-          q: "in:inbox is:unread"
-        }
-      })
+          q: "in:inbox is:unread",
+        },
+      }),
     );
   }
 
   async testEmptyMessageList() {
     const params: GoogleListGmailRequest = {};
-    
+
     mockedAxios.get.mockResolvedValueOnce({
       data: {
         messages: [],
-        resultSizeEstimate: 0
-      }
+        resultSizeEstimate: 0,
+      },
     });
 
-    const result = await listGmail(params) as GmailListResponse;
-    
+    const result = (await listGmail(params)) as GmailListResponse;
+
     expect(result.messages).toHaveLength(0);
     expect(result.resultSizeEstimate).toBe(0);
   }
@@ -132,23 +136,23 @@ class ListGmailTest {
 
     const params: GoogleListGmailRequest = {};
     const result = await listGmail(params);
-    
+
     expect(result).toBe("failed to get mail list. error: token not found");
     expect(mockedAxios.get).not.toHaveBeenCalled();
   }
 
   async testApiError() {
     const params: GoogleListGmailRequest = {};
-    
+
     mockedAxios.get.mockRejectedValueOnce({
       isAxiosError: true,
       response: {
         data: {
           error: {
-            message: "Invalid credentials"
-          }
-        }
-      }
+            message: "Invalid credentials",
+          },
+        },
+      },
     });
 
     const result = await listGmail(params);
@@ -157,7 +161,7 @@ class ListGmailTest {
 
   async testNonAxiosError() {
     const params: GoogleListGmailRequest = {};
-    
+
     mockedAxios.get.mockRejectedValueOnce(new Error("Unknown error"));
 
     const result = await listGmail(params);
@@ -168,17 +172,17 @@ class ListGmailTest {
     const mockMessage = this.getMockGmailMessage({
       labelIds: undefined,
       snippet: undefined,
-      payload: undefined
+      payload: undefined,
     });
 
     mockedAxios.get.mockResolvedValueOnce({
       data: {
-        messages: [mockMessage]
-      }
+        messages: [mockMessage],
+      },
     });
 
-    const result = await listGmail({}) as GmailListResponse;
-    
+    const result = (await listGmail({})) as GmailListResponse;
+
     expect(result.messages?.[0].labelIds).toBeUndefined();
     expect(result.messages?.[0].snippet).toBeUndefined();
     expect(result.messages?.[0].payload).toBeUndefined();
@@ -186,17 +190,17 @@ class ListGmailTest {
 
   async testPagination() {
     const params: GoogleListGmailRequest = {};
-    
+
     mockedAxios.get.mockResolvedValueOnce({
       data: {
         messages: [this.getMockGmailMessage()],
         nextPageToken: "next_page_token_123",
-        resultSizeEstimate: 100
-      }
+        resultSizeEstimate: 100,
+      },
     });
 
-    const result = await listGmail(params) as GmailListResponse;
-    
+    const result = (await listGmail(params)) as GmailListResponse;
+
     expect(result.nextPageToken).toBe("next_page_token_123");
     expect(result.resultSizeEstimate).toBe(100);
   }

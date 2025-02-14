@@ -4,13 +4,22 @@ import { SSHManager } from "../actions/hyperbolic/helpers/ssh_manager";
 // Mock the SSHManager
 jest.mock("../actions/hyperbolic/helpers/ssh_manager");
 
+/**
+ *
+ */
 class SSHAccessTest {
   OLD_ENV: NodeJS.ProcessEnv;
 
+  /**
+   *
+   */
   constructor() {
     this.OLD_ENV = process.env;
   }
 
+  /**
+   *
+   */
   beforeEach() {
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
@@ -20,11 +29,17 @@ class SSHAccessTest {
     });
   }
 
+  /**
+   *
+   */
   afterEach() {
     process.env = this.OLD_ENV;
     jest.clearAllMocks();
   }
 
+  /**
+   *
+   */
   async testConnectWithPasswordAuthentication() {
     const params = {
       host: "test-server.com",

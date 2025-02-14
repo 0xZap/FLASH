@@ -61,12 +61,12 @@ Important notes:
  * @returns Formatted string of GPU instance statuses.
  */
 export async function getGpuStatus() {
-    const config = HyperbolicConfig.getInstance();
-    const apiKey = config.getApiKey();
+  const config = HyperbolicConfig.getInstance();
+  const apiKey = config.getApiKey();
 
-    if (!apiKey) {
-        throw new Error("Hyperbolic API key not found");
-    }
+  if (!apiKey) {
+    throw new Error("Hyperbolic API key not found");
+  }
 
   try {
     const response = await axios.get("https://api.hyperbolic.xyz/v1/marketplace/instances", {

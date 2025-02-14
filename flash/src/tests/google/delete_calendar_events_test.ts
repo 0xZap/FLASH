@@ -1,5 +1,8 @@
 import { GoogleConfig } from "../../actions/google/config/google_config";
-import { deleteCalendarEvents, GoogleDeleteCalendarEventsRequest } from "../../actions/google/delete_calendar_events";
+import {
+  deleteCalendarEvents,
+  GoogleDeleteCalendarEventsRequest,
+} from "../../actions/google/delete_calendar_events";
 import axios from "axios";
 
 jest.mock("axios");
@@ -16,16 +19,16 @@ class DeleteCalendarEventsTest {
     // Reset modules and environment before each test
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
-    
+
     // Reset singleton instance
     GoogleConfig.resetInstance();
-    
+
     // Set up required environment variables
     process.env.GOOGLE_API_TOKEN = "test-token";
-    
+
     // Initialize config with test values
     GoogleConfig.getInstance({
-      token: "test-token"
+      token: "test-token",
     });
   }
 
@@ -39,26 +42,26 @@ class DeleteCalendarEventsTest {
     const params: GoogleDeleteCalendarEventsRequest = {
       calendar_id: "test@example.com",
       event_id: "event123",
-      send_updates: "none"
+      send_updates: "none",
     };
 
     mockedAxios.delete.mockResolvedValueOnce({ status: 204 });
 
     const result = await deleteCalendarEvents(params);
-    
+
     expect(mockedAxios.delete).toHaveBeenCalledWith(
       `https://www.googleapis.com/calendar/v3/calendars/${params.calendar_id}/events/${params.event_id}`,
       {
         params: {
-          sendUpdates: params.send_updates
+          sendUpdates: params.send_updates,
         },
         headers: {
           Authorization: "Bearer test-token",
-          "Content-Type": "application/json"
-        }
-      }
+          "Content-Type": "application/json",
+        },
+      },
     );
-    
+
     expect(result).toBe("successfully deleted calendar events event123");
   }
 
@@ -70,7 +73,7 @@ class DeleteCalendarEventsTest {
     const params: GoogleDeleteCalendarEventsRequest = {
       calendar_id: "test@example.com",
       event_id: "event123",
-      send_updates: "none"
+      send_updates: "none",
     };
 
     const result = await deleteCalendarEvents(params);
@@ -82,17 +85,17 @@ class DeleteCalendarEventsTest {
     const params: GoogleDeleteCalendarEventsRequest = {
       calendar_id: "test@example.com",
       event_id: "event123",
-      send_updates: "none"
+      send_updates: "none",
     };
 
     const errorResponse = {
       response: {
         data: {
           error: {
-            message: "Calendar event not found"
-          }
-        }
-      }
+            message: "Calendar event not found",
+          },
+        },
+      },
     };
 
     mockedAxios.delete.mockRejectedValueOnce(errorResponse);
@@ -105,7 +108,7 @@ class DeleteCalendarEventsTest {
     const params: GoogleDeleteCalendarEventsRequest = {
       calendar_id: "test@example.com",
       event_id: "event123",
-      send_updates: "none"
+      send_updates: "none",
     };
 
     mockedAxios.delete.mockRejectedValueOnce(new Error("Network Error"));
@@ -118,7 +121,7 @@ class DeleteCalendarEventsTest {
     const params: GoogleDeleteCalendarEventsRequest = {
       calendar_id: "test@example.com",
       event_id: "event123",
-      send_updates: "none"
+      send_updates: "none",
     };
 
     mockedAxios.delete.mockRejectedValueOnce("Unexpected error");
@@ -132,13 +135,13 @@ class DeleteCalendarEventsTest {
       {
         calendar_id: "test@example.com",
         event_id: "event123",
-        send_updates: "all"
+        send_updates: "all",
       },
       {
         calendar_id: "test@example.com",
         event_id: "event123",
-        send_updates: "externalOnly"
-      }
+        send_updates: "externalOnly",
+      },
     ];
 
     for (const params of testCases) {
@@ -150,13 +153,13 @@ class DeleteCalendarEventsTest {
         `https://www.googleapis.com/calendar/v3/calendars/${params.calendar_id}/events/${params.event_id}`,
         {
           params: {
-            sendUpdates: params.send_updates
+            sendUpdates: params.send_updates,
           },
           headers: {
             Authorization: "Bearer test-token",
-            "Content-Type": "application/json"
-          }
-        }
+            "Content-Type": "application/json",
+          },
+        },
       );
     }
   }

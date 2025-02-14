@@ -17,16 +17,16 @@ class GetCalendarListTest {
     // Reset modules and environment before each test
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
-    
+
     // Reset singleton instance
     GoogleConfig.resetInstance();
-    
+
     // Set up required environment variables
     process.env.GOOGLE_API_TOKEN = "test-token";
-    
+
     // Initialize config with test values
     GoogleConfig.getInstance({
-      token: "test-token"
+      token: "test-token",
     });
   }
 
@@ -53,40 +53,40 @@ class GetCalendarListTest {
       defaultReminders: [
         {
           method: "email",
-          minutes: 30
-        }
+          minutes: 30,
+        },
       ],
-      ...overrides
+      ...overrides,
     };
   }
 
   async testSuccessfulCalendarListRetrieval() {
     const mockCalendar = this.getMockCalendarEntry();
-    
+
     mockedAxios.get.mockResolvedValueOnce({
       data: {
         kind: "calendar#calendarList",
         etag: "etag123",
-        items: [mockCalendar]
-      }
+        items: [mockCalendar],
+      },
     });
 
-    const result = await getCalendarList() as CalendarListResponse;
-    
+    const result = (await getCalendarList()) as CalendarListResponse;
+
     expect(mockedAxios.get).toHaveBeenCalledWith(
       "https://www.googleapis.com/calendar/v3/users/me/calendarList",
       {
         headers: {
           Authorization: "Bearer test-token",
-          "Content-Type": "application/json"
-        }
-      }
+          "Content-Type": "application/json",
+        },
+      },
     );
 
     expect(result.items?.[0]).toMatchObject({
       id: "calendar123",
       summary: "Test Calendar",
-      description: "Test Description"
+      description: "Test Description",
     });
   }
 
@@ -95,12 +95,12 @@ class GetCalendarListTest {
       data: {
         kind: "calendar#calendarList",
         etag: "etag123",
-        items: []
-      }
+        items: [],
+      },
     });
 
-    const result = await getCalendarList() as CalendarListResponse;
-    
+    const result = (await getCalendarList()) as CalendarListResponse;
+
     expect(result.items).toHaveLength(0);
     expect(result.kind).toBe("calendar#calendarList");
   }
@@ -111,7 +111,7 @@ class GetCalendarListTest {
     delete process.env.GOOGLE_API_TOKEN;
 
     const result = await getCalendarList();
-    
+
     expect(result).toBe("failed to get calendar list. error: token not found");
     expect(mockedAxios.get).not.toHaveBeenCalled();
   }
@@ -122,14 +122,14 @@ class GetCalendarListTest {
       response: {
         data: {
           error: {
-            message: "Invalid credentials"
-          }
-        }
-      }
+            message: "Invalid credentials",
+          },
+        },
+      },
     });
 
     const result = await getCalendarList();
-    
+
     expect(result).toBe("failed to get calendar list. error: Invalid credentials");
   }
 
@@ -137,7 +137,7 @@ class GetCalendarListTest {
     mockedAxios.get.mockRejectedValueOnce(new Error("Unknown error"));
 
     const result = await getCalendarList();
-    
+
     expect(result).toBe("failed to get calendar list. error: Unknown error");
   }
 
@@ -148,10 +148,10 @@ class GetCalendarListTest {
         items: [
           {
             id: 123, // Should be string according to schema
-            invalidField: "test"
-          }
-        ]
-      }
+            invalidField: "test",
+          },
+        ],
+      },
     });
 
     await expect(getCalendarList()).rejects.toThrow();
@@ -161,18 +161,18 @@ class GetCalendarListTest {
     const mockCalendar = this.getMockCalendarEntry({
       description: undefined,
       location: undefined,
-      defaultReminders: undefined
+      defaultReminders: undefined,
     });
 
     mockedAxios.get.mockResolvedValueOnce({
       data: {
         kind: "calendar#calendarList",
-        items: [mockCalendar]
-      }
+        items: [mockCalendar],
+      },
     });
 
-    const result = await getCalendarList() as CalendarListResponse;
-    
+    const result = (await getCalendarList()) as CalendarListResponse;
+
     expect(result.items?.[0].description).toBeUndefined();
     expect(result.items?.[0].location).toBeUndefined();
     expect(result.items?.[0].defaultReminders).toBeUndefined();

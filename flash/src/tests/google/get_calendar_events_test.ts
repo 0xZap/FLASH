@@ -16,21 +16,21 @@ class GetCalendarEventsTest {
     // Reset modules and environment before each test
     jest.resetModules();
     process.env = { ...this.OLD_ENV };
-    
+
     // Reset singleton instance
     GoogleConfig.resetInstance();
-    
+
     // Set up required environment variables
     process.env.GOOGLE_API_TOKEN = "test-token";
-    
+
     // Initialize config with test values
     GoogleConfig.getInstance({
-      token: "test-token"
+      token: "test-token",
     });
 
     // Reset date to a fixed point for testing
     jest.useFakeTimers();
-    jest.setSystemTime(new Date('2024-02-11T10:00:00Z'));
+    jest.setSystemTime(new Date("2024-02-11T10:00:00Z"));
   }
 
   afterEach() {
@@ -47,32 +47,32 @@ class GetCalendarEventsTest {
       description: "Test Description",
       start: {
         dateTime: "2024-02-11T10:00:00Z",
-        timeZone: "UTC"
+        timeZone: "UTC",
       },
       end: {
         dateTime: "2024-02-11T11:00:00Z",
-        timeZone: "UTC"
+        timeZone: "UTC",
       },
       status: "confirmed",
       created: "2024-02-10T10:00:00Z",
       updated: "2024-02-10T10:00:00Z",
       organizer: {
         email: "organizer@example.com",
-        displayName: "Test Organizer"
+        displayName: "Test Organizer",
       },
       attendees: [
         {
           email: "attendee1@example.com",
           displayName: "Test Attendee 1",
-          responseStatus: "accepted"
+          responseStatus: "accepted",
         },
         {
           email: "attendee2@example.com",
           displayName: "Test Attendee 2",
-          responseStatus: "needsAction"
-        }
+          responseStatus: "needsAction",
+        },
       ],
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -80,33 +80,33 @@ class GetCalendarEventsTest {
     const params = {
       event_types: "default",
       calendar_id: "test@example.com",
-      max_results: 10
+      max_results: 10,
     };
 
     const mockEvent = this.getMockCalendarEvent();
-    
+
     mockedAxios.get.mockResolvedValueOnce({
       data: {
-        items: [mockEvent]
-      }
+        items: [mockEvent],
+      },
     });
 
     const result = await getCalendarEvents(params);
-    
+
     expect(mockedAxios.get).toHaveBeenCalledWith(
       `https://www.googleapis.com/calendar/v3/calendars/${params.calendar_id}/events`,
       {
         params: {
           orderBy: "updated",
-          timeMin: new Date('2024-02-11T10:00:00Z').toISOString(),
-          timeMax: new Date('2024-03-12T10:00:00Z').toISOString(),
+          timeMin: new Date("2024-02-11T10:00:00Z").toISOString(),
+          timeMax: new Date("2024-03-12T10:00:00Z").toISOString(),
           maxResults: params.max_results,
-          eventTypes: "default"
+          eventTypes: "default",
         },
         headers: {
-          Authorization: "Bearer test-token"
-        }
-      }
+          Authorization: "Bearer test-token",
+        },
+      },
     );
 
     // Verify formatted output contains expected event details
@@ -123,13 +123,13 @@ class GetCalendarEventsTest {
       calendar_id: "test@example.com",
       time_min: "2024-03-01T00:00:00Z",
       time_max: "2024-03-31T23:59:59Z",
-      max_results: 10
+      max_results: 10,
     };
 
     mockedAxios.get.mockResolvedValueOnce({
       data: {
-        items: [this.getMockCalendarEvent()]
-      }
+        items: [this.getMockCalendarEvent()],
+      },
     });
 
     await getCalendarEvents(params);
@@ -139,28 +139,28 @@ class GetCalendarEventsTest {
       expect.objectContaining({
         params: expect.objectContaining({
           timeMin: params.time_min,
-          timeMax: params.time_max
-        })
-      })
+          timeMax: params.time_max,
+        }),
+      }),
     );
   }
 
   async testEventWithoutOptionalFields() {
     const mockEvent = this.getMockCalendarEvent({
       description: undefined,
-      attendees: undefined
+      attendees: undefined,
     });
 
     mockedAxios.get.mockResolvedValueOnce({
       data: {
-        items: [mockEvent]
-      }
+        items: [mockEvent],
+      },
     });
 
     const result = await getCalendarEvents({
       calendar_id: "test@example.com",
       max_results: 100,
-      event_types: "default"
+      event_types: "default",
     });
 
     expect(result).not.toContain("Description:");
@@ -176,12 +176,10 @@ class GetCalendarEventsTest {
     const params = {
       event_types: "default",
       calendar_id: "test@example.com",
-      max_results: 100
+      max_results: 100,
     };
 
-    await expect(getCalendarEvents(params)).rejects.toThrow(
-      "Google API token not found"
-    );
+    await expect(getCalendarEvents(params)).rejects.toThrow("Google API token not found");
     expect(mockedAxios.get).not.toHaveBeenCalled();
   }
 
@@ -189,16 +187,16 @@ class GetCalendarEventsTest {
     const params = {
       event_types: "default",
       max_results: 100,
-      calendar_id: "test@example.com"
+      calendar_id: "test@example.com",
     };
 
     mockedAxios.get.mockRejectedValueOnce({
       isAxiosError: true,
-      message: "Calendar not found"
+      message: "Calendar not found",
     });
 
     await expect(getCalendarEvents(params)).rejects.toThrow(
-      "Failed to fetch calendar events: Calendar not found"
+      "Failed to fetch calendar events: Calendar not found",
     );
   }
 
@@ -206,27 +204,25 @@ class GetCalendarEventsTest {
     const params = {
       event_types: "default",
       max_results: 100,
-      calendar_id: "test@example.com"
+      calendar_id: "test@example.com",
     };
 
     mockedAxios.get.mockRejectedValueOnce(new Error("Unknown error"));
 
-    await expect(getCalendarEvents(params)).rejects.toThrow(
-      "Failed to fetch calendar events"
-    );
+    await expect(getCalendarEvents(params)).rejects.toThrow("Failed to fetch calendar events");
   }
 
   async testCustomEventTypes() {
     const params = {
       calendar_id: "test@example.com",
       event_types: "focusTime",
-      max_results: 100
+      max_results: 100,
     };
 
     mockedAxios.get.mockResolvedValueOnce({
       data: {
-        items: [this.getMockCalendarEvent()]
-      }
+        items: [this.getMockCalendarEvent()],
+      },
     });
 
     await getCalendarEvents(params);
@@ -235,9 +231,9 @@ class GetCalendarEventsTest {
       expect.any(String),
       expect.objectContaining({
         params: expect.objectContaining({
-          eventTypes: "focusTime"
-        })
-      })
+          eventTypes: "focusTime",
+        }),
+      }),
     );
   }
 }

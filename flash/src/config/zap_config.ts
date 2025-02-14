@@ -16,10 +16,17 @@ const ConfigSchema = z.object({
   twitterApiKey: z.string().optional(),
 });
 
+/**
+ *
+ */
 export class ZapConfig {
   private static instance: ZapConfig | null = null;
   private readonly config: ZapConfigParams;
 
+  /**
+   *
+   * @param params
+   */
   private constructor(params?: ZapConfigParams) {
     // First try params, then env vars
     this.config = {
@@ -29,11 +36,15 @@ export class ZapConfig {
       telegramApiKey: params?.telegramApiKey ?? process.env.TELEGRAM_API_KEY,
       twitterApiKey: params?.twitterApiKey ?? process.env.TWITTER_API_KEY,
     };
-    
+
     // Validate the config
     ConfigSchema.parse(this.config);
   }
 
+  /**
+   *
+   * @param params
+   */
   public static getInstance(params?: ZapConfigParams): ZapConfig {
     if (!ZapConfig.instance) {
       ZapConfig.instance = new ZapConfig(params);
@@ -41,55 +52,73 @@ export class ZapConfig {
     return ZapConfig.instance;
   }
 
+  /**
+   *
+   */
   public static resetInstance(): void {
     ZapConfig.instance = null;
   }
 
+  /**
+   *
+   */
   public getHyperbolicApiKey(): string {
     const apiKey = this.config.hyperbolicApiKey;
     if (!apiKey) {
       throw new Error(
-        "Hyperbolic API key not found. Please provide it via constructor or set HYPERBOLIC_API_KEY environment variable."
+        "Hyperbolic API key not found. Please provide it via constructor or set HYPERBOLIC_API_KEY environment variable.",
       );
     }
     return apiKey;
   }
 
+  /**
+   *
+   */
   public getGoogleToken(): string {
     const token = this.config.googleToken;
     if (!token) {
       throw new Error(
-        "Google token not found. Please provide it via constructor or set GOOGLE_TOKEN environment variable."
+        "Google token not found. Please provide it via constructor or set GOOGLE_TOKEN environment variable.",
       );
     }
     return token;
   }
 
+  /**
+   *
+   */
   public getEvmApiKey(): string {
     const apiKey = this.config.evmApiKey;
     if (!apiKey) {
       throw new Error(
-        "EVM API key not found. Please provide it via constructor or set EVM_API_KEY environment variable."
+        "EVM API key not found. Please provide it via constructor or set EVM_API_KEY environment variable.",
       );
     }
     return apiKey;
   }
 
+  /**
+   *
+   */
   public getTelegramApiKey(): string {
     const apiKey = this.config.telegramApiKey;
     if (!apiKey) {
       throw new Error(
-        "Telegram API key not found. Please provide it via constructor or set TELEGRAM_API_KEY environment variable."
+        "Telegram API key not found. Please provide it via constructor or set TELEGRAM_API_KEY environment variable.",
       );
     }
     return apiKey;
   }
 
+  /**
+   *
+   */
   public getTwitterApiKey(): string {
     const apiKey = this.config.twitterApiKey;
     if (!apiKey) {
       throw new Error(
-        "Twitter API key not found. Please provide it via constructor or set TWITTER_API_KEY environment variable."
+        "Twitter API key not found. Please provide it via constructor or set TWITTER_API_KEY environment variable.",
       );
     }
     return apiKey;

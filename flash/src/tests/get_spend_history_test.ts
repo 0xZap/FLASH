@@ -8,13 +8,22 @@ import { HyperbolicConfig } from "../actions/hyperbolic/config/hyperbolic_config
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+/**
+ *
+ */
 class GetSpendHistoryTest {
   OLD_ENV: NodeJS.ProcessEnv;
 
+  /**
+   *
+   */
   constructor() {
     this.OLD_ENV = process.env;
   }
 
+  /**
+   *
+   */
   beforeEach() {
     // Save the current environment variables
     this.OLD_ENV = { ...process.env };
@@ -27,10 +36,16 @@ class GetSpendHistoryTest {
     HyperbolicConfig.getInstance({ apiKey: "test-api-key" });
   }
 
+  /**
+   *
+   */
   afterEach() {
     process.env = this.OLD_ENV;
   }
 
+  /**
+   *
+   */
   async testFetchAndFormatSpendHistory() {
     // Mock successful API response
     mockedAxios.get.mockResolvedValueOnce({
@@ -65,6 +80,9 @@ class GetSpendHistoryTest {
     expect(result).toContain("Total Spending: $1.00");
   }
 
+  /**
+   *
+   */
   async testHandleEmptyHistory() {
     // Mock API response with empty history
     mockedAxios.get.mockResolvedValueOnce({
@@ -77,6 +95,9 @@ class GetSpendHistoryTest {
     expect(result).toBe("No rental history found.");
   }
 
+  /**
+   *
+   */
   async testThrowErrorWhenAPIKeyIsMissing() {
     // Remove API key from environment
     delete process.env.HYPERBOLIC_API_KEY;
@@ -84,6 +105,9 @@ class GetSpendHistoryTest {
     await expect(getSpendHistory()).rejects.toThrow("Failed to fetch spend history");
   }
 
+  /**
+   *
+   */
   async testHandleAPIErrors() {
     // Mock API error
     mockedAxios.get.mockRejectedValueOnce(new Error("API Error"));
