@@ -108,7 +108,7 @@ async function runChatMode(agent: any, config: any) {
   try {
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const userInput = await question("\nser message: ");
+      const userInput = await question("\nuser message: ");
 
       if (userInput.toLowerCase() === "exit") {
         break;

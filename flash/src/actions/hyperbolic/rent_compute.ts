@@ -7,7 +7,7 @@ import { HyperbolicConfig } from "../../config/hyperbolic_config";
 const RentComputeSchema = z
   .object({
     cluster_name: z.string().describe("The cluster name to rent from"),
-    node_id: z.string().describe("The node ID to rent"),
+    node_id: z.string().describe("The node ID to rent also known as node name"),
     gpu_count: z.number().min(1).describe("Number of GPUs to rent"),
   })
   .strict();
@@ -35,9 +35,9 @@ export async function rentCompute(params: z.infer<typeof RentComputeSchema>) {
   const apiKey = config.getApiKey();
 
   if (!apiKey) {
-      throw new Error("Hyperbolic API key not found");
+    throw new Error("Hyperbolic API key not found");
   }
-
+  console.log("Renting compute with params:", params);
   try {
     const response = await axios.post(
       "https://api.hyperbolic.xyz/v1/marketplace/instances/create",
@@ -54,10 +54,14 @@ export async function rentCompute(params: z.infer<typeof RentComputeSchema>) {
       },
     );
 
+    // Validate response data structure
+    if (!response.data?.instance) {
+      throw new Error("Invalid response format: missing instance data");
+    }
+
     // Format response
     const instance = response.data.instance;
     const formattedResponse = `Successfully requested GPU instance:
-- Instance ID: ${instance.id}
 - Node: ${params.node_id}
 - Cluster: ${params.cluster_name}
 - GPU Count: ${params.gpu_count}
