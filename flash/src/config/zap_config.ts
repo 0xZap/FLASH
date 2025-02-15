@@ -6,6 +6,7 @@ export interface ZapConfigParams {
   googleToken?: string;
   telegramApiKey?: string;
   twitterApiKey?: string;
+  ethereumPrivateKey?: string;
 }
 
 const ConfigSchema = z.object({
@@ -14,6 +15,7 @@ const ConfigSchema = z.object({
   googleToken: z.string().optional(),
   telegramApiKey: z.string().optional(),
   twitterApiKey: z.string().optional(),
+  ethereumPrivateKey: z.string().optional(),
 });
 
 /**
@@ -36,6 +38,7 @@ export class ZapConfig {
       googleToken: params?.googleToken ?? process.env.GOOGLE_TOKEN,
       telegramApiKey: params?.telegramApiKey ?? process.env.TELEGRAM_API_KEY,
       twitterApiKey: params?.twitterApiKey ?? process.env.TWITTER_API_KEY,
+      ethereumPrivateKey: params?.ethereumPrivateKey ?? process.env.ETHEREUM_PRIVATE_KEY,
     };
 
     // Validate the config
@@ -140,6 +143,22 @@ export class ZapConfig {
       );
     }
     return apiKey;
+  }
+
+  /**
+   * Retrieves the Ethereum private key from the configuration.
+   *
+   * @returns The Ethereum private key string
+   * @throws Error if the private key is not found
+   */
+  public getEthereumPrivateKey(): string {
+    const privateKey = this.config.ethereumPrivateKey;
+    if (!privateKey) {
+      throw new Error(
+        "Ethereum private key not found. Please provide it via constructor or set ETHEREUM_PRIVATE_KEY environment variable.",
+      );
+    }
+    return privateKey;
   }
 }
 
