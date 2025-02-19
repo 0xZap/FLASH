@@ -1,5 +1,5 @@
 import { StructuredToolInterface, BaseToolkit as Toolkit } from "@langchain/core/tools";
-import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig } from "@0xzap/flash";
+import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig, EthereumConfig } from "@0xzap/flash";
 import { ZapTool } from "../tools/zap_tool";
 
 /**
@@ -9,17 +9,19 @@ export class ZapToolkit extends Toolkit {
   tools: StructuredToolInterface[];
   private hyperbolicConfig?: HyperbolicConfig;
   private googleConfig?: GoogleConfig;
-
+  private ethereumConfig?: EthereumConfig;
   /**
    * Creates a new Zap Toolkit instance
    *
    * @param hyperbolicConfig - Optional configuration for Hyperbolic API
    * @param googleConfig - Optional configuration for Google API
+   * @param ethereumConfig - Optional configuration for Ethereum API
    */
-  constructor(hyperbolicConfig?: HyperbolicConfig, googleConfig?: GoogleConfig) {
+  constructor(hyperbolicConfig?: HyperbolicConfig, googleConfig?: GoogleConfig, ethereumConfig?: EthereumConfig) {
     super();
     this.hyperbolicConfig = hyperbolicConfig;
     this.googleConfig = googleConfig;
+    this.ethereumConfig = ethereumConfig;
     this.tools = this.initializeTools();
   }
 
@@ -39,6 +41,12 @@ export class ZapToolkit extends Toolkit {
     if (this.googleConfig) {
       GoogleConfig.resetInstance();
       GoogleConfig.getInstance({ token: this.googleConfig.getToken() });
+    }
+
+    // If ethereumConfig is provided, ensure it's set as the instance
+    if (this.ethereumConfig) {
+      EthereumConfig.resetInstance();
+      EthereumConfig.getInstance({ privateKey: this.ethereumConfig.getPrivateKey() });
     }
 
     const actions = ZAP_ACTIONS;
