@@ -2,7 +2,7 @@
   "name": "@0xzap/flash-langchain",
   "description": "FLASH Langchain",
   "repository": "https://github.com/0xZap/flash",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Zap Labs",
   "license": "MIT",
   "main": "dist/index.js",
@@ -42,7 +42,7 @@
     "@langchain/core": "^0.3.39",
     "tools": "link:@langchain/core/tools",
     "viem": "^2.21.51",
-    "@0xzap/flash": "0.0.3",
+    "@0xzap/flash": "0.0.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
