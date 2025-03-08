@@ -80,166 +80,317 @@ flash/
 
 ## Adding New Tools
 
-Tools are organized by category (Web3, AI/ML, Productivity, Socials) in the core package. To add a new tool:
+FLASH tools are the core building blocks that provide functionality for agent builders. Each tool follows a specific pattern to ensure consistency and reliability.
 
-1. Create a new file in the appropriate category directory
-2. Implement the tool following the FLASH Tool interface
-3. Add tests for your implementation
-4. Update documentation and examples
-5. Add the tool to the exports in `index.ts`
+### Tool Organization
 
-Example of a tool implementation:
+Tools are organized by category in the core package under `packages/flash/src/tools/`:
+
+```
+tools/
+├── ai/                # AI/ML related tools
+├── productivity/      # Productivity tools
+├── socials/           # Social media and communication tools
+├── web3/              # Blockchain and Web3 tools
+└── ...                # Other categories
+```
+
+### Creating a New Tool
+
+Follow these steps to add a new tool to FLASH:
+
+1. **Choose the right category**: Place your tool in the appropriate category directory, or create a new category if needed.
+
+2. **Create a new file**: Name it descriptively (e.g., `get_available_gpus.ts` for a GPU availability checker).
+
+3. **Implement the tool**: Each tool consists of:
+   - Input schema (using Zod)
+   - Tool function
+   - Tool action class
+
+4. **Add tests**: Create tests in the corresponding test directory.
+
+5. **Update exports**: Add your tool to the appropriate index.ts file.
+
+6. **Document your tool**: Add JSDoc comments and update documentation as needed.
+
+### Tool Implementation Guide
+
+Every FLASH tool follows this general structure:
+
+1. **Input Schema**: Define what inputs your tool accepts using Zod.
+2. **Tool Prompt**: Create a clear description of what your tool does.
+3. **Tool Function**: Implement the core functionality that performs the task.
+4. **Tool Action Class**: Wrap everything in a ZapAction class for registration.
+
+#### Example Tool Implementation (Step by Step)
+
+Let's walk through creating a simple calculator tool that can perform basic arithmetic operations:
+
+##### Step 1: Define the Input Schema
+First, create a Zod schema that defines what inputs your tool will accept. This serves as both documentation and runtime validation.
+
+For our calculator tool, we need:
+- An operation type (add, subtract, multiply, or divide)
+- Two numbers to operate on
 
 ```typescript
 import { z } from "zod";
-import axios from "axios";
 import { ZapAction } from "../zap_action";
-import { HyperbolicConfig } from "../../config/hyperbolic_config";
 
-// Schema for GPU response data
-const GpuSchema = z.object({
-  model: z.string(),
-  memory: z.number(),
-  price: z.number(),
-  available: z.number(),
-  total: z.number(),
-  location: z.string(),
-  node_id: z.string(),
-  cluster_name: z.string(),
-  compute_power: z.number(),
-  clock_speed: z.number(),
-  storage_capacity: z.number(),
-  ram_capacity: z.number(),
-  cpu_cores: z.number(),
-  status: z.string(),
-});
+// Define input schema
+const CalculateSchema = z.object({
+  operation: z.enum(["add", "subtract", "multiply", "divide"]).describe("The operation to perform"),
+  num1: z.number().describe("First number"),
+  num2: z.number().describe("Second number"),
+}).strict();
+```
 
-// Input schema (empty as no inputs required)
-const GetAvailableGpusSchema = z.object({}).strict();
+##### Step 2: Create the Tool Prompt
+Next, write a clear description that explains what your tool does, what inputs it takes, and how to use it. This is what the AI will see when deciding whether to use your tool.
 
-const GET_AVAILABLE_GPUS_PROMPT = `
-This tool will get all the available GPU machines on the Hyperbolic platform.
+Include:
+- A brief description of the tool's purpose
+- Required and optional inputs
+- Example usage
+- Any important notes or limitations
 
-It does not take any following inputs
+```typescript
+// Create tool prompt
+const CALCULATE_PROMPT = `
+This tool performs basic arithmetic operations on two numbers.
 
-Important notes:
-- Authorization key is required for this operation
-- The GPU prices are in CENTS per hour
+Inputs:
+- operation: The operation to perform, one of: "add", "subtract", "multiply", "divide"
+- num1: First number
+- num2: Second number
+
+Examples:
+- To add 5 and 3: { "operation": "add", "num1": 5, "num2": 3 }
+- To divide 10 by 2: { "operation": "divide", "num1": 10, "num2": 2 }
+
+Note: Division by zero will return an error.
+`;
+```
+
+##### Step 3: Implement the Tool Function
+Now, write the actual function that performs the task. This function should:
+- Accept inputs that match your schema
+- Include proper error handling
+- Return results in a user-friendly format
+
+```typescript
+/**
+ * Performs basic arithmetic calculations.
+ * @param inputs The calculation inputs
+ * @returns The calculation result
+ */
+export async function calculate(inputs: z.infer<typeof CalculateSchema>) {
+  const { operation, num1, num2 } = inputs;
+  
+  // Handle different operations
+  switch (operation) {
+    case "add":
+      return `${num1} + ${num2} = ${num1 + num2}`;
+    case "subtract":
+      return `${num1} - ${num2} = ${num1 - num2}`;
+    case "multiply":
+      return `${num1} × ${num2} = ${num1 * num2}`;
+    case "divide":
+      // Check for division by zero
+      if (num2 === 0) {
+        throw new Error("Division by zero is not allowed");
+      }
+      return `${num1} ÷ ${num2} = ${num1 / num2}`;
+    default:
+      // This should never happen thanks to zod validation
+      throw new Error(`Unsupported operation: ${operation}`);
+  }
+}
+```
+
+##### Step 4: Create the Tool Action Class
+Finally, create a class that implements the ZapAction interface. This registers your tool with the FLASH system and connects all the pieces together.
+
+```typescript
+/**
+ * Action to perform arithmetic calculations.
+ * This class registers the tool with the FLASH system.
+ */
+export class CalculateAction implements ZapAction<typeof CalculateSchema> {
+  public name = "calculate";                // Tool name for invocation
+  public description = CALCULATE_PROMPT;    // Tool description
+  public schema = CalculateSchema;          // Input validation schema
+  public func = calculate;                  // The function to execute
+}
+```
+
+#### Complete Code with Detailed Comments
+
+Here's the complete implementation of our calculator tool with comprehensive comments:
+
+```typescript
+import { z } from "zod";
+import { ZapAction } from "../zap_action";
+
+/**
+ * Step 1: Define Input Schema
+ * 
+ * Use Zod to create a schema that:
+ * - Documents the expected inputs
+ * - Provides runtime validation
+ * - Enables TypeScript type inference
+ */
+const CalculateSchema = z.object({
+  // Define an enum of allowed operations
+  operation: z.enum(["add", "subtract", "multiply", "divide"])
+    .describe("The operation to perform"),
+  
+  // Define number inputs with descriptions
+  num1: z.number().describe("First number"),
+  num2: z.number().describe("Second number"),
+  
+  // .strict() ensures no additional properties are allowed
+}).strict();
+
+/**
+ * Step 2: Create Tool Prompt
+ * 
+ * This multiline string serves as documentation for the AI.
+ * It should clearly explain:
+ * - What the tool does
+ * - What inputs it expects
+ * - How to use it correctly
+ * - Any limitations or edge cases
+ */
+const CALCULATE_PROMPT = `
+This tool performs basic arithmetic operations on two numbers.
+
+Inputs:
+- operation: The operation to perform, one of: "add", "subtract", "multiply", "divide"
+- num1: First number
+- num2: Second number
+
+Examples:
+- To add 5 and 3: { "operation": "add", "num1": 5, "num2": 3 }
+- To divide 10 by 2: { "operation": "divide", "num1": 10, "num2": 2 }
+
+Note: Division by zero will return an error.
 `;
 
 /**
- * Get available GPUs from Hyperbolic platform.
- * @returns Formatted string of available GPUs.
+ * Step 3: Implement Tool Function
+ * 
+ * This function contains the actual logic of your tool.
+ * It should:
+ * - Accept inputs that match your schema
+ * - Process those inputs to perform the desired task
+ * - Handle errors gracefully
+ * - Return results in a user-friendly format
+ * 
+ * @param inputs The calculation inputs (validated by Zod)
+ * @returns The calculation result as a formatted string
  */
-export async function getAvailableGpus() {
+export async function calculate(inputs: z.infer<typeof CalculateSchema>) {
+  // Destructure inputs for easier access
+  const { operation, num1, num2 } = inputs;
+  
+  // Use a switch statement to handle different operations
+  switch (operation) {
+    case "add":
+      return `${num1} + ${num2} = ${num1 + num2}`;
     
-    const config = HyperbolicConfig.getInstance();
-    const apiKey = config.getApiKey();
+    case "subtract":
+      return `${num1} - ${num2} = ${num1 - num2}`;
     
-    // Check if API key is found
-    if (!apiKey) {
-        throw new Error("Hyperbolic API key not found");
-    }
+    case "multiply":
+      // Use proper multiplication symbol for better readability
+      return `${num1} × ${num2} = ${num1 * num2}`;
     
-    try {
-    const response = await axios.post(
-      "https://api.hyperbolic.xyz/v1/marketplace",
-      { filters: {} },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-      },
-    );
-
-    // Process GPU information
-    const gpuMap = new Map<string, z.infer<typeof GpuSchema>>();
-
-    for (const instance of response.data.instances) {
-      if (instance.status === "node_ready") {
-        const gpu = instance.hardware.gpus[0];
-        const gpuModel = gpu.model.replace("NVIDIA-", "");
-        const memory = Math.round(gpu.ram / 1024);
-        const price = instance.pricing.price.amount / 100;
-        const available = instance.gpus_total - instance.gpus_reserved;
-        const total = instance.gpus_total;
-
-        const key = `${gpuModel}-${price}-${instance.cluster_name}`;
-
-        if (!gpuMap.has(key)) {
-          gpuMap.set(key, {
-            model: gpuModel,
-            memory,
-            price,
-            available,
-            total,
-            location: instance.location.region,
-            node_id: instance.id,
-            cluster_name: instance.cluster_name,
-            compute_power: gpu.compute_power || 0,
-            clock_speed: gpu.clock_speed || 0,
-            storage_capacity: instance.hardware.storage[0]?.capacity || 0,
-            ram_capacity: instance.hardware.ram[0]?.capacity || 0,
-            cpu_cores: instance.hardware.cpus[0]?.virtual_cores || 0,
-            status: instance.status,
-          });
-        } else {
-          const existing = gpuMap.get(key);
-          if (existing) {
-            existing.available += available;
-            existing.total += total;
-          }
-        }
+    case "divide":
+      // Always check for division by zero
+      if (num2 === 0) {
+        throw new Error("Division by zero is not allowed");
       }
-    }
-
-    const gpus = Array.from(gpuMap.values());
-    gpus.sort((a, b) => b.price - a.price || b.available - a.available);
-
-    // Format response
-    const formattedResponse = gpus
-      .map(gpu => {
-        const monthlyPrice = Math.round(gpu.price * 24 * 30);
-        const storageGB = Math.round(gpu.storage_capacity / 1024);
-        const ramGB = Math.round(gpu.ram_capacity / 1024);
-
-        return `${gpu.model} (${gpu.memory}GB):
-- Price: $${gpu.price.toFixed(2)}/hour ($${monthlyPrice}/month)
-- Available: ${gpu.available}/${gpu.total} units
-- Location: ${gpu.location}
-- Node ID: ${gpu.node_id}
-- Cluster: ${gpu.cluster_name}
-- Hardware Specs:
-  • CPU: ${gpu.cpu_cores} virtual cores
-  • RAM: ${ramGB}GB
-  • Storage: ${storageGB}GB
-  • GPU Clock: ${gpu.clock_speed}MHz
-  • Compute Power: ${gpu.compute_power} TFLOPS
-- Status: ${gpu.status}`;
-      })
-      .join("\n\n");
-
-    return formattedResponse;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(`Failed to fetch GPU data: ${error.message}`);
-    }
-    throw new Error("Failed to fetch GPU data");
+      // Use proper division symbol for better readability
+      return `${num1} ÷ ${num2} = ${num1 / num2}`;
+    
+    default:
+      // This code should never execute due to Zod validation,
+      // but TypeScript doesn't know that, so we include it for type safety
+      throw new Error(`Unsupported operation: ${operation}`);
   }
 }
 
 /**
- * Action to get available GPUs from Hyperbolic platform.
+ * Step 4: Create Tool Action Class
+ * 
+ * This class implements the ZapAction interface to register your tool
+ * with the FLASH system. It connects all the pieces together:
+ * - Schema for validation
+ * - Prompt for AI documentation
+ * - Function for execution
  */
-export class getAvailableGpusAction implements ZapAction<typeof GetAvailableGpusSchema> {
-  public name = "get_available_gpus";
-  public description = GET_AVAILABLE_GPUS_PROMPT;
-  public schema = GetAvailableGpusSchema;
-  public config = HyperbolicConfig.getInstance();
-  public func = getAvailableGpus;
+export class CalculateAction implements ZapAction<typeof CalculateSchema> {
+  public name = "calculate";                // Name used to invoke the tool
+  public description = CALCULATE_PROMPT;    // Description shown to the AI
+  public schema = CalculateSchema;          // Schema for validating inputs
+  public func = calculate;                  // Function to execute
+  
+  // Note: Some tools may need additional properties like:
+  // public config = SomeConfig.getInstance(); // Configuration for the tool
 }
+```
 
+### Best Practices for Tool Development
+
+1. **User-friendly error handling**: Provide clear error messages that guide users to fix issues.
+2. **Input validation**: Use Zod schemas to validate all inputs and provide helpful error messages.
+3. **Documentation**: Add comprehensive JSDoc comments explaining what the tool does and how to use it.
+4. **Testing**: Create tests for your tool that cover various edge cases.
+5. **Security**: Be mindful of security implications and handle sensitive data appropriately.
+
+### Common Tool Patterns
+
+#### Tools with Required Inputs
+
+For tools that require user inputs:
+
+```typescript
+// Example: Search Twitter tool
+const SearchTwitterSchema = z.object({
+  query: z.string().min(1).describe("Search query"),
+  limit: z.number().optional().default(10).describe("Maximum number of results"),
+}).strict();
+```
+
+#### Tools with API Keys
+
+For tools requiring external API access:
+
+```typescript
+// Get API key from configuration
+const config = TwitterConfig.getInstance();
+const apiKey = config.getApiKey();
+
+if (!apiKey) {
+  throw new Error("Twitter API key not found. Please set it in your configuration.");
+}
+```
+
+#### Handling Asynchronous Operations
+
+Most tools will use async/await for operations like API calls:
+
+```typescript
+export async function myAsyncTool(inputs: z.infer<typeof MyToolSchema>) {
+  try {
+    const response = await someAsyncOperation();
+    return processResults(response);
+  } catch (error) {
+    handleErrorProperly(error);
+  }
+}
 ```
 
 ## Framework Integration Guidelines
