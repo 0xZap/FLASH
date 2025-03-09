@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ZapAction } from "../zap_action";
 import { Browserbase } from "@browserbasehq/sdk";
+import puppeteer from "puppeteer";
 
 // Define the configuration class for Browserbase
 export class BrowserbaseConfig {
@@ -129,14 +130,12 @@ export async function connectBrowserbase(params: z.infer<typeof ConnectBrowserba
     
     const session = await bb.sessions.create(sessionOptions);
     
-    // Connect to the session with timeout
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error(`Connection timed out after ${params.timeout}ms`)), params.timeout);
+    const browser = await puppeteer.connect({
+      browserWSEndpoint: session.connectUrl,
     });
     
-    const browserPromise = bb.connect(session.id);
-    await Promise.race([browserPromise, timeoutPromise]);
-    
+    const pages = await browser.pages();
+    console.log(`Connected to ${pages.length} pages`);
     return `Successfully connected to Browserbase:
 - Session ID: ${session.id}
 - Project ID: ${projectId}
