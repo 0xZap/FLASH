@@ -8,6 +8,7 @@ export interface ZapConfigParams {
   twitterApiKey?: string;
   ethereumPrivateKey?: string;
   exaApiKey?: string;
+  alchemyApiKey?: string;
 }
 
 const ConfigSchema = z.object({
@@ -18,6 +19,7 @@ const ConfigSchema = z.object({
   twitterApiKey: z.string().optional(),
   ethereumPrivateKey: z.string().optional(),
   exaApiKey: z.string().optional(),
+  alchemyApiKey: z.string().optional(),
 });
 
 /**
@@ -42,6 +44,7 @@ export class ZapConfig {
       twitterApiKey: params?.twitterApiKey ?? process.env.TWITTER_API_KEY,
       ethereumPrivateKey: params?.ethereumPrivateKey ?? process.env.ETHEREUM_PRIVATE_KEY,
       exaApiKey: params?.exaApiKey ?? process.env.EXA_API_KEY,
+      alchemyApiKey: params?.alchemyApiKey ?? process.env.ALCHEMY_API_KEY,
     };
 
     // Validate the config
@@ -178,6 +181,14 @@ export class ZapConfig {
       );
     }
     return apiKey;
+  }
+
+  /**
+   * Gets the Alchemy API key from the configuration.
+   * @returns The Alchemy API key or empty string if not set
+   */
+  public getAlchemyApiKey(): string {
+    return this.config.alchemyApiKey || "";
   }
 }
 

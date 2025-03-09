@@ -3,7 +3,7 @@
 
 <div align="center">
   
-[Visit our website](https://www.0xzap.com/)         [X](https://x.com/0xZapLab)
+[Visit our website](https://www.0xzap.com/)         [X](https://x.com/0xZapLab)
 
 </div>
 
@@ -32,10 +32,28 @@ pnpm add @zap/flash-langchain
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more information.
 
 ## Tools available 🧰
+> **34+ tools ready to use for your AI agents!**
+
 ### Web3
 - [x] Ethereum
+- [x] Alchemy
+  - [x] Token Price APIs (by symbol, by address, historical)
+  - [x] Blockchain APIs (accounts, blocks, transactions)
+  - [x] Gas Estimation and Fee Management
+  - [x] Core Blockchain State (blocks, transactions, accounts)
+  - [x] Gas Management (estimateGas, gasPrice, feeHistory)
+  - [x] Smart Contract Interaction (logs, balances)
 - [ ] Coinbase Agentic Kit
 - [x] Hyperbolic Agentic Kit
+  - [x] GPU Management
+    - [x] Get Available GPUs
+    - [x] Rent Compute
+    - [x] Terminate Compute
+    - [x] Get GPU Status
+  - [x] Account Management
+    - [x] Get Current Balance
+    - [x] Get Spend History
+    - [x] Link Wallet Address
 - [ ] Hedera Agentic Kit
 - [ ] Starknet Agentic Kit
 - [ ] P2P
@@ -46,15 +64,24 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
   - Payment processing
 
 ### AI/ML
-- [x] Hyperbolic
+- [x] Hyperbolic Agentic Kit
+  - [x] GPU Availability
+  - [x] Runtime Management
+- [x] ExaAI
+  - [x] Web Search & Content Retrieval
 - [ ] ElevenLabs
 - [ ] HeyGen
 
 ### Productivity
 - [x] Google Integration
-  - Calendar
-  - Gmail
-  - Sheets
+  - [x] Gmail
+    - [x] List Gmail Messages
+  - [x] Calendar
+    - [x] Get Calendar List
+    - [x] Get Calendar Events
+    - [x] Insert Calendar Events
+    - [x] Delete Calendar Events
+  - [x] Sheets
 - [ ] Notion
 - [ ] Trello
 - [ ] Canva
