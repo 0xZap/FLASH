@@ -82,7 +82,8 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ### Research
 - [ ] Youtube Scripts
-
+- [ ] Search Tool
+- [x] ExaAI
 ## Implement Frameworks
 
 ### Javascript Frameworks

@@ -7,6 +7,7 @@ export interface ZapConfigParams {
   telegramApiKey?: string;
   twitterApiKey?: string;
   ethereumPrivateKey?: string;
+  exaApiKey?: string;
 }
 
 const ConfigSchema = z.object({
@@ -16,6 +17,7 @@ const ConfigSchema = z.object({
   telegramApiKey: z.string().optional(),
   twitterApiKey: z.string().optional(),
   ethereumPrivateKey: z.string().optional(),
+  exaApiKey: z.string().optional(),
 });
 
 /**
@@ -39,6 +41,7 @@ export class ZapConfig {
       telegramApiKey: params?.telegramApiKey ?? process.env.TELEGRAM_API_KEY,
       twitterApiKey: params?.twitterApiKey ?? process.env.TWITTER_API_KEY,
       ethereumPrivateKey: params?.ethereumPrivateKey ?? process.env.ETHEREUM_PRIVATE_KEY,
+      exaApiKey: params?.exaApiKey ?? process.env.EXA_API_KEY,
     };
 
     // Validate the config
@@ -159,6 +162,22 @@ export class ZapConfig {
       );
     }
     return privateKey;
+  }
+
+  /**
+   * Retrieves the Exa API key from the configuration.
+   *
+   * @returns The Exa API key string
+   * @throws Error if the API key is not found
+   */
+  public getExaApiKey(): string {
+    const apiKey = this.config.exaApiKey;
+    if (!apiKey) {
+      throw new Error(
+        "Exa API key not found. Please provide it via constructor or set EXA_API_KEY environment variable.",
+      );
+    }
+    return apiKey;
   }
 }
 
