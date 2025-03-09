@@ -11,7 +11,7 @@ const CoinHistorySchema = z.object({
   id: z.string().describe("The ID of the coin to fetch historical data for (e.g., 'bitcoin', 'ethereum')"),
   date: z.string().describe("The date in DD-MM-YYYY format (e.g., '30-12-2020')"),
   localization: z.boolean().optional().describe("Include localized data (default: false)"),
-});
+}).strict();
 
 /**
  * Step 2: Create Tool Prompt

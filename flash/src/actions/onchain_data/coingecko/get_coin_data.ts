@@ -15,7 +15,7 @@ const CoinDataSchema = z.object({
   community_data: z.boolean().optional().describe("Include community data (default: false)"),
   developer_data: z.boolean().optional().describe("Include developer data (default: false)"),
   sparkline: z.boolean().optional().describe("Include sparkline data (default: false)"),
-});
+}).strict();
 
 /**
  * Step 2: Create Tool Prompt

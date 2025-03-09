@@ -9,10 +9,8 @@ export * from "./coingecko";
 export * from "./coingecko_pro";
 
 // Combine all onchain data actions
-export const ONCHAIN_DATA_ACTIONS = [
+export const ONCHAIN_DATA_ACTIONS: ZapAction<any>[] = [
   ...ALCHEMY_ACTIONS,
   ...COINGECKO_ACTIONS,
   ...COINGECKO_PRO_ACTIONS
 ]; 
-
-export const ONCHAIN_DATA_ACTIONS: ZapAction<any>[] = [...ALCHEMY_ACTIONS]; 

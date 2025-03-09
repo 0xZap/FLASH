@@ -24,7 +24,7 @@ const CoinChartSchema = z.object({
     .describe("Data up to number of days ago (1/7/14/30/90/180/365/max)"),
   interval: z.enum(["daily", "hourly"]).optional()
     .describe("Data interval. Possible values: daily, hourly (default: auto based on days)"),
-});
+}).strict();
 
 /**
  * Step 2: Create Tool Prompt

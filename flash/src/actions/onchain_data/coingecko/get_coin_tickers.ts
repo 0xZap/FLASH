@@ -16,7 +16,7 @@ const CoinTickersSchema = z.object({
   order: z.enum(["trust_score_desc", "trust_score_asc", "volume_desc"]).optional()
     .describe("Order results by trust score or volume (default: trust_score_desc)"),
   depth: z.boolean().optional().describe("Include order book depth data (default: false)"),
-});
+}).strict();
 
 /**
  * Step 2: Create Tool Prompt
