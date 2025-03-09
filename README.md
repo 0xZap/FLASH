@@ -78,7 +78,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
     - [x] List Gmail Messages
   - [x] Calendar
     - [x] Get Calendar List
-    - [x] Get Calendar Events
+    - [x] Get Calendar Evencucuts
     - [x] Insert Calendar Events
     - [x] Delete Calendar Events
   - [x] Sheets
