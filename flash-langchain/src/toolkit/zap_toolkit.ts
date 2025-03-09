@@ -80,9 +80,9 @@ export class ZapToolkit extends Toolkit {
     // If coingeckoConfig is provided, ensure it's set as the instance
     if (this.coingeckoConfig) {
       CoinGeckoConfig.resetInstance();
-      CoinGeckoConfig.getInstance()
-        .setApiKey(this.coingeckoConfig.getApiKey() || '')
-        .setProApiKey(this.coingeckoConfig.getProApiKey() || '');
+      const instance = CoinGeckoConfig.getInstance();
+      instance.setApiKey(this.coingeckoConfig.getApiKey() || '');
+      instance.setProApiKey(this.coingeckoConfig.getProApiKey() || '');
     }
 
     const actions = ZAP_ACTIONS;

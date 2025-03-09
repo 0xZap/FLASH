@@ -6,8 +6,14 @@ import { ZapConfig } from "./zap_config";
  * This class manages the API keys and other configuration for both
  * the regular CoinGecko API and the CoinGecko Pro API.
  */
+
+export interface CoinGeckoConfigParams {
+  apiKey?: string;
+  proApiKey?: string;
+}
+
 export class CoinGeckoConfig {
-  private static instance: CoinGeckoConfig;
+  private static instance: CoinGeckoConfig | null = null;
   
   // Regular CoinGecko API key (for higher rate limits on free endpoints)
   private apiKey: string | null = null;
@@ -18,20 +24,47 @@ export class CoinGeckoConfig {
   // Reference to ZapConfig for any shared configuration
   private zapConfig: ZapConfig;
 
-  private constructor() {
-    // Use composition instead of inheritance
-    this.zapConfig = ZapConfig.getInstance();
+  private constructor(params?: CoinGeckoConfigParams) {
+    try {
+      // First try to get keys from params
+      if (params?.apiKey) {
+        this.apiKey = params.apiKey;
+      }
+      if (params?.proApiKey) {
+        this.proApiKey = params.proApiKey;
+      }
+
+      // Use composition for ZapConfig
+      this.zapConfig = ZapConfig.getInstance();
+      
+      // If keys weren't provided in params, try to get from ZapConfig
+      if (!this.apiKey) {
+        this.apiKey = this.zapConfig.getCoinGeckoApiKey() || null;
+      }
+      if (!this.proApiKey) {
+        this.proApiKey = this.zapConfig.getCoinGeckoProApiKey() || null;
+      }
+    } catch (error) {
+      throw new Error(
+        "Failed to initialize CoinGeckoConfig: " +
+        (error instanceof Error ? error.message : "Unknown error")
+      );
+    }
   }
 
   /**
    * Get the singleton instance of CoinGeckoConfig
    * @returns The CoinGeckoConfig instance
    */
-  public static getInstance(): CoinGeckoConfig {
+  public static getInstance(params?: CoinGeckoConfigParams): CoinGeckoConfig {
     if (!CoinGeckoConfig.instance) {
-      CoinGeckoConfig.instance = new CoinGeckoConfig();
+      CoinGeckoConfig.instance = new CoinGeckoConfig(params);
     }
     return CoinGeckoConfig.instance;
+  }
+
+  public static resetInstance(): void {
+    CoinGeckoConfig.instance = null;
   }
 
   /**

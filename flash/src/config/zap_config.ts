@@ -190,6 +190,14 @@ export class ZapConfig {
   public getAlchemyApiKey(): string {
     return this.config.alchemyApiKey || "";
   }
+
+  public getCoinGeckoApiKey(): string | null {
+    return process.env.COINGECKO_API_KEY || null;
+  }
+
+  public getCoinGeckoProApiKey(): string | null {
+    return process.env.COINGECKO_PRO_API_KEY || null;
+  }
 }
 
 // Export a singleton instance

@@ -42,7 +42,7 @@
     "@langchain/core": "^0.3.39",
     "tools": "link:@langchain/core/tools",
     "viem": "^2.21.51",
-    "@0xzap/flash": "0.0.7",
+    "@0xzap/flash": "0.0.8",
     "zod": "^3.23.8"
   },
   "devDependencies": {
