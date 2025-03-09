@@ -33,8 +33,9 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ## Tools available 🧰
 ### Web3
+- [x] Ethereum
 - [ ] Coinbase Agentic Kit
-- [ ] Hyperbolic Agentic Kit
+- [x] Hyperbolic Agentic Kit
 - [ ] Hedera Agentic Kit
 - [ ] Starknet Agentic Kit
 - [ ] P2P
