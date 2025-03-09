@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { CoinGeckoConfig } from "../../../config/coingecko_config";
+import { formatNumber, formatLargeNumber, formatSupply } from "./helpers";
 
 /**
  * Step 1: Define Input Schema
@@ -219,56 +220,6 @@ export async function getCoinsMarketData(inputs: z.infer<typeof CoinsMarketDataS
     }
     
     return "Unknown error occurred while fetching data from CoinGecko.";
-  }
-}
-
-/**
- * Helper function to format currency values
- */
-function formatNumber(num: number, currency: string): string {
-  if (num === null || num === undefined) return 'N/A';
-  
-  const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency.toUpperCase(),
-    minimumFractionDigits: num < 1 ? 6 : 2,
-    maximumFractionDigits: num < 1 ? 6 : 2,
-  });
-  
-  return formatter.format(num);
-}
-
-/**
- * Helper function to format large numbers
- */
-function formatLargeNumber(num: number): string {
-  if (num === null || num === undefined) return 'N/A';
-  
-  if (num >= 1_000_000_000) {
-    return `$${(num / 1_000_000_000).toFixed(2)}B`;
-  } else if (num >= 1_000_000) {
-    return `$${(num / 1_000_000).toFixed(2)}M`;
-  } else if (num >= 1_000) {
-    return `$${(num / 1_000).toFixed(2)}K`;
-  } else {
-    return `$${num.toFixed(2)}`;
-  }
-}
-
-/**
- * Helper function to format supply values
- */
-function formatSupply(supply: number | null, symbol: string): string {
-  if (!supply) return 'N/A';
-  
-  if (supply >= 1_000_000_000) {
-    return `${(supply / 1_000_000_000).toFixed(2)}B ${symbol.toUpperCase()}`;
-  } else if (supply >= 1_000_000) {
-    return `${(supply / 1_000_000).toFixed(2)}M ${symbol.toUpperCase()}`;
-  } else if (supply >= 1_000) {
-    return `${(supply / 1_000).toFixed(2)}K ${symbol.toUpperCase()}`;
-  } else {
-    return `${supply.toFixed(2)} ${symbol.toUpperCase()}`;
   }
 }
 

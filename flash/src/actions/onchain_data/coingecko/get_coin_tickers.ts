@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { CoinGeckoConfig } from "../../../config/coingecko_config";
+import { formatNumber, formatLargeNumber } from "./helpers";
 
 /**
  * Step 1: Define Input Schema
@@ -182,34 +183,6 @@ function groupTickersByExchange(tickers: any[]): Record<string, { tickers: any[]
   });
   
   return groups;
-}
-
-/**
- * Helper function to format numbers
- */
-function formatNumber(num: number): string {
-  if (num >= 1000) {
-    return num.toLocaleString(undefined, { maximumFractionDigits: 2 });
-  } else if (num >= 1) {
-    return num.toLocaleString(undefined, { maximumFractionDigits: 4 });
-  } else {
-    return num.toLocaleString(undefined, { maximumSignificantDigits: 4 });
-  }
-}
-
-/**
- * Helper function to format large numbers
- */
-function formatLargeNumber(num: number): string {
-  if (num >= 1_000_000_000) {
-    return `${(num / 1_000_000_000).toFixed(2)}B`;
-  } else if (num >= 1_000_000) {
-    return `${(num / 1_000_000).toFixed(2)}M`;
-  } else if (num >= 1_000) {
-    return `${(num / 1_000).toFixed(2)}K`;
-  } else {
-    return num.toFixed(2);
-  }
 }
 
 /**

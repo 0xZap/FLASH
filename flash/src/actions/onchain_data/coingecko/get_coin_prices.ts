@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { CoinGeckoConfig } from "../../../config/coingecko_config";
+import { formatNumber, capitalizeFirstLetter, getRequestHeaders } from "./helpers";
 
 /**
  * Step 1: Define Input Schema
@@ -67,37 +68,32 @@ export async function getCoinPrices(inputs: z.infer<typeof CoinPricesSchema>): P
   const baseUrl = config.getBaseUrl();
   const endpoint = "/simple/price";
   
+  // Build URL parameters
+  const params = new URLSearchParams();
+  params.append("ids", inputs.coin_ids.join(","));
+  params.append("vs_currencies", inputs.vs_currencies.join(","));
+  
+  if (inputs.include_market_cap) {
+    params.append("include_market_cap", "true");
+  }
+  
+  if (inputs.include_24h_vol) {
+    params.append("include_24h_vol", "true");
+  }
+  
+  if (inputs.include_24h_change) {
+    params.append("include_24h_change", "true");
+  }
+  
+  if (inputs.include_last_updated_at) {
+    params.append("include_last_updated_at", "true");
+  }
+  
+  // Get headers using the helper function
+  const headers = getRequestHeaders();
+  
+  // Make the API request
   try {
-    // Prepare request parameters
-    const params = new URLSearchParams();
-    params.append("ids", inputs.coin_ids.join(","));
-    params.append("vs_currencies", inputs.vs_currencies.join(","));
-    
-    if (inputs.include_market_cap) {
-      params.append("include_market_cap", "true");
-    }
-    
-    if (inputs.include_24h_vol) {
-      params.append("include_24h_vol", "true");
-    }
-    
-    if (inputs.include_24h_change) {
-      params.append("include_24h_change", "true");
-    }
-    
-    if (inputs.include_last_updated_at) {
-      params.append("include_last_updated_at", "true");
-    }
-    
-    // Add API key if available (for higher rate limits)
-    const headers: Record<string, string> = {
-      'Accept': 'application/json'
-    };
-    
-    if (config.hasApiKey()) {
-      headers['x-cg-api-key'] = config.getApiKey() as string;
-    }
-    
     // Make API request
     const response = await fetch(`${baseUrl}${endpoint}?${params.toString()}`, {
       method: 'GET',
@@ -165,30 +161,6 @@ export async function getCoinPrices(inputs: z.infer<typeof CoinPricesSchema>): P
     }
     
     return "Unknown error occurred while fetching data from CoinGecko.";
-  }
-}
-
-/**
- * Helper function to capitalize the first letter of a string
- */
-function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-/**
- * Helper function to format numbers
- */
-function formatNumber(num: number): string {
-  if (num >= 1_000_000_000) {
-    return `$${(num / 1_000_000_000).toFixed(2)}B`;
-  } else if (num >= 1_000_000) {
-    return `$${(num / 1_000_000).toFixed(2)}M`;
-  } else if (num >= 1_000) {
-    return `$${(num / 1_000).toFixed(2)}K`;
-  } else if (num < 0.01) {
-    return `$${num.toFixed(8)}`;
-  } else {
-    return `$${num.toFixed(2)}`;
   }
 }
 

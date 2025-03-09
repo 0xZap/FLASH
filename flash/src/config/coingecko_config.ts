@@ -6,7 +6,7 @@ import { ZapConfig } from "./zap_config";
  * This class manages the API keys and other configuration for both
  * the regular CoinGecko API and the CoinGecko Pro API.
  */
-export class CoinGeckoConfig extends ZapConfig {
+export class CoinGeckoConfig {
   private static instance: CoinGeckoConfig;
   
   // Regular CoinGecko API key (for higher rate limits on free endpoints)
@@ -14,9 +14,13 @@ export class CoinGeckoConfig extends ZapConfig {
   
   // CoinGecko Pro API key (for paid endpoints)
   private proApiKey: string | null = null;
+  
+  // Reference to ZapConfig for any shared configuration
+  private zapConfig: ZapConfig;
 
   private constructor() {
-    super();
+    // Use composition instead of inheritance
+    this.zapConfig = ZapConfig.getInstance();
   }
 
   /**

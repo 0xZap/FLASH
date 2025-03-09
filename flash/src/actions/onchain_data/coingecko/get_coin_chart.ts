@@ -1,6 +1,16 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { CoinGeckoConfig } from "../../../config/coingecko_config";
+import { 
+  formatCurrency, 
+  formatLargeNumber, 
+  formatDate,
+  getCurrencySymbol,
+  getTimeframeLabel,
+  findSignificantPoints,
+  getRequestHeaders
+} from "./helpers";
+
 
 /**
  * Step 1: Define Input Schema
@@ -51,15 +61,7 @@ export async function getCoinChart(inputs: z.infer<typeof CoinChartSchema>): Pro
   const url = `${apiUrl}/coins/${encodeURIComponent(inputs.id)}/market_chart?${params.toString()}`;
   
   try {
-    const headers: HeadersInit = {
-      'accept': 'application/json',
-    };
-    
-    // Add API key if available
-    const apiKey = config.getApiKey();
-    if (apiKey) {
-      headers['x-cg-pro-api-key'] = apiKey;
-    }
+    const headers = getRequestHeaders();
     
     const response = await fetch(url, {
       method: 'GET',
@@ -156,123 +158,6 @@ function formatChartData(data: any, inputs: z.infer<typeof CoinChartSchema>): st
   result += `*Total data points: ${data.prices.length}*\n`;
   
   return result;
-}
-
-/**
- * Helper function to find significant price points (highs and lows)
- */
-function findSignificantPoints(priceData: [number, number][], maxPoints: number): Array<{timestamp: number, price: number, isHigh: boolean}> {
-  if (priceData.length <= 2) {
-    return [];
-  }
-  
-  const points: Array<{timestamp: number, price: number, isHigh: boolean}> = [];
-  const prices = priceData.map(p => p[1]);
-  const timestamps = priceData.map(p => p[0]);
-  
-  // Find local maxima and minima
-  for (let i = 1; i < prices.length - 1; i++) {
-    // Local maximum
-    if (prices[i] > prices[i - 1] && prices[i] > prices[i + 1]) {
-      points.push({
-        timestamp: timestamps[i],
-        price: prices[i],
-        isHigh: true
-      });
-    }
-    // Local minimum
-    else if (prices[i] < prices[i - 1] && prices[i] < prices[i + 1]) {
-      points.push({
-        timestamp: timestamps[i],
-        price: prices[i],
-        isHigh: false
-      });
-    }
-  }
-  
-  // Sort by significance (distance from average)
-  const avgPrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-  points.sort((a, b) => Math.abs(b.price - avgPrice) - Math.abs(a.price - avgPrice));
-  
-  // Return top N points
-  return points.slice(0, maxPoints);
-}
-
-/**
- * Helper function to get currency symbol
- */
-function getCurrencySymbol(currency: string): string {
-  const symbols: Record<string, string> = {
-    usd: '$',
-    eur: '€',
-    gbp: '£',
-    jpy: '¥',
-    btc: '₿',
-    eth: 'Ξ',
-  };
-  
-  return symbols[currency.toLowerCase()] || currency;
-}
-
-/**
- * Helper function to format currency values
- */
-function formatCurrency(value: number, currency: string): string {
-  const symbol = getCurrencySymbol(currency);
-  
-  if (value >= 1000) {
-    return `${symbol}${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
-  } else if (value >= 1) {
-    return `${symbol}${value.toLocaleString(undefined, { maximumFractionDigits: 4 })}`;
-  } else {
-    return `${symbol}${value.toLocaleString(undefined, { maximumSignificantDigits: 4 })}`;
-  }
-}
-
-/**
- * Helper function to format large numbers with currency
- */
-function formatLargeNumber(num: number, currency: string): string {
-  const symbol = getCurrencySymbol(currency);
-  
-  if (num >= 1_000_000_000) {
-    return `${symbol}${(num / 1_000_000_000).toFixed(2)}B`;
-  } else if (num >= 1_000_000) {
-    return `${symbol}${(num / 1_000_000).toFixed(2)}M`;
-  } else if (num >= 1_000) {
-    return `${symbol}${(num / 1_000).toFixed(2)}K`;
-  } else {
-    return `${symbol}${num.toFixed(2)}`;
-  }
-}
-
-/**
- * Helper function to format dates
- */
-function formatDate(date: Date): string {
-  return date.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-}
-
-/**
- * Helper function to get timeframe label
- */
-function getTimeframeLabel(days: string): string {
-  const labels: Record<string, string> = {
-    '1': '24-Hour',
-    '7': '7-Day',
-    '14': '14-Day',
-    '30': '30-Day',
-    '90': '3-Month',
-    '180': '6-Month',
-    '365': '1-Year',
-    'max': 'All-Time'
-  };
-  
-  return labels[days] || `${days}-Day`;
 }
 
 /**

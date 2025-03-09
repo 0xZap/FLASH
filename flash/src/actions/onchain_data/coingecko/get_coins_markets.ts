@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { CoinGeckoConfig } from "../../../config/coingecko_config";
+import { formatNumber, formatNumberWithoutSymbol } from "./helpers";
 
 /**
  * Step 1: Define Input Schema
@@ -217,42 +218,6 @@ export async function getCoinsMarkets(inputs: z.infer<typeof CoinsMarketsSchema>
     }
     
     return "Unknown error occurred while fetching data from CoinGecko.";
-  }
-}
-
-/**
- * Helper function to format numbers with currency symbol
- */
-function formatNumber(num: number): string {
-  if (num === null || num === undefined) return "N/A";
-  
-  if (num >= 1_000_000_000) {
-    return `$${(num / 1_000_000_000).toFixed(2)}B`;
-  } else if (num >= 1_000_000) {
-    return `$${(num / 1_000_000).toFixed(2)}M`;
-  } else if (num >= 1_000) {
-    return `$${(num / 1_000).toFixed(2)}K`;
-  } else if (num < 0.01 && num > 0) {
-    return `$${num.toFixed(8)}`;
-  } else {
-    return `$${num.toFixed(2)}`;
-  }
-}
-
-/**
- * Helper function to format numbers without currency symbol
- */
-function formatNumberWithoutSymbol(num: number): string {
-  if (num === null || num === undefined) return "N/A";
-  
-  if (num >= 1_000_000_000) {
-    return `${(num / 1_000_000_000).toFixed(2)}B`;
-  } else if (num >= 1_000_000) {
-    return `${(num / 1_000_000).toFixed(2)}M`;
-  } else if (num >= 1_000) {
-    return `${(num / 1_000).toFixed(2)}K`;
-  } else {
-    return `${num.toFixed(2)}`;
   }
 }
 
