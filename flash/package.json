@@ -36,7 +36,7 @@
     "crypto"
   ],
   "dependencies": {
-    "alchemy-sdk": "^3.3.1",
+    "alchemy-sdk": "^3.5.4",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "exa-js": "^1.5.11",
