@@ -44,7 +44,8 @@
     "ssh2": "^1.16.0",
     "viem": "^2.23.8",
     "zod": "^3.24.2",
-    "pyodide": "^0.23.4"
+    "pyodide": "^0.23.4",
+    "elevenlabs": "^5.0.0"
   },
   "devDependencies": {
     "@types/secp256k1": "^4.0.6",
