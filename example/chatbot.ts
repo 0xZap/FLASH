@@ -3,7 +3,15 @@ dotenv.config();
 
 function validateEnvironment(): void {
   const missingVars: string[] = [];
-  const requiredVars = ["OPENAI_API_KEY", "HYPERBOLIC_API_KEY", "GOOGLE_API_KEY", "GOOGLE_CLIENT_SECRET"];
+  const requiredVars = [
+    "OPENAI_API_KEY",
+    "HYPERBOLIC_API_KEY",
+    "GOOGLE_API_KEY",
+    "GOOGLE_CLIENT_SECRET",
+    "ETHEREUM_PRIVATE_KEY",
+    "EXA_API_KEY",
+    "ALCHEMY_API_KEY"
+  ];
   requiredVars.forEach(varName => {
     if (!process.env[varName]) {
       missingVars.push(varName);
@@ -27,14 +35,18 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatOpenAI } from "@langchain/openai";
 import * as readline from "readline";
 import { ZapToolkit } from "@0xzap/flash-langchain";
-import { ZapConfig, HyperbolicConfig, GoogleConfig } from "@0xzap/flash";
+import { ZapConfig, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig } from "@0xzap/flash";
 // import { GoogleAuth, setupAuthServer } from './google_auth';
 
-// Reset any existing instances
+// Reset all existing instances
 ZapConfig.resetInstance();
 HyperbolicConfig.resetInstance();
+GoogleConfig.resetInstance();
+EthereumConfig.resetInstance();
+ExaConfig.resetInstance();
+AlchemyConfig.resetInstance();
 
-// Initialize configurations with environment variable
+// Initialize all configurations with environment variables
 const zapConfig = ZapConfig.getInstance({
   hyperbolicApiKey: process.env.HYPERBOLIC_API_KEY
 });
@@ -45,6 +57,18 @@ const hyperbolicConfig = HyperbolicConfig.getInstance({
 
 const googleConfig = GoogleConfig.getInstance({
   token: process.env.GOOGLE_TOKEN
+});
+
+const ethereumConfig = EthereumConfig.getInstance({
+  privateKey: process.env.ETHEREUM_PRIVATE_KEY
+});
+
+const exaConfig = ExaConfig.getInstance({
+  apiKey: process.env.EXA_API_KEY
+});
+
+const alchemyConfig = AlchemyConfig.getInstance({
+  apiKey: process.env.ALCHEMY_API_KEY
 });
 
 /**
@@ -62,8 +86,14 @@ async function initializeAgent() {
     // Get the Hyperbolic config instance
     const hyperbolicConfig = HyperbolicConfig.getInstance();
 
-    // Initialize Zap Tools Toolkit with config and get tools
-    const zapToolKit = new ZapToolkit(hyperbolicConfig, googleConfig);
+    // Initialize Zap Tools Toolkit with all configs
+    const zapToolKit = new ZapToolkit(
+      hyperbolicConfig,
+      googleConfig,
+      ethereumConfig,
+      exaConfig,
+      alchemyConfig
+    );
     const tools = zapToolKit.getTools();
 
     // Store buffered conversation history in memory
