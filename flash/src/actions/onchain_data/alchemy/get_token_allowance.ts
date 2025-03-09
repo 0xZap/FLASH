@@ -106,7 +106,7 @@ export async function getTokenAllowance(inputs: z.infer<typeof TokenAllowanceSch
     };
     
     // Fetch token allowance using the Alchemy API
-    const allowanceResponse = await alchemy.connection.send("alchemy_getTokenAllowance", [params]);
+    const allowanceResponse = await alchemy.core.send("alchemy_getTokenAllowance", [params]);
     
     // Convert the result to a bigint for proper handling of large numbers
     const allowance = BigInt(allowanceResponse);
@@ -123,7 +123,7 @@ export async function getTokenAllowance(inputs: z.infer<typeof TokenAllowanceSch
         const tokenSymbol = metadata.symbol || "";
         
         // Format allowance as a readable number with proper decimals
-        const readableAllowance = formatBigIntWithDecimals(allowance, decimals);
+        const readableAllowance = formatBigIntWithDecimals(allowance, decimals || 18);
         
         formattedResponse = `Token Allowance:\n\n`;
         formattedResponse += `Token: ${tokenName} (${tokenSymbol})\n`;

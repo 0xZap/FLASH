@@ -85,7 +85,7 @@ export async function getAccounts(inputs: z.infer<typeof AccountsSchema>): Promi
     });
     
     // Fetch accounts using the JSON-RPC method
-    const accounts = await alchemy.connection.send("eth_accounts", []);
+    const accounts = await alchemy.core.send("eth_accounts", []);
     
     // Format the response
     let formattedResponse = `Accounts on ${inputs.network}:\n\n`;

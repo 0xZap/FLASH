@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
-import { Alchemy } from "alchemy-sdk";
+import { Alchemy, AssetTransfersCategory } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
-
+import { AssetTransfersResult } from "alchemy-sdk";
 /**
  * Step 1: Define Input Schema
  * 
@@ -72,9 +72,15 @@ export async function getTransactionsByAddress(inputs: z.infer<typeof Transactio
     };
     
     // Fetch transactions by address
-    const result = await alchemy.data.getAssetTransfers({
+    const result = await alchemy.core.getAssetTransfers({
       fromAddress: inputs.address,
-      category: ["external", "internal", "erc20", "erc721", "erc1155"],
+      category: [
+        AssetTransfersCategory.EXTERNAL,
+        AssetTransfersCategory.INTERNAL,
+        AssetTransfersCategory.ERC20,
+        AssetTransfersCategory.ERC721,
+        AssetTransfersCategory.ERC1155
+      ],
       maxCount: inputs.limit
     });
     
@@ -97,7 +103,9 @@ export async function getTransactionsByAddress(inputs: z.infer<typeof Transactio
     
     // Add data rows
     result.transfers.forEach((tx, index) => {
-      const timestamp = tx.metadata?.blockTimestamp ? new Date(tx.metadata.blockTimestamp).toISOString() : 'N/A';
+      // Convert block number to timestamp (since we don't have direct timestamp access)
+      const blockNumber = parseInt(tx.blockNum, 16); // Convert hex string to number
+      const timestamp = blockNumber ? `Block #${blockNumber}` : 'N/A';
       const asset = tx.asset || 'ETH';
       const value = tx.value ? `${tx.value} ${asset}` : 'N/A';
       const from = tx.from ? shortenAddress(tx.from) : 'N/A';

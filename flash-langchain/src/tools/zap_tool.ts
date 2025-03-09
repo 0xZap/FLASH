@@ -21,7 +21,7 @@ export class ZapTool<TActionSchema extends ZapActionSchema> extends StructuredTo
     super();
     this.action = action;
     this.name = action.name;
-    this.description = action.description;
+    this.description = action.description.slice(0, 1000);
     this.schema = action.schema;
   }
 

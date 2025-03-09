@@ -121,7 +121,7 @@ export async function getGasPrice(inputs: z.infer<typeof GasPriceSchema>): Promi
     let formattedResponse = `Current Gas Price on ${inputs.network}:\n\n`;
     
     // Convert to different units
-    const gasPriceWei = BigInt(gasPrice);
+    const gasPriceWei = BigInt(gasPrice.toString());
     const gasPriceGwei = Number(gasPriceWei) / 1e9;
     
     formattedResponse += `• Gas Price: ${gasPriceGwei.toFixed(2)} Gwei\n`;

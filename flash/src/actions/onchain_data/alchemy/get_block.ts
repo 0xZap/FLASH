@@ -2,7 +2,6 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { Alchemy, Network } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
-
 /**
  * Step 1: Define Input Schema
  * 
@@ -95,7 +94,7 @@ export async function getBlock(inputs: z.infer<typeof BlockInfoSchema>): Promise
     });
     
     // Fetch the block information
-    const block = await alchemy.core.getBlock(inputs.blockNumberOrTag, inputs.includeTransactions);
+    const block = await alchemy.core.getBlock(inputs.blockNumberOrTag);
     
     if (!block) {
       return `No block found for ${inputs.blockNumberOrTag} on ${inputs.network}.`;
@@ -116,7 +115,7 @@ export async function getBlock(inputs: z.infer<typeof BlockInfoSchema>): Promise
     // Miner and state
     formattedResponse += `Miner: ${block.miner}\n`;
     formattedResponse += `Difficulty: ${block.difficulty}\n`;
-    formattedResponse += `Total Difficulty: ${block.totalDifficulty}\n`;
+    formattedResponse += `Total Difficulty: ${block.difficulty}\n`;
     formattedResponse += `Gas Used: ${block.gasUsed}\n`;
     formattedResponse += `Gas Limit: ${block.gasLimit}\n`;
     
@@ -125,22 +124,15 @@ export async function getBlock(inputs: z.infer<typeof BlockInfoSchema>): Promise
       formattedResponse += `Transaction Count: ${block.transactions.length}\n\n`;
       
       // If requested, include transaction details
-      if (inputs.includeTransactions && block.transactions.length > 0 && typeof block.transactions[0] !== 'string') {
+      if (inputs.includeTransactions && block.transactions.length > 0) {
         // Show only first few transactions if there are many
         const transactionsToShow = Math.min(5, block.transactions.length);
         formattedResponse += `Showing ${transactionsToShow} of ${block.transactions.length} transactions:\n\n`;
         
         for (let i = 0; i < transactionsToShow; i++) {
-          const tx = block.transactions[i];
-          if (typeof tx !== 'string') {
-            formattedResponse += `Transaction #${i + 1}:\n`;
-            formattedResponse += `- Hash: ${tx.hash}\n`;
-            formattedResponse += `- From: ${tx.from}\n`;
-            formattedResponse += `- To: ${tx.to || 'Contract Creation'}\n`;
-            formattedResponse += `- Value: ${tx.value.toString()}\n`;
-            formattedResponse += `- Gas Price: ${tx.gasPrice?.toString() || 'N/A'}\n`;
-            formattedResponse += `- Gas Limit: ${tx.gasLimit.toString()}\n\n`;
-          }
+          const tx = block.transactions[i] 
+          formattedResponse += `Transaction #${i + 1}:\n`;
+          formattedResponse += `- Info: ${tx}\n`;
         }
         
         // If we didn't show all transactions
@@ -154,7 +146,7 @@ export async function getBlock(inputs: z.infer<typeof BlockInfoSchema>): Promise
           formattedResponse += `Transaction Hashes (first ${hashesToShow}):\n`;
           for (let i = 0; i < hashesToShow; i++) {
             const txHash = block.transactions[i];
-            formattedResponse += `- ${typeof txHash === 'string' ? txHash : txHash.hash}\n`;
+            formattedResponse += `- ${typeof txHash === 'string' ? txHash : 'Unexpectected transaction type'}\n`;
           }
           
           if (block.transactions.length > hashesToShow) {

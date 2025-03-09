@@ -83,14 +83,14 @@ export async function exaSearch(inputs: z.infer<typeof ExaSearchSchema>): Promis
     const results = await exa.searchAndContents(inputs.query, searchOptions);
     
     // Format results
-    if (!results || results.length === 0) {
+    if (!results.results || results.results.length === 0) {
       return "No results found for your query.";
     }
     
     // Build formatted response
-    let formattedResponse = `Found ${results.length} results for "${inputs.query}":\n\n`;
+    let formattedResponse = `Found ${results.results.length} results for "${inputs.query}":\n\n`;
     
-    results.forEach((result: any, index: number) => {
+    results.results.forEach((result: any, index: number) => {
       formattedResponse += `${index + 1}. ${result.title}\n`;
       formattedResponse += `   URL: ${result.url}\n`;
       

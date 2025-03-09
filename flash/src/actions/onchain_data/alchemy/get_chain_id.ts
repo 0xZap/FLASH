@@ -111,7 +111,7 @@ export async function getChainId(inputs: z.infer<typeof ChainIdSchema>): Promise
     const expectedChainId = getExpectedChainId(inputs.network);
     
     // Fetch the chain ID using the JSON-RPC method
-    const chainIdHex = await alchemy.connection.send("eth_chainId", []);
+    const chainIdHex = await alchemy.core.send("eth_chainId", []);
     
     // Convert hex string to decimal
     const chainId = parseInt(chainIdHex, 16);

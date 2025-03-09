@@ -114,8 +114,17 @@ export async function getTokenBalances(inputs: z.infer<typeof TokenBalancesSchem
     // Build formatted response
     let formattedResponse = `Token balances for ${inputs.address} on ${inputs.network}:\n\n`;
     
+    // Define interface for token data
+    interface TokenData {
+      name: string;
+      symbol: string;
+      balance: string;
+      contractAddress: string;
+      decimals: number;
+    }
+
     // Create an array to store token data with metadata
-    const tokenDataArray = [];
+    const tokenDataArray: TokenData[] = [];
     
     // Fetch token metadata for each token
     for (const token of result.tokenBalances) {
