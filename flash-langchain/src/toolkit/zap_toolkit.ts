@@ -1,5 +1,5 @@
 import { StructuredToolInterface, BaseToolkit as Toolkit } from "@langchain/core/tools";
-import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig } from "@0xzap/flash";
+import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig, CoinGeckoConfig } from "@0xzap/flash";
 import { ZapTool } from "../tools/zap_tool";
 
 /**
@@ -12,6 +12,7 @@ export class ZapToolkit extends Toolkit {
   private ethereumConfig?: EthereumConfig;
   private exaConfig?: ExaConfig;
   private alchemyConfig?: AlchemyConfig;
+  private coingeckoConfig?: CoinGeckoConfig;
   /**
    * Creates a new Zap Toolkit instance
    *
@@ -20,13 +21,15 @@ export class ZapToolkit extends Toolkit {
    * @param ethereumConfig - Optional configuration for Ethereum API
    * @param exaConfig - Optional configuration for Exa API
    * @param alchemyConfig - Optional configuration for Alchemy API
+   * @param coingeckoConfig - Optional configuration for CoinGecko API
    */
   constructor(
     hyperbolicConfig?: HyperbolicConfig,
     googleConfig?: GoogleConfig,
     ethereumConfig?: EthereumConfig,
     exaConfig?: ExaConfig,
-    alchemyConfig?: AlchemyConfig
+    alchemyConfig?: AlchemyConfig,
+    coingeckoConfig?: CoinGeckoConfig
   ) {
     super();
     this.hyperbolicConfig = hyperbolicConfig;
@@ -34,6 +37,7 @@ export class ZapToolkit extends Toolkit {
     this.ethereumConfig = ethereumConfig;
     this.exaConfig = exaConfig;
     this.alchemyConfig = alchemyConfig;
+    this.coingeckoConfig = coingeckoConfig;
     this.tools = this.initializeTools();
   }
 
@@ -71,6 +75,14 @@ export class ZapToolkit extends Toolkit {
     if (this.alchemyConfig) {
       AlchemyConfig.resetInstance();
       AlchemyConfig.getInstance({ apiKey: this.alchemyConfig.getApiKey() });
+    }
+
+    // If coingeckoConfig is provided, ensure it's set as the instance
+    if (this.coingeckoConfig) {
+      CoinGeckoConfig.resetInstance();
+      CoinGeckoConfig.getInstance()
+        .setApiKey(this.coingeckoConfig.getApiKey() || '')
+        .setProApiKey(this.coingeckoConfig.getProApiKey() || '');
     }
 
     const actions = ZAP_ACTIONS;
