@@ -136,5 +136,7 @@ import {
       }
   }
   
-  // Run all tests
-  testAlchemyActions();
+    // Run all tests
+export async function runAlchemyTests() {
+    await testAlchemyActions();
+}

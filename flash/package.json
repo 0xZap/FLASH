@@ -21,6 +21,7 @@
     "format": "npx --yes prettier -c .prettierrc --write \"**/*.{ts,js,cjs,json,md}\"",
     "format-check": "npx --yes prettier -c .prettierrc --check \"**/*.{ts,js,cjs,json,md}\"",
     "check": "tsc --noEmit",
+    "test": "ts-node src/tests/index.ts",
     "test:exa": "ts-node src/tests/exa/index.ts",
     "test:alchemy": "ts-node src/tests/alchemy/index.ts",
     "test:dry-run": "pnpm install && pnpm ci && pnpm publish --dry-run",
@@ -36,11 +37,14 @@
     "crypto"
   ],
   "dependencies": {
+    "@browserbasehq/sdk": "^2.3.0",
+    "@browserbasehq/stagehand": "^1.14.0",
     "alchemy-sdk": "^3.5.4",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "exa-js": "^1.5.11",
     "nock": "^14.0.1",
+    "puppeteer": "^24.4.0",
     "ssh2": "^1.16.0",
     "viem": "^2.23.8",
     "zod": "^3.24.2"
