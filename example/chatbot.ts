@@ -10,8 +10,10 @@ function validateEnvironment(): void {
     "GOOGLE_CLIENT_SECRET",
     "ETHEREUM_PRIVATE_KEY",
     "EXA_API_KEY",
-    "ALCHEMY_API_KEY"
+    "ALCHEMY_API_KEY",
+    "COINGECKO_API_KEY",
   ];
+  // Optional COINGECKO_PRO_API_KEY
   requiredVars.forEach(varName => {
     if (!process.env[varName]) {
       missingVars.push(varName);
@@ -35,7 +37,7 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatOpenAI } from "@langchain/openai";
 import * as readline from "readline";
 import { ZapToolkit } from "@0xzap/flash-langchain";
-import { ZapConfig, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig } from "@0xzap/flash";
+import { ZapConfig, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig, CoinGeckoConfig } from "@0xzap/flash";
 // import { GoogleAuth, setupAuthServer } from './google_auth';
 
 // Reset all existing instances
@@ -71,6 +73,10 @@ const alchemyConfig = AlchemyConfig.getInstance({
   apiKey: process.env.ALCHEMY_API_KEY
 });
 
+const coinGeckoConfig = CoinGeckoConfig.getInstance({
+  apiKey: process.env.COINGECKO_API_KEY
+});
+
 /**
  * Initialize the agent with Zap Tools
  *
@@ -92,7 +98,8 @@ async function initializeAgent() {
       googleConfig,
       ethereumConfig,
       exaConfig,
-      alchemyConfig
+      alchemyConfig,
+      coinGeckoConfig
     );
     const tools = zapToolKit.getTools();
 

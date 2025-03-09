@@ -45,11 +45,11 @@ importers:
   example:
     dependencies:
       '@0xzap/flash':
-        specifier: 0.0.5
-        version: 0.0.5(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        specifier: 0.0.9
+        version: 0.0.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@0xzap/flash-langchain':
-        specifier: 0.0.6
-        version: 0.0.6(bufferutil@4.0.9)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
+        specifier: 0.0.8
+        version: 0.0.8(bufferutil@4.0.9)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@langchain/core':
         specifier: ^0.3.19
         version: 0.3.42(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))
@@ -93,6 +93,9 @@ importers:
       axios:
         specifier: ^1.7.9
         version: 1.8.2
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       exa-js:
         specifier: ^1.5.11
         version: 1.5.11
@@ -164,11 +167,8 @@ importers:
 
 packages:
 
-  '@0xzap/flash-langchain@0.0.6':
-    resolution: {integrity: sha512-WM9zAhIAuD90nhQtiVGgczfHsB4TqS755bknhX2FNrkNVz8qKh5tHCCuZgLc1Ao+q0RHYPm+LqXQr3294jhR/g==}
-
-  '@0xzap/flash@0.0.5':
-    resolution: {integrity: sha512-2WMKLR7yWWI/O2uxTcBFznCjAVHC6CJCPlYKxaHhcSfp2S/Lb+GwvY/G7y+ZjT0jWjAxPFmVPNvJfHQHfKqAPQ==}
+  '@0xzap/flash-langchain@0.0.8':
+    resolution: {integrity: sha512-g9Z1XUx6Y6rpH61l6DrYQ8icXOFs9Xzxq6I0MthIkPPOPc9/RUlEAY0MjC7muBbbrLIyW5M0IH+AgG1xNSX86g==}
 
   '@0xzap/flash@0.0.9':
     resolution: {integrity: sha512-0SXRU8k6gox5020x3Qsn0jZ26jsyivfv6qCUE/FEOVS7IhVgR0ec8ICbHxEG+PsFUvpm4qqEnefQM+WsQw68sQ==}
@@ -3087,9 +3087,9 @@ packages:
 
 snapshots:
 
-  '@0xzap/flash-langchain@0.0.6(bufferutil@4.0.9)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)':
+  '@0xzap/flash-langchain@0.0.8(bufferutil@4.0.9)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@0xzap/flash': 0.0.5(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+      '@0xzap/flash': 0.0.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@langchain/core': 0.3.42(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))
       tools: link:@langchain/core/tools
       viem: 2.23.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2)
@@ -3099,23 +3099,6 @@ snapshots:
       - debug
       - encoding
       - openai
-      - supports-color
-      - typescript
-      - utf-8-validate
-
-  '@0xzap/flash@0.0.5(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)':
-    dependencies:
-      alchemy-sdk: 3.5.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      axios: 1.8.2
-      exa-js: 1.5.11
-      nock: 14.0.1
-      ssh2: 1.16.0
-      viem: 2.23.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2)
-      zod: 3.24.2
-    transitivePeerDependencies:
-      - bufferutil
-      - debug
-      - encoding
       - supports-color
       - typescript
       - utf-8-validate
