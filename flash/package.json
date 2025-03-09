@@ -47,7 +47,8 @@
     "puppeteer": "^24.4.0",
     "ssh2": "^1.16.0",
     "viem": "^2.23.8",
-    "zod": "^3.24.2"
+    "zod": "^3.24.2",
+    "pyodide": "^0.23.4"
   },
   "devDependencies": {
     "@types/secp256k1": "^4.0.6",
