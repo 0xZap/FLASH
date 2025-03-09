@@ -33,10 +33,10 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ## Tools available 🧰
 ### Web3
-- [ ] Ethereum Operations
-  - Transfer
-  - Swap
-  - Bridge
+- [ ] Coinbase Agentic Kit
+- [ ] Hyperbolic Agentic Kit
+- [ ] Hedera Agentic Kit
+- [ ] Starknet Agentic Kit
 - [ ] P2P
   - Staking
   - Restaking
