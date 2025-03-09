@@ -48,8 +48,8 @@ importers:
         specifier: 0.0.5
         version: 0.0.5(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@0xzap/flash-langchain':
-        specifier: 0.0.5
-        version: 0.0.5(bufferutil@4.0.9)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
+        specifier: 0.0.6
+        version: 0.0.6(bufferutil@4.0.9)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@langchain/core':
         specifier: ^0.3.19
         version: 0.3.42(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))
@@ -124,8 +124,8 @@ importers:
 
 packages:
 
-  '@0xzap/flash-langchain@0.0.5':
-    resolution: {integrity: sha512-/r2TZtYgg9ZWAnI0mNEhY1M9Asvix8phnN14pDX93WWrGhBZCsZ0vCsSV1BLaE4QlbTweNXH5PNReCg5W/pPbw==}
+  '@0xzap/flash-langchain@0.0.6':
+    resolution: {integrity: sha512-WM9zAhIAuD90nhQtiVGgczfHsB4TqS755bknhX2FNrkNVz8qKh5tHCCuZgLc1Ao+q0RHYPm+LqXQr3294jhR/g==}
 
   '@0xzap/flash@0.0.5':
     resolution: {integrity: sha512-2WMKLR7yWWI/O2uxTcBFznCjAVHC6CJCPlYKxaHhcSfp2S/Lb+GwvY/G7y+ZjT0jWjAxPFmVPNvJfHQHfKqAPQ==}
@@ -2231,7 +2231,7 @@ packages:
 
 snapshots:
 
-  '@0xzap/flash-langchain@0.0.5(bufferutil@4.0.9)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)':
+  '@0xzap/flash-langchain@0.0.6(bufferutil@4.0.9)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@0xzap/flash': 0.0.5(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@langchain/core': 0.3.42(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))

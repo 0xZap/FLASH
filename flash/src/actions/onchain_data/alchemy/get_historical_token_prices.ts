@@ -45,7 +45,8 @@ const HISTORICAL_TOKEN_PRICE_PROMPT = `
 This tool fetches historical cryptocurrency prices using the Alchemy Price API.
 
 Required inputs:
-- symbol: Token symbol to fetch historical prices for (e.g., 'ETH')
+- network: Network name (e.g., 'ETH_MAINNET')
+- address: Token contract address
 - startTime: Start time in ISO format (e.g., '2024-01-01T00:00:00Z')
 - endTime: End time in ISO format (e.g., '2024-01-31T23:59:59Z')
 - interval: Time interval between data points:
@@ -58,13 +59,15 @@ Optional inputs:
 
 Examples:
 - Daily prices for January 2024: {
-    "symbol": "ETH",
+    "network": "ETH_MAINNET",
+    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
     "startTime": "2024-01-01T00:00:00Z",
     "endTime": "2024-01-31T23:59:59Z",
     "interval": "1d"
   }
 - Hourly prices for a specific day: {
-    "symbol": "BTC",
+    "network": "ETH_MAINNET",
+    "address": "0x15b7c0c907e4C6b9AdaAaabC300C08991D6CEA05",
     "startTime": "2024-01-15T00:00:00Z",
     "endTime": "2024-01-15T23:59:59Z",
     "interval": "1h"

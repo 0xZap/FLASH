@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@0xzap/flash": "0.0.5",
-    "@0xzap/flash-langchain": "0.0.5",
+    "@0xzap/flash-langchain": "0.0.6",
     "@langchain/core": "^0.3.19",
     "@langchain/langgraph": "^0.2.54",
     "@langchain/openai": "^0.3.14",
