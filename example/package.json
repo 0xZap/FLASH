@@ -15,8 +15,8 @@
     "format-check": "prettier -c .prettierrc --check \"**/*.{ts,js,cjs,json,md}\""
   },
   "dependencies": {
-    "@0xzap/flash": "0.0.5",
-    "@0xzap/flash-langchain": "0.0.6",
+    "@0xzap/flash": "0.0.6",
+    "@0xzap/flash-langchain": "0.0.7",
     "@langchain/core": "^0.3.19",
     "@langchain/langgraph": "^0.2.54",
     "@langchain/openai": "^0.3.14",
