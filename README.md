@@ -33,24 +33,42 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ## Tools available 🧰
 ### Web3
-- [ ] Ethereum Operations
-  - Transfer
-  - Swap
-  - Bridge
+- [x] Ethereum
+- [ ] Coinbase Agentic Kit
+- [x] Hyperbolic Agentic Kit
+- [ ] Hedera Agentic Kit
+- [ ] Starknet Agentic Kit
 - [ ] P2P
   - Staking
   - Restaking
 - [ ] Solana 
+- [ ] Stripe
+  - Payment processing
+
 ### AI/ML
 - [x] Hyperbolic
 - [ ] ElevenLabs
 - [ ] HeyGen
+
 ### Productivity
 - [x] Google Integration
   - Calendar
   - Gmail
+  - Sheets
 - [ ] Notion
 - [ ] Trello
+- [ ] Canva
+- [ ] Figma
+- [ ] ClickUp
+- [ ] Airtable
+- [ ] Calendly
+- [ ] Zoom
+
+### Developer
+- [ ] Github
+- [ ] Jira
+- [ ] Supabase
+
 ### Socials
 - [ ] Telegram
 - [ ] Twitter
@@ -58,7 +76,26 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 - [ ] Slack
 - [ ] Reddit
 
+### Business
+- [ ] Salesforce
+- [ ] HubSpot
+
+### Research
+- [ ] Youtube Scripts
+- [ ] Search Tool
+- [x] ExaAI
+## Implement Frameworks
+
+### Javascript Frameworks
+- [x] [LangChain](https://www.langchain.com/)
+- [ ] [CrewAI](https://www.crewai.io/)
+- [ ] [OpenAI](https://platform.openai.com/)
+- [ ] [Autogen](https://microsoft.github.io/autogen/)
+- [ ] [Lang Flow](https://www.langflow.org/)
+
 ## Guides and examples 📚
+
+TODO
 
 ## Contributors ✨
 <a href="https://github.com/0xZap/flash/graphs/contributors">
