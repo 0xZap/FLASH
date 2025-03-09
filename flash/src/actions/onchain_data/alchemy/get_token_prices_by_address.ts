@@ -1,7 +1,17 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
-import { Alchemy } from "alchemy-sdk";
+import { Alchemy, Network } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
+import { TokenPriceByAddressResult } from "alchemy-sdk";
+
+function getNetworkFromString(networkString: string): Network {
+  const networkMap: {[key: string]: Network} = {
+    "eth-mainnet": Network.ETH_MAINNET,
+    "eth-goerli": Network.ETH_GOERLI,
+    // Add other networks as needed
+  };
+  return networkMap[networkString] || Network.ETH_MAINNET;
+}
 
 /**
  * Step 1: Define Input Schema
@@ -70,9 +80,12 @@ export async function getTokenPricesByAddress(inputs: z.infer<typeof TokenPriceB
     // Initialize Alchemy client
     const alchemy = new Alchemy({ apiKey });
     
-    // Prepare the request data
+    // Prepare the request data with proper Network type
     const requestData = {
-      addresses: inputs.addresses
+      addresses: inputs.addresses.map(addr => ({
+        network: getNetworkFromString(addr.network),
+        address: addr.address
+      }))
     };
     
     // Fetch token prices by address
@@ -103,11 +116,6 @@ export async function getTokenPricesByAddress(inputs: z.infer<typeof TokenPriceB
         formattedResponse += `  ${price.currency}: ${price.value}\n`;
         formattedResponse += `  Last Updated: ${price.lastUpdatedAt}\n`;
       });
-      
-      // Display token info if available
-      if (tokenData.tokenMetadata) {
-        formattedResponse += `  Token: ${tokenData.tokenMetadata.name || 'Unknown'} (${tokenData.tokenMetadata.symbol || 'Unknown'})\n`;
-      }
       
       formattedResponse += "\n";
     });

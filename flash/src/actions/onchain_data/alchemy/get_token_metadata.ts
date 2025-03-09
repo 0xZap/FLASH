@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { Alchemy, Network } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
+import { TokenMetadataResponse } from "alchemy-sdk";
 
 /**
  * Step 1: Define Input Schema
@@ -102,7 +103,7 @@ export async function getTokenMetadata(inputs: z.infer<typeof TokenMetadataSchem
     // Build formatted response
     let formattedResponse = `Token Metadata for ${inputs.contractAddress} on ${inputs.network}:\n\n`;
     
-    // Add basic token info
+    // Add basic token info (only using properties defined in TokenMetadataResponse)
     formattedResponse += `Name: ${metadata.name || 'Unknown'}\n`;
     formattedResponse += `Symbol: ${metadata.symbol || 'Unknown'}\n`;
     formattedResponse += `Decimals: ${metadata.decimals || 'Unknown'}\n`;
@@ -110,23 +111,6 @@ export async function getTokenMetadata(inputs: z.infer<typeof TokenMetadataSchem
     // Add logo info if available
     if (metadata.logo) {
       formattedResponse += `Logo URL: ${metadata.logo}\n`;
-    }
-    
-    // Add token type if available
-    if (metadata.tokenType) {
-      formattedResponse += `Token Standard: ${metadata.tokenType}\n`;
-    }
-    
-    // Add market cap if available
-    if (metadata.marketCap) {
-      formattedResponse += `Market Cap: $${metadata.marketCap.toLocaleString()}\n`;
-    }
-    
-    // Add total supply if available
-    if (metadata.totalSupply) {
-      const decimals = metadata.decimals || 18;
-      const readableSupply = parseInt(metadata.totalSupply) / Math.pow(10, decimals);
-      formattedResponse += `Total Supply: ${readableSupply.toLocaleString()} ${metadata.symbol || ''}\n`;
     }
     
     return formattedResponse;

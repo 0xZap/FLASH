@@ -108,7 +108,7 @@ export async function getFeeHistory(inputs: z.infer<typeof FeeHistorySchema>): P
     ];
     
     // Fetch fee history using the JSON-RPC method
-    const feeHistory = await alchemy.connection.send("eth_feeHistory", params);
+    const feeHistory = await alchemy.core.send("eth_feeHistory", params);
     
     if (!feeHistory) {
       return `No fee history data found for the specified parameters on ${inputs.network}.`;

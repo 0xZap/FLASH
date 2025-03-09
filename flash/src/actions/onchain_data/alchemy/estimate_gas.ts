@@ -170,7 +170,7 @@ export async function estimateGas(inputs: z.infer<typeof EstimateGasSchema>): Pr
     ];
     
     // Fetch gas estimation using the JSON-RPC method
-    const gasEstimate = await alchemy.connection.send("eth_estimateGas", [transaction, inputs.blockTag]);
+    const gasEstimate = await alchemy.core.send("eth_estimateGas", [transaction, inputs.blockTag]);
     
     if (!gasEstimate) {
       return `No gas estimate could be determined for the provided transaction on ${inputs.network}.`;
@@ -220,7 +220,7 @@ export async function estimateGas(inputs: z.infer<typeof EstimateGasSchema>): Pr
     formattedResponse += `- Estimated Gas: ${gasEstimateValue.toLocaleString()} units\n`;
     
     // Calculate cost
-    const gasCostWei = gasEstimateValue * BigInt(gasPrice);
+    const gasCostWei = gasEstimateValue * BigInt(gasPrice.toString());
     const gasCostEth = Utils.formatEther(gasCostWei);
     const currencySymbol = getNativeCurrencySymbol(inputs.network);
     

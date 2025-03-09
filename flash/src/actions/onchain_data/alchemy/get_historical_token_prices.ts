@@ -1,7 +1,27 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
-import { Alchemy } from "alchemy-sdk";
+import { Alchemy, Network } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
+import { HistoricalPriceInterval } from "alchemy-sdk";
+/**
+ * Maps network string to Alchemy Network enum
+ */
+function getNetworkFromString(networkString: string): Network {
+  const networkMap: { [key: string]: Network } = {
+    "ETH_MAINNET": Network.ETH_MAINNET,
+    "ETH_SEPOLIA": Network.ETH_SEPOLIA,
+    "MATIC_MAINNET": Network.MATIC_MAINNET,
+    "OPT_MAINNET": Network.OPT_MAINNET,
+    "ARB_MAINNET": Network.ARB_MAINNET,
+    "BASE_MAINNET": Network.BASE_MAINNET,
+  };
+  
+  const network = networkMap[networkString];
+  if (!network) {
+    throw new Error(`Unsupported network: ${networkString}`);
+  }
+  return network;
+}
 
 /**
  * Step 1: Define Input Schema
@@ -9,11 +29,11 @@ import { AlchemyConfig } from "../../../config/alchemy_config";
  * Schema for the Alchemy historical token price tool inputs
  */
 const HistoricalTokenPriceSchema = z.object({
-  symbol: z.string().describe("Token symbol to fetch historical prices for (e.g., 'ETH')"),
+  network: z.enum(["ETH_MAINNET", "ETH_SEPOLIA", "MATIC_MAINNET", "OPT_MAINNET", "ARB_MAINNET", "BASE_MAINNET"]).describe("Network name (e.g., 'ETH_MAINNET')"),
+  address: z.string().describe("Token contract address"),
   startTime: z.string().describe("Start time in ISO format (e.g., '2024-01-01T00:00:00Z')"),
   endTime: z.string().describe("End time in ISO format (e.g., '2024-01-31T23:59:59Z')"),
-  interval: z.enum(["1h", "1d", "1w", "1m"]).describe("Time interval between data points: 1h (hourly), 1d (daily), 1w (weekly), 1m (monthly)"),
-  currency: z.string().optional().default("USD").describe("Currency to convert to (e.g., 'USD')"),
+  interval: z.enum(["5m", "1h", "1d"]).describe("Time interval between data points"),
 }).strict();
 
 /**
@@ -29,10 +49,9 @@ Required inputs:
 - startTime: Start time in ISO format (e.g., '2024-01-01T00:00:00Z')
 - endTime: End time in ISO format (e.g., '2024-01-31T23:59:59Z')
 - interval: Time interval between data points:
+  - "5m": 5-minute intervals
   - "1h": Hourly data
   - "1d": Daily data
-  - "1w": Weekly data
-  - "1m": Monthly data
 
 Optional inputs:
 - currency: Currency to convert to (default: 'USD')
@@ -80,34 +99,40 @@ export async function getHistoricalTokenPrices(inputs: z.infer<typeof Historical
     
     // Prepare the request data
     const requestData = {
-      symbol: inputs.symbol,
+      network: inputs.network,
+      address: inputs.address,
       startTime: inputs.startTime,
       endTime: inputs.endTime,
       interval: inputs.interval,
-      currency: inputs.currency
     };
     
     // Fetch historical token prices
-    const result = await alchemy.prices.getHistoricalTokenPrice(requestData);
+    const network = getNetworkFromString(requestData.network);
+    const result = await alchemy.prices.getHistoricalPriceByAddress(
+      network,
+      requestData.address, 
+      requestData.startTime, 
+      requestData.endTime, 
+      requestData.interval as HistoricalPriceInterval
+    );
     
     // Format results
-    if (!result || !result.data || !result.data.prices || result.data.prices.length === 0) {
-      return `No historical price data found for ${inputs.symbol} in the specified time range.`;
+    if (!result || !result.data || !result.data.values || result.data.values.length === 0) {
+      return `No historical price data found for ${inputs.address} in the specified time range.`;
     }
     
     // Build formatted response
-    let formattedResponse = `Historical prices for ${inputs.symbol} (${inputs.interval} interval):\n\n`;
+    let formattedResponse = `Historical prices for ${inputs.address} (${inputs.interval} interval):\n\n`;
     formattedResponse += `Time range: ${inputs.startTime} to ${inputs.endTime}\n`;
-    formattedResponse += `Currency: ${inputs.currency}\n\n`;
     
     // Add a header row
     formattedResponse += `Timestamp | Open | High | Low | Close | Volume\n`;
     formattedResponse += `---------|------|------|-----|-------|-------\n`;
     
     // Add data rows
-    result.data.prices.forEach((price) => {
+    Array.from(result.data.values()).forEach((price) => {
       const timestamp = new Date(price.timestamp).toISOString();
-      formattedResponse += `${timestamp} | ${price.open} | ${price.high} | ${price.low} | ${price.close} | ${price.volume || 'N/A'}\n`;
+      formattedResponse += `${timestamp} | ${price.value}\n`;
     });
     
     return formattedResponse;
@@ -131,11 +156,11 @@ export class GetHistoricalTokenPricesAction implements ZapAction<typeof Historic
   public config = AlchemyConfig.getInstance();
   public func = (args: { [key: string]: any }) => 
     getHistoricalTokenPrices({
-      symbol: args.symbol,
+      network: args.network,
+      address: args.address,
       startTime: args.startTime,
       endTime: args.endTime,
       interval: args.interval,
-      currency: args.currency,
     });
 }
 

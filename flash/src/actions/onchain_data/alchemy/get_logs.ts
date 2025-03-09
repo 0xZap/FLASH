@@ -161,10 +161,10 @@ export async function getLogs(inputs: z.infer<typeof GetLogsSchema>): Promise<st
     limitedLogs.forEach((log, index) => {
       formattedResponse += `Log #${index + 1}:\n`;
       formattedResponse += `- Address: ${log.address}\n`;
-      formattedResponse += `- Block Number: ${parseInt(log.blockNumber, 16)}\n`;
+      formattedResponse += `- Block Number: ${parseInt(log.blockNumber.toString(), 16)}\n`;
       formattedResponse += `- Transaction Hash: ${log.transactionHash}\n`;
-      formattedResponse += `- Transaction Index: ${parseInt(log.transactionIndex, 16)}\n`;
-      formattedResponse += `- Log Index: ${parseInt(log.logIndex, 16)}\n`;
+      formattedResponse += `- Transaction Index: ${parseInt(log.transactionIndex.toString(), 16)}\n`;
+      formattedResponse += `- Log Index: ${parseInt(log.logIndex.toString(), 16)}\n`;
       
       // Format topics
       if (log.topics && log.topics.length > 0) {
