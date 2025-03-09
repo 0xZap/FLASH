@@ -125,8 +125,8 @@ importers:
   flash-langchain:
     dependencies:
       '@0xzap/flash':
-        specifier: 0.0.8
-        version: 0.0.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        specifier: 0.0.9
+        version: 0.0.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@langchain/core':
         specifier: ^0.3.39
         version: 0.3.42(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))
@@ -170,8 +170,8 @@ packages:
   '@0xzap/flash@0.0.5':
     resolution: {integrity: sha512-2WMKLR7yWWI/O2uxTcBFznCjAVHC6CJCPlYKxaHhcSfp2S/Lb+GwvY/G7y+ZjT0jWjAxPFmVPNvJfHQHfKqAPQ==}
 
-  '@0xzap/flash@0.0.8':
-    resolution: {integrity: sha512-0re68kR85sqWZbySJQQ3fAXoT04OkqZjuy+Svv43/kqYK6VWJYdgFopDrcpvcZmV9UIoXFFPWryJyWyuyCxCgg==}
+  '@0xzap/flash@0.0.9':
+    resolution: {integrity: sha512-0SXRU8k6gox5020x3Qsn0jZ26jsyivfv6qCUE/FEOVS7IhVgR0ec8ICbHxEG+PsFUvpm4qqEnefQM+WsQw68sQ==}
 
   '@adraffy/ens-normalize@1.11.0':
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
@@ -3120,7 +3120,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@0xzap/flash@0.0.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)':
+  '@0xzap/flash@0.0.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)':
     dependencies:
       alchemy-sdk: 3.5.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       axios: 1.8.2
