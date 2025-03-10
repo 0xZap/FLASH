@@ -34,9 +34,10 @@
     "langchain"
   ],
   "devDependencies": {
-    "@types/node": "^20.12.11",
+    "@types/node": "^20.17.24",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
+    "dotenv": "^16.4.7",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsdoc": "^48.2.5",
@@ -46,5 +47,9 @@
     "typedoc": "^0.27.2",
     "typescript": "^5.4.5"
   },
-  "version": "0.0.2"
+  "version": "0.0.2",
+  "dependencies": {
+    "@browserbasehq/sdk": "^2.3.0",
+    "zod": "^3.24.2"
+  }
 }
