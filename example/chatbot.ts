@@ -37,7 +37,7 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatOpenAI } from "@langchain/openai";
 import * as readline from "readline";
 import { ZapToolkit } from "@0xzap/flash-langchain";
-import { ZapConfig, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig, CoinGeckoConfig } from "@0xzap/flash";
+import { ZapConfig, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig, CoinGeckoConfig, PerplexityConfig, HeyGenConfig, ElevenLabsConfig, BrowserbaseConfig } from "@0xzap/flash";
 // import { GoogleAuth, setupAuthServer } from './google_auth';
 
 // Reset all existing instances
@@ -47,6 +47,10 @@ GoogleConfig.resetInstance();
 EthereumConfig.resetInstance();
 ExaConfig.resetInstance();
 AlchemyConfig.resetInstance();
+PerplexityConfig.resetInstance();
+HeyGenConfig.resetInstance();
+ElevenLabsConfig.resetInstance();
+BrowserbaseConfig.resetInstance();
 
 // Initialize all configurations with environment variables
 const zapConfig = ZapConfig.getInstance({
@@ -77,6 +81,22 @@ const coinGeckoConfig = CoinGeckoConfig.getInstance({
   apiKey: process.env.COINGECKO_API_KEY
 });
 
+const perplexityConfig = PerplexityConfig.getInstance({
+  apiKey: process.env.PERPLEXITY_API_KEY
+});
+
+const heygenConfig = HeyGenConfig.getInstance({
+  apiKey: process.env.HEYGEN_API_KEY
+});
+
+const elevenlabsConfig = ElevenLabsConfig.getInstance({
+  apiKey: process.env.ELEVENLABS_API_KEY
+});
+
+const browserbaseConfig = BrowserbaseConfig.getInstance({
+  apiKey: process.env.BROWSERBASE_API_KEY
+});
+
 /**
  * Initialize the agent with Zap Tools
  *
@@ -99,7 +119,11 @@ async function initializeAgent() {
       ethereumConfig,
       exaConfig,
       alchemyConfig,
-      coinGeckoConfig
+      coinGeckoConfig,
+      browserbaseConfig,
+      elevenlabsConfig,     
+      heygenConfig,
+      perplexityConfig
     );
     const tools = zapToolKit.getTools();
 
