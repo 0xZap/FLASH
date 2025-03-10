@@ -1,6 +1,6 @@
 import { ZapAction, ZapActionSchema } from "../zap_action";
 import { PERPLEXITY_ACTIONS } from "./perplexity";
-import { BROWSER_USE_TOOLS } from "./browser_use";
+// import { BROWSER_USE_TOOLS } from "./browser_use";
 
 /**
  * Retrieves all web data action instances.
@@ -10,7 +10,7 @@ import { BROWSER_USE_TOOLS } from "./browser_use";
 export function getWebDataActions(): ZapAction<ZapActionSchema>[] {
   return [
     ...PERPLEXITY_ACTIONS,
-    ...BROWSER_USE_TOOLS,
+    // ...BROWSER_USE_TOOLS,
     // Add other web data actions here as they are implemented
   ];
 }
