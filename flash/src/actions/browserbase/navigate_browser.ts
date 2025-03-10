@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../zap_action";
 import { Browserbase } from "@browserbasehq/sdk";
 import { BrowserbaseConfig } from "./connect_browser";
+import puppeteer from "puppeteer";
 
 // Input schema for browser navigation
 const NavigateBrowserSchema = z
@@ -78,7 +79,9 @@ export async function navigateBrowser(params: z.infer<typeof NavigateBrowserSche
     const bb = new Browserbase({ apiKey });
     
     // For TypeScript, let's declare an 'any' type to avoid compilation errors
-    const browser: any = await bb.connect(params.session_id);
+    const browser: any = await puppeteer.connect({
+      browserWSEndpoint: params.session_id,
+    });
     
     // Create a new page/tab in the browser
     const page = await browser.newPage();

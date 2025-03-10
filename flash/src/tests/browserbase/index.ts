@@ -357,7 +357,7 @@ async function testPuppeteerConnectAction() {
 }
 
 // Run tests
-async function runTests() {
+export async function runBrowserbaseTests() {
   console.log("=== BROWSERBASE TESTS ===");
   await testConnectBrowserbaseAction();
   console.log("-------------------------");
@@ -368,5 +368,3 @@ async function runTests() {
   await testPuppeteerConnectAction();
   console.log("=== TESTS COMPLETED ===");
 }
-
-runTests(); 

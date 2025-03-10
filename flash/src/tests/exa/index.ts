@@ -87,4 +87,6 @@ async function testExaSearchAction() {
     }
 }
 
-testExaSearchAction();
+export async function runExaTests() {
+    await testExaSearchAction();
+}
