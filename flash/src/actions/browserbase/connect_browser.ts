@@ -105,19 +105,19 @@ export async function connectBrowserbase(params: z.infer<typeof ConnectBrowserba
   const apiKey = config.getApiKey();
   const defaultProjectId = config.getProjectId();
   
-  if (!apiKey) {
-    throw new Error("Browserbase API key not found. Please set it in your configuration or as BROWSERBASE_API_KEY environment variable.");
-  }
+  // if (!apiKey) {
+  //   throw new Error("Browserbase API key not found. Please set it in your configuration or as BROWSERBASE_API_KEY environment variable.");
+  // }
   
   const projectId = params.project_id || defaultProjectId;
   
-  if (!projectId) {
-    throw new Error("Browserbase project ID not found. Please provide it in the parameters or set it in your configuration or as BROWSERBASE_PROJECT_ID environment variable.");
-  }
+  // if (!projectId) {
+  //   throw new Error("Browserbase project ID not found. Please provide it in the parameters or set it in your configuration or as BROWSERBASE_PROJECT_ID environment variable.");
+  // }
 
   try {
     // Initialize Browserbase SDK
-    const bb = new Browserbase({ apiKey });
+    const bb = new Browserbase({ apiKey: apiKey || '' });
 
     // Create a session
     const sessionOptions: any = {

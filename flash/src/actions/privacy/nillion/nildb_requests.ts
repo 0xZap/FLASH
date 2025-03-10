@@ -209,6 +209,70 @@ export class NilDB {
     }
 
     /**
+     * Upload embeddings and chunks to all nilDB nodes.
+     * @param embeddingShares List of embedding shares for each document
+     * @param chunkShares List of chunk shares for each document
+     * @throws Error if number of embeddings and chunks don't match or if upload fails
+     */
+    public async uploadData(
+        embeddingShares: number[][][],
+        chunkShares: Uint8Array[][]
+    ): Promise<void> {
+        // Check sizes: same number of embeddings and chunks
+        if (embeddingShares.length !== chunkShares.length) {
+            throw new Error(
+                `Mismatch: ${embeddingShares.length} embeddings vs ${chunkShares.length} chunks.`
+            );
+        }
+
+        for (let docIndex = 0; docIndex < embeddingShares.length; docIndex++) {
+            const dataId = uuidv4();
+            const documentEmbeddingShares = embeddingShares[docIndex];
+            const documentChunkShares = chunkShares[docIndex];
+
+            for (let nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++) {
+                const node = this.nodes[nodeIndex];
+                const url = `${node.url}/data/create`;
+
+                const headers = {
+                    'Authorization': `Bearer ${node.bearerToken}`,
+                    'Content-Type': 'application/json'
+                };
+
+                // Get all embedding shares for this node
+                const nodeEmbeddingShares = documentEmbeddingShares.map(
+                    dimension => dimension[nodeIndex]
+                );
+
+                const payload = {
+                    schema: node.schemaId,
+                    data: [{
+                        _id: dataId,
+                        embedding: nodeEmbeddingShares,
+                        chunk: Buffer.from(documentChunkShares[nodeIndex]).toString('base64')
+                    }]
+                };
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error in POST request: ${response.status}, ${await response.text()}`);
+                }
+
+                console.log({
+                    status_code: response.status,
+                    message: "Success",
+                    response_json: await response.json()
+                });
+            }
+        }
+    }
+
+    /**
      * Query NilAI with NilRAG integration
      * @param params Query parameters for NilAI
      * @returns Response from NilAI

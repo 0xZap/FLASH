@@ -55,9 +55,9 @@ export function getBrowserUseConfig(): { config: BrowserUseConfig; apiKey: strin
   const config = BrowserUseConfig.getInstance();
   const apiKey = config.getApiKey();
 
-  if (!apiKey) {
-    throw new Error("Browser Use API key not found. Please set it in your configuration or as BROWSER_USE_API_KEY environment variable.");
-  }
+  // if (!apiKey) {
+  //   throw new Error("Browser Use API key not found. Please set it in your configuration or as BROWSER_USE_API_KEY environment variable.");
+  // }
 
-  return { config, apiKey };
+  return { config, apiKey: apiKey || '' };
 } 

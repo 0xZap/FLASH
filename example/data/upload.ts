@@ -10,9 +10,12 @@ import {
 import { nilql } from '@nillion/nilql';
 import * as fs from 'fs';
 import * as path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const JSON_FILE = "examples/nildb_config.json";
-const SECRET_KEY = "YOUR_SECRET_KEY"; // Update with your SecretVault (nilDB) Secret Key
+const SECRET_KEY = process.env.SECRET_KEY || '';
 const FILE_PATH = 'examples/data/cities.txt';
 
 async function main() {
@@ -65,6 +68,7 @@ async function main() {
     // Upload encrypted data to nilDB
     console.log('Uploading data...');
     await nilDB.uploadData(embeddingsShares, chunksShares);
+    
     console.log('Data upload complete!');
 }
 

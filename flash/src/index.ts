@@ -45,6 +45,7 @@ export * from "./actions/video";
 export * from "./actions/privacy";
 
 export * from "./actions/privacy/nillion";
+
 export * from "./config/google_config";
 
 export * from "./config/hyperbolic_config";
