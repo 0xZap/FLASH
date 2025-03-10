@@ -1,5 +1,5 @@
 import { StructuredToolInterface, BaseToolkit as Toolkit } from "@langchain/core/tools";
-import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig, CoinGeckoConfig, BrowserbaseConfig, ElevenLabsConfig, HeyGenConfig, PerplexityConfig } from "@0xzap/flash";
+import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig, CoinGeckoConfig, ElevenLabsConfig, HeyGenConfig, PerplexityConfig } from "@0xzap/flash";
 import { ZapTool } from "../tools/zap_tool";
 
 /**
