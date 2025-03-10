@@ -88,13 +88,14 @@ export async function speechToText(params: z.infer<typeof SpeechToTextSchema>): 
     // Create audio blob
     const audioBlob = new Blob([await response.arrayBuffer()], { type: params.content_type });
     
-    // Convert speech to text
-    const transcription = await client.speechToText.convert({
-      file: audioBlob,
+    // Prepare request options
+    const options: any = {
+      audio_url: params.audio_url,
       model_id: params.model_id,
-      include_timestamps: params.include_timestamps,
-      include_confidence: params.include_confidence,
-    });
+    };
+
+    // Convert speech to text
+    const transcription = await client.speechToText.convert(options);
     
     // Format the result
     let result = "";

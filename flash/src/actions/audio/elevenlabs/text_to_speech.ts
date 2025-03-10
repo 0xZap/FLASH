@@ -131,17 +131,18 @@ export async function textToSpeech(params: z.infer<typeof TextToSpeechSchema>): 
     // Convert text to speech
     const audio = await client.textToSpeech.convert(params.voice_id, options);
     
-    // If return_url is true, get a temporary URL, otherwise return base64 encoded audio
     let result = "";
     if (params.return_url) {
       // Create a temporary URL for the audio blob
-      const audioBlob = new Blob([audio], { type: `audio/${params.output_format.startsWith("mp3") ? "mp3" : "wav"}` });
+      const audioBlob = new Blob([audio as any], { 
+        type: `audio/${params.output_format.startsWith("mp3") ? "mp3" : "wav"}` 
+      });
       const audioUrl = URL.createObjectURL(audioBlob);
       
       result = `Successfully converted text to speech. Access your audio at this temporary URL (valid for this session only):\n${audioUrl}\n\nVoice ID: ${params.voice_id}\nModel: ${params.model_id}\nFormat: ${params.output_format}`;
     } else {
-      // Return the audio as base64
-      const base64Audio = Buffer.from(audio).toString("base64");
+      // Convert to base64
+      const base64Audio = Buffer.from(audio as any).toString("base64");
       result = `Successfully converted text to speech. Audio data in base64 format:\n\nVoice ID: ${params.voice_id}\nModel: ${params.model_id}\nFormat: ${params.output_format}\n\n${base64Audio}`;
     }
     

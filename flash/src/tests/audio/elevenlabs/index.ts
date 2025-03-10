@@ -145,12 +145,10 @@ async function testSpeechToTextAction() {
 }
 
 // Run tests
-async function runTests() {
+export async function runElevenLabsTests() {
   console.log("=== ELEVENLABS AUDIO API TESTS ===");
   await testTextToSpeechAction();
   console.log("-------------------------");
   await testSpeechToTextAction();
   console.log("=== TESTS COMPLETED ===");
 }
-
-runTests(); 

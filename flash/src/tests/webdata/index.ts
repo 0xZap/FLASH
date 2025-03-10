@@ -1,6 +1,7 @@
-/* 
-Run all webdata tests
-*/
+import { runPerplexityTests } from "./perplexity";
+import { runBrowserUseTests } from "./browser_use";
 
-import "./perplexity";
-import "./browser_use"; 
+export async function runWebdataTests() {
+    await runPerplexityTests();
+    await runBrowserUseTests();
+}

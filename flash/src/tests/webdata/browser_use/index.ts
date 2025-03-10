@@ -245,7 +245,7 @@ async function testLiveApiCalls() {
 }
 
 // Run all the tests
-async function runTests() {
+export async function runBrowserUseTests() {
   console.log("=== BROWSER USE API TESTS ===");
   await testMissingApiKey();
   await testInvalidParams();
@@ -253,5 +253,3 @@ async function runTests() {
   await testLiveApiCalls();
   console.log("=== TESTS COMPLETED ===");
 }
-
-runTests(); 

@@ -86,10 +86,8 @@ async function testPerplexityChatAction() {
 }
 
 // Run tests
-async function runTests() {
+export async function runPerplexityTests() {
   console.log("=== PERPLEXITY API TESTS ===");
   await testPerplexityChatAction();
   console.log("=== TESTS COMPLETED ===");
 }
-
-runTests(); 

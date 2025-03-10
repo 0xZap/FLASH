@@ -1,14 +1,15 @@
+
 import { runExaTests } from "./exa";
 import { runAlchemyTests } from "./alchemy";
 import { runBrowserbaseTests } from "./browserbase";
-import * from "./code";
-import * from "./code";
-import * from "./webdata";
-import * from "./audio";
-import * from "./video";
-
-console.log("All tests have been executed.");
+import { runWebdataTests } from "./webdata";
+import { runElevenLabsTests } from "./audio/elevenlabs";
+import { runHeygenTests } from "./video";
 
 runExaTests();
 runAlchemyTests();
 runBrowserbaseTests();
+runWebdataTests();
+runElevenLabsTests();
+runHeygenTests();
+console.log("All tests have been executed.");
