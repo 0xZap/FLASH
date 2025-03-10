@@ -203,4 +203,119 @@ export class NilDB {
 
         return differenceShares;
     }
+
+    /**
+     * Query NilAI with NilRAG integration
+     * @param params Query parameters for NilAI
+     * @returns Response from NilAI
+     */
+    public async nilaiChatCompletion(params: {
+        nilaiUrl: string;
+        token: string;
+        model: string;
+        messages: Array<{ role: string; content: string }>;
+        temperature?: number;
+        maxTokens?: number;
+        stream?: boolean;
+    }): Promise<any> {
+        const headers = {
+            'Authorization': `Bearer ${params.token}`,
+            'Content-Type': 'application/json'
+        };
+
+        const payload = {
+            model: params.model,
+            messages: params.messages,
+            temperature: params.temperature ?? 0.2,
+            max_tokens: params.maxTokens ?? 2048,
+            stream: params.stream ?? false
+        };
+
+        const response = await fetch(params.nilaiUrl, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error in NilAI request: ${response.status}, ${await response.text()}`);
+        }
+
+        return await response.json();
+    }
+
+    /**
+     * Query the NilDB network for relevant information
+     * @param query The search query string
+     * @param options Query options including limit, threshold, and metadata inclusion
+     * @returns Query results from the NilDB network
+     */
+    public async client_query(
+        query: string,
+        options: {
+            limit?: number;
+            threshold?: number;
+            includeMetadata?: boolean;
+        } = {}
+    ): Promise<any> {
+        const {
+            limit = 5,
+            threshold = 0.7,
+            includeMetadata = true
+        } = options;
+
+        // Validate inputs
+        if (!query.trim()) {
+            throw new Error("Query string cannot be empty");
+        }
+
+        const results: any[] = [];
+        for (const node of this.nodes) {
+            const url = `${node.url}/query`;
+            
+            const headers = {
+                'Authorization': `Bearer ${node.bearerToken}`,
+                'Content-Type': 'application/json'
+            };
+
+            const payload = {
+                query,
+                limit,
+                threshold,
+                include_metadata: includeMetadata,
+                schema_id: node.schemaId
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error in query request: ${response.status}, ${await response.text()}`);
+            }
+
+            const responseData = await response.json();
+            results.push(responseData);
+        }
+
+        // Aggregate results from all nodes
+        return this.aggregateResults(results, limit);
+    }
+
+    /**
+     * Aggregate and sort results from multiple nodes
+     * @private
+     */
+    private aggregateResults(results: any[], limit: number): any[] {
+        // Flatten results from all nodes
+        const flatResults = results.flat();
+        
+        // Sort by relevance score (assuming higher is better)
+        flatResults.sort((a, b) => (b.score || 0) - (a.score || 0));
+        
+        // Return top results up to limit
+        return flatResults.slice(0, limit);
+    }
 }
