@@ -45,8 +45,8 @@ importers:
   example:
     dependencies:
       '@0xzap/flash':
-        specifier: 0.0.10
-        version: 0.0.10(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
+        specifier: 0.0.13
+        version: 0.0.13(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@0xzap/flash-langchain':
         specifier: 0.0.9
         version: 0.0.9(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
@@ -59,6 +59,9 @@ importers:
       '@langchain/openai':
         specifier: ^0.3.14
         version: 0.3.17(@langchain/core@0.3.42(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2)))(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+      '@nillion/nilql':
+        specifier: 0.0.0-alpha.6
+        version: 0.0.0-alpha.6
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
@@ -71,6 +74,9 @@ importers:
       googleapis:
         specifier: ^133.0.0
         version: 133.0.0
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
       zod:
         specifier: ^3.22.4
         version: 3.24.2
@@ -214,6 +220,9 @@ packages:
 
   '@0xzap/flash@0.0.10':
     resolution: {integrity: sha512-4UENRQc6LwFf6RQyTjb02a1Khc8Rrfk6ts1l2xWNEjzYkzrPrbQM+be5n8xs+Z/JToOivKU+aKcU3qifibWMEA==}
+
+  '@0xzap/flash@0.0.13':
+    resolution: {integrity: sha512-XiXl3hEKe6wV6ZYX1UzwaeP4vwG9ymczIRzBOAWIyJDNGKzoydAMzl8AlSo2RQRXsQ7FOb/x9aoRirQXhdLyOQ==}
 
   '@adraffy/ens-normalize@1.11.0':
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
@@ -3702,6 +3711,41 @@ snapshots:
       - typescript
       - utf-8-validate
 
+  '@0xzap/flash@0.0.13(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)':
+    dependencies:
+      '@browserbasehq/sdk': 2.3.0
+      '@browserbasehq/stagehand': 1.14.0(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(dotenv@16.4.7)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(utf-8-validate@5.0.10)(zod@3.24.2)
+      '@nillion/nilql': 0.0.0-alpha.6
+      '@types/elliptic': 6.4.18
+      '@types/jsonwebtoken': 9.0.9
+      '@types/uuid': 10.0.0
+      '@xenova/transformers': 2.17.2
+      alchemy-sdk: 3.5.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      axios: 1.8.2
+      dotenv: 16.4.7
+      elevenlabs: 1.53.0
+      elliptic: 6.6.1
+      exa-js: 1.5.11
+      jsonwebtoken: 9.0.2
+      nock: 14.0.1
+      puppeteer: 24.4.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+      pyodide: 0.23.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      ssh2: 1.16.0
+      uuid: 11.1.0
+      viem: 2.23.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2)
+      zod: 3.24.2
+    transitivePeerDependencies:
+      - '@playwright/test'
+      - bare-buffer
+      - bufferutil
+      - debug
+      - deepmerge
+      - encoding
+      - openai
+      - supports-color
+      - typescript
+      - utf-8-validate
+
   '@adraffy/ens-normalize@1.11.0': {}
 
   '@ampproject/remapping@2.3.0':
@@ -4555,7 +4599,7 @@ snapshots:
 
   '@puppeteer/browsers@2.8.0':
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
       extract-zip: 2.0.1
       progress: 2.0.3
       proxy-agent: 6.5.0
@@ -5739,7 +5783,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -5911,7 +5955,7 @@ snapshots:
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6051,7 +6095,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6085,7 +6129,7 @@ snapshots:
   https-proxy-agent@7.0.6:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6995,7 +7039,7 @@ snapshots:
     dependencies:
       '@tootallnate/quickjs-emscripten': 0.23.0
       agent-base: 7.1.3
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
       get-uri: 6.0.4
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6
@@ -7141,7 +7185,7 @@ snapshots:
   proxy-agent@6.5.0:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6
       lru-cache: 7.18.3
@@ -7168,7 +7212,7 @@ snapshots:
     dependencies:
       '@puppeteer/browsers': 2.8.0
       chromium-bidi: 2.1.2(devtools-protocol@0.0.1413902)
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
       devtools-protocol: 0.0.1413902
       typed-query-selector: 2.12.0
       ws: 8.18.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -7426,7 +7470,7 @@ snapshots:
   socks-proxy-agent@8.0.5:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.0
+      debug: 4.4.0(supports-color@5.5.0)
       socks: 2.8.4
     transitivePeerDependencies:
       - supports-color

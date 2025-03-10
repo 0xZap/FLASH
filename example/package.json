@@ -15,15 +15,17 @@
     "format-check": "prettier -c .prettierrc --check \"**/*.{ts,js,cjs,json,md}\""
   },
   "dependencies": {
-    "@0xzap/flash": "0.0.10",
+    "@0xzap/flash": "0.0.13",
     "@0xzap/flash-langchain": "0.0.9",
     "@langchain/core": "^0.3.19",
     "@langchain/langgraph": "^0.2.54",
     "@langchain/openai": "^0.3.14",
+    "@nillion/nilql": "0.0.0-alpha.6",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
     "google-auth-library": "^9.6.3",
     "googleapis": "^133.0.0",
+    "uuid": "^11.1.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

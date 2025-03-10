@@ -18,7 +18,7 @@ export interface Node {
  * A class to manage distributed nilDB nodes for secure data storage and retrieval.
  */
 export class NilDB {
-    private nodes: Node[];
+    nodes: Node[];
 
     constructor(nodes: Node[]) {
         this.nodes = nodes.map(node => ({
