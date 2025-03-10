@@ -19,23 +19,23 @@ import {
 /**
  * All browser use tools
  */
-export const BROWSER_USE_TOOLS = [
-  // Task creation
-  new RunTaskAction(),
+// export const BROWSER_USE_TOOLS = [
+//   // Task creation
+//   new RunTaskAction(),
   
-  // Task control
-  new StopTaskAction(),
-  new PauseTaskAction(),
-  new ResumeTaskAction(),
+//   // Task control
+//   new StopTaskAction(),
+//   new PauseTaskAction(),
+//   new ResumeTaskAction(),
   
-  // Task information
-  new GetTaskAction(),
-  new GetTaskStatusAction(),
-  new GetTaskMediaAction(),
-  new ListTasksAction(),
+//   // Task information
+//   new GetTaskAction(),
+//   new GetTaskStatusAction(),
+//   new GetTaskMediaAction(),
+//   new ListTasksAction(),
   
-  // Account and utility endpoints
-  new CheckBalanceAction(),
-  new GetUserInfoAction(),
-  new PingAction(),
-]; 
+//   // Account and utility endpoints
+//   new CheckBalanceAction(),
+//   new GetUserInfoAction(),
+//   new PingAction(),
+// ]; 

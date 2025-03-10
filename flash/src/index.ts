@@ -3,7 +3,7 @@ import { HYPERBOLIC_ACTIONS } from "./actions/hyperbolic";
 import { ETHEREUM_ACTIONS } from "./actions/ethereum";
 import { EXA_ACTIONS } from "./actions/exa";
 import { ONCHAIN_DATA_ACTIONS } from "./actions/onchain_data";
-import { BROWSERBASE_ACTIONS } from "./actions/browserbase";
+// import { BROWSERBASE_ACTIONS } from "./actions/browserbase";
 // import { CODE_ACTIONS } from "./actions/code";
 import { WEBDATA_ACTIONS } from "./actions/webdata";
 import { AUDIO_ACTIONS } from "./actions/audio";
@@ -14,7 +14,7 @@ export const ZAP_ACTIONS = GOOGLE_ACTIONS
   .concat(ETHEREUM_ACTIONS)
   .concat(EXA_ACTIONS)
   .concat(ONCHAIN_DATA_ACTIONS)
-  .concat(BROWSERBASE_ACTIONS)
+  // .concat(BROWSERBASE_ACTIONS)
   // .concat(CODE_ACTIONS)
   .concat(WEBDATA_ACTIONS)
   .concat(AUDIO_ACTIONS)
@@ -32,7 +32,7 @@ export * from "./actions/exa";
 
 export * from "./actions/onchain_data";
 
-export * from "./actions/browserbase";
+// export * from "./actions/browserbase";
 
 // export * from "./actions/code";
 
@@ -56,7 +56,7 @@ export * from "./config/zap_config";
 
 export * from "./config/exa_config";
 
-export * from "./config/browser_use_config";
+// export * from "./config/browser_use_config";
 
 export * from "./config/alchemy_config";
 

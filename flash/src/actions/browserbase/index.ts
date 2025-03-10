@@ -30,10 +30,10 @@ export function getBrowserbaseActions(config?: BrowserbaseConfig): ZapAction<Zap
 
 export const BROWSERBASE_ACTIONS = getBrowserbaseActions();
 
-export {
-  BrowserbaseConfig,
-  ConnectBrowserbaseAction,
-  NavigateBrowserAction,
-  StagehandBrowseAction,
-  PuppeteerConnectAction,
-}; 
+// export {
+//   BrowserbaseConfig,
+//   ConnectBrowserbaseAction,
+//   NavigateBrowserAction,
+//   StagehandBrowseAction,
+//   PuppeteerConnectAction,
+// }; 
