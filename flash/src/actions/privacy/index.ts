@@ -1,6 +1,6 @@
 import { ZapAction, ZapActionSchema } from "../zap_action";
 
-export * as nillion from './nillion';
+// export * as nillion from './nillion';
 
 /**
  * Retrieves all Privacy action instances.
