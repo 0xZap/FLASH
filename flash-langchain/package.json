@@ -2,7 +2,7 @@
   "name": "@0xzap/flash-langchain",
   "description": "FLASH Langchain",
   "repository": "https://github.com/0xZap/flash",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "author": "Zap Labs",
   "license": "MIT",
   "main": "dist/index.js",
