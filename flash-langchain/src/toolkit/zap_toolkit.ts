@@ -1,5 +1,5 @@
 import { StructuredToolInterface, BaseToolkit as Toolkit } from "@langchain/core/tools";
-import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig, CoinGeckoConfig } from "@0xzap/flash";
+import { ZAP_ACTIONS, HyperbolicConfig, GoogleConfig, EthereumConfig, ExaConfig, AlchemyConfig, CoinGeckoConfig, BrowserbaseConfig, ElevenLabsConfig, HeyGenConfig, PerplexityConfig } from "@0xzap/flash";
 import { ZapTool } from "../tools/zap_tool";
 
 /**
@@ -13,6 +13,11 @@ export class ZapToolkit extends Toolkit {
   private exaConfig?: ExaConfig;
   private alchemyConfig?: AlchemyConfig;
   private coingeckoConfig?: CoinGeckoConfig;
+  private heygenConfig?: HeyGenConfig;
+  private elevenlabsConfig?: ElevenLabsConfig;
+  private browserbaseConfig?: BrowserbaseConfig;
+  private perplexityConfig?: PerplexityConfig;
+
   /**
    * Creates a new Zap Toolkit instance
    *
@@ -22,6 +27,10 @@ export class ZapToolkit extends Toolkit {
    * @param exaConfig - Optional configuration for Exa API
    * @param alchemyConfig - Optional configuration for Alchemy API
    * @param coingeckoConfig - Optional configuration for CoinGecko API
+   * @param heygenConfig - Optional configuration for HeyGen API
+   * @param elevenlabsConfig - Optional configuration for ElevenLabs API
+   * @param browserbaseConfig - Optional configuration for Browserbase API
+   * @param perplexityConfig - Optional configuration for Perplexity API
    */
   constructor(
     hyperbolicConfig?: HyperbolicConfig,
@@ -29,7 +38,11 @@ export class ZapToolkit extends Toolkit {
     ethereumConfig?: EthereumConfig,
     exaConfig?: ExaConfig,
     alchemyConfig?: AlchemyConfig,
-    coingeckoConfig?: CoinGeckoConfig
+    coingeckoConfig?: CoinGeckoConfig,
+    browserbaseConfig?: BrowserbaseConfig,
+    elevenlabsConfig?: ElevenLabsConfig,
+    heygenConfig?: HeyGenConfig,
+    perplexityConfig?: PerplexityConfig
   ) {
     super();
     this.hyperbolicConfig = hyperbolicConfig;
@@ -38,6 +51,10 @@ export class ZapToolkit extends Toolkit {
     this.exaConfig = exaConfig;
     this.alchemyConfig = alchemyConfig;
     this.coingeckoConfig = coingeckoConfig;
+    this.heygenConfig = heygenConfig;
+    this.elevenlabsConfig = elevenlabsConfig;
+    this.browserbaseConfig = browserbaseConfig;
+    this.perplexityConfig = perplexityConfig;
     this.tools = this.initializeTools();
   }
 
@@ -83,6 +100,26 @@ export class ZapToolkit extends Toolkit {
       const instance = CoinGeckoConfig.getInstance();
       instance.setApiKey(this.coingeckoConfig.getApiKey() || '');
       instance.setProApiKey(this.coingeckoConfig.getProApiKey() || '');
+    }
+
+    if (this.heygenConfig) {
+      HeyGenConfig.resetInstance();
+      HeyGenConfig.getInstance({ apiKey: this.heygenConfig.getApiKey() || "" });
+    }
+
+    if (this.elevenlabsConfig) {
+      ElevenLabsConfig.resetInstance();
+      ElevenLabsConfig.getInstance({ apiKey: this.elevenlabsConfig.getApiKey() || "" });
+    }
+
+    if (this.browserbaseConfig) {
+      BrowserbaseConfig.resetInstance();
+      BrowserbaseConfig.getInstance({ apiKey: this.browserbaseConfig.getApiKey() || "" });
+    }
+
+    if (this.perplexityConfig) {
+      PerplexityConfig.resetInstance();
+      PerplexityConfig.getInstance({ apiKey: this.perplexityConfig.getApiKey() || "" });
     }
 
     const actions = ZAP_ACTIONS;

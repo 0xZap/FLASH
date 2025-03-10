@@ -143,8 +143,8 @@ importers:
   flash-langchain:
     dependencies:
       '@0xzap/flash':
-        specifier: 0.0.9
-        version: 0.0.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+        specifier: 0.0.10
+        version: 0.0.10(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@langchain/core':
         specifier: ^0.3.39
         version: 0.3.42(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))
@@ -184,6 +184,9 @@ packages:
 
   '@0xzap/flash-langchain@0.0.8':
     resolution: {integrity: sha512-g9Z1XUx6Y6rpH61l6DrYQ8icXOFs9Xzxq6I0MthIkPPOPc9/RUlEAY0MjC7muBbbrLIyW5M0IH+AgG1xNSX86g==}
+
+  '@0xzap/flash@0.0.10':
+    resolution: {integrity: sha512-4UENRQc6LwFf6RQyTjb02a1Khc8Rrfk6ts1l2xWNEjzYkzrPrbQM+be5n8xs+Z/JToOivKU+aKcU3qifibWMEA==}
 
   '@0xzap/flash@0.0.9':
     resolution: {integrity: sha512-0SXRU8k6gox5020x3Qsn0jZ26jsyivfv6qCUE/FEOVS7IhVgR0ec8ICbHxEG+PsFUvpm4qqEnefQM+WsQw68sQ==}
@@ -3392,6 +3395,33 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - debug
+      - encoding
+      - openai
+      - supports-color
+      - typescript
+      - utf-8-validate
+
+  '@0xzap/flash@0.0.10(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)':
+    dependencies:
+      '@browserbasehq/sdk': 2.3.0
+      '@browserbasehq/stagehand': 1.14.0(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(dotenv@16.4.7)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(utf-8-validate@5.0.10)(zod@3.24.2)
+      alchemy-sdk: 3.5.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      axios: 1.8.2
+      dotenv: 16.4.7
+      elevenlabs: 1.53.0
+      exa-js: 1.5.11
+      nock: 14.0.1
+      puppeteer: 24.4.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)
+      pyodide: 0.23.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      ssh2: 1.16.0
+      viem: 2.23.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2)
+      zod: 3.24.2
+    transitivePeerDependencies:
+      - '@playwright/test'
+      - bare-buffer
+      - bufferutil
+      - debug
+      - deepmerge
       - encoding
       - openai
       - supports-color
