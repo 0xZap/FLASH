@@ -15,7 +15,7 @@ export class ZapToolkit extends Toolkit {
   private coingeckoConfig?: CoinGeckoConfig;
   private heygenConfig?: HeyGenConfig;
   private elevenlabsConfig?: ElevenLabsConfig;
-  private browserbaseConfig?: BrowserbaseConfig;
+  // private browserbaseConfig?: BrowserbaseConfig;
   private perplexityConfig?: PerplexityConfig;
 
   /**
@@ -42,7 +42,7 @@ export class ZapToolkit extends Toolkit {
     elevenlabsConfig?: ElevenLabsConfig,
     heygenConfig?: HeyGenConfig,
     perplexityConfig?: PerplexityConfig,
-    browserbaseConfig?: BrowserbaseConfig
+    // browserbaseConfig?: BrowserbaseConfig
   ) {
     super();
     this.hyperbolicConfig = hyperbolicConfig;
@@ -53,7 +53,7 @@ export class ZapToolkit extends Toolkit {
     this.coingeckoConfig = coingeckoConfig;
     this.heygenConfig = heygenConfig;
     this.elevenlabsConfig = elevenlabsConfig;
-    this.browserbaseConfig = browserbaseConfig;
+    // this.browserbaseConfig = browserbaseConfig;
     this.perplexityConfig = perplexityConfig;
     this.tools = this.initializeTools();
   }
@@ -112,10 +112,10 @@ export class ZapToolkit extends Toolkit {
       ElevenLabsConfig.getInstance({ apiKey: this.elevenlabsConfig.getApiKey() || "" });
     }
 
-    if (this.browserbaseConfig) {
-      BrowserbaseConfig.resetInstance();
-      BrowserbaseConfig.getInstance({ apiKey: this.browserbaseConfig.getApiKey() || "" });
-    }
+    // if (this.browserbaseConfig) {
+    //   BrowserbaseConfig.resetInstance();
+    //   BrowserbaseConfig.getInstance({ apiKey: this.browserbaseConfig.getApiKey() || "" });
+    // }
 
     if (this.perplexityConfig) {
       PerplexityConfig.resetInstance();
