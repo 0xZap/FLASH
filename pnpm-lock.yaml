@@ -45,8 +45,8 @@ importers:
   example:
     dependencies:
       '@0xzap/flash':
-        specifier: 0.0.15
-        version: 0.0.15(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
+        specifier: 0.0.16
+        version: 0.0.16(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@0xzap/flash-langchain':
         specifier: 0.0.9
         version: 0.0.9(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
@@ -227,8 +227,8 @@ packages:
   '@0xzap/flash@0.0.14':
     resolution: {integrity: sha512-9ViBsTrFJQi7uLElNGYD2T3JVZtF5reN4R9+25qhVgzwt5kq/Z7PcpZPF4tMhzhxMgENpIxgLSeaDLvOxPyhVA==}
 
-  '@0xzap/flash@0.0.15':
-    resolution: {integrity: sha512-jljpa36MXGxoG0+T+exYMXh252mDmgrXqbhIiwXOwNkgXurnwbBJzbucr9l5RLaHL0WLHiMC/t5Dfht9jayfOQ==}
+  '@0xzap/flash@0.0.16':
+    resolution: {integrity: sha512-d0dTPoWSA/P7JEhQjbZEJD6raX8vD8/+zjkYiJpiTgC7NKj0TXqTiOSl5jzoDyOSRVBbMCdTQxHy10J/hfs0wQ==}
 
   '@adraffy/ens-normalize@1.11.0':
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
@@ -3752,7 +3752,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@0xzap/flash@0.0.15(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)':
+  '@0xzap/flash@0.0.16(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@0xzap/flash': 0.0.14(@playwright/test@1.51.0)(bufferutil@4.0.9)(deepmerge@4.3.1)(openai@4.86.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2))(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@browserbasehq/sdk': 2.3.0

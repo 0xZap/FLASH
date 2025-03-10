@@ -39,10 +39,10 @@ export class ZapToolkit extends Toolkit {
     exaConfig?: ExaConfig,
     alchemyConfig?: AlchemyConfig,
     coingeckoConfig?: CoinGeckoConfig,
-    browserbaseConfig?: BrowserbaseConfig,
     elevenlabsConfig?: ElevenLabsConfig,
     heygenConfig?: HeyGenConfig,
-    perplexityConfig?: PerplexityConfig
+    perplexityConfig?: PerplexityConfig,
+    browserbaseConfig?: BrowserbaseConfig
   ) {
     super();
     this.hyperbolicConfig = hyperbolicConfig;
