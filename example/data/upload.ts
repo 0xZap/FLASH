@@ -39,7 +39,7 @@ async function main() {
     console.log();
 
     // Initialize secret keys for different modes of operation
-    const numNodes = nilDB.nodes.length;
+    const numNodes = nilDB.getNodeCount();
     const additiveKey = nilql.ClusterKey.generate(
         { nodes: Array(numNodes).fill({}) },
         { sum: true }

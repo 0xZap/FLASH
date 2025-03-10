@@ -5,7 +5,7 @@
   },
   "description": "FLASH Framework-agnostic Library for Agentic System Hubs",
   "repository": "https://github.com/0xZap/flash",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "author": "Zap Labs",
   "license": "MIT",
   "main": "dist/index.js",
@@ -37,6 +37,7 @@
     "crypto"
   ],
   "dependencies": {
+    "@0xzap/flash": "^0.0.14",
     "@browserbasehq/sdk": "^2.3.0",
     "@browserbasehq/stagehand": "^1.14.0",
     "@nillion/nilql": "0.0.0-alpha.6",

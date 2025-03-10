@@ -18,13 +18,17 @@ export interface Node {
  * A class to manage distributed nilDB nodes for secure data storage and retrieval.
  */
 export class NilDB {
-    nodes: Node[];
+    private nodes: Node[];
 
     constructor(nodes: Node[]) {
         this.nodes = nodes.map(node => ({
             ...node,
             url: node.url.endsWith("/") ? node.url.slice(0, -1) : node.url
         }));
+    }
+
+    public getNodeCount(): number {
+        return this.nodes.length;
     }
 
     async initSchema(): Promise<void> {
