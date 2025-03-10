@@ -52,6 +52,8 @@ export * from "./config/zap_config";
 
 export * from "./config/exa_config";
 
+export * from "./config/browser_use_config";
+
 export * from "./config/alchemy_config";
 
 export * from "./config/coingecko_config";
