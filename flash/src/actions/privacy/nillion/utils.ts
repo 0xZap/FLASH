@@ -3,7 +3,7 @@
  */
 
 import { nilql } from '@nillion/nilql';
-import { pipeline } from '@xenova/transformers';
+// import { pipeline } from '@xenova/transformers';
 
 /**
  * Load text from a file and split it into paragraphs.
@@ -40,20 +40,21 @@ export async function generateEmbeddingsHuggingface(
     chunksOrQuery: string | string[],
     modelName: string = 'sentence-transformers/all-MiniLM-L6-v2'
 ): Promise<number[][]> {
-    const extractor = await pipeline('feature-extraction', modelName);
-    
+    // const extractor = await pipeline('feature-extraction', modelName);
+    // 
     // Handle both single string and array of strings
     const inputs = Array.isArray(chunksOrQuery) ? chunksOrQuery : [chunksOrQuery];
     
     // Process each input and extract embeddings
     const embeddings = await Promise.all(
         inputs.map(async (text) => {
-            const output = await extractor(text, { pooling: 'mean' });
-            return Array.from(output.data);
+            // const output = await extractor(text, { pooling: 'mean' });
+            // return Array.from(output.data);
+            return [];
         })
     );
     
-    return embeddings;
+    return embeddings as number[][];
 }
 
 /**
