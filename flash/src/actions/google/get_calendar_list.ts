@@ -2,52 +2,9 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
 import { GoogleConfig } from "../../config/google_config";
-// Schema for calendar entry response
-const CalendarEntrySchema = z.object({
-  id: z.string(),
-  summary: z.string().optional(),
-  description: z.string().optional(),
-  location: z.string().optional(),
-  timeZone: z.string().optional(),
-  colorId: z.string().optional(),
-  backgroundColor: z.string().optional(),
-  foregroundColor: z.string().optional(),
-  selected: z.boolean().optional(),
-  primary: z.boolean().optional(),
-  deleted: z.boolean().optional(),
-  accessRole: z.string().optional(),
-  defaultReminders: z
-    .array(
-      z.object({
-        method: z.string(),
-        minutes: z.number(),
-      }),
-    )
-    .optional(),
-});
+import { GetCalendarListSchema, GET_CALENDAR_LIST_PROMPT, GET_CALENDAR_LIST_ACTION_NAME, CalendarListResponseSchema } from "../../actions_schemas/google/get_calendar_list";
 
-// Schema for the calendar list response
-const CalendarListResponseSchema = z.object({
-  kind: z.string().optional(),
-  etag: z.string().optional(),
-  nextPageToken: z.string().optional(),
-  nextSyncToken: z.string().optional(),
-  items: z.array(CalendarEntrySchema).optional(),
-});
 
-// Input schema (empty as no inputs required)
-const GetCalendarListSchema = z.object({}).strict();
-
-const GET_CALENDAR_LIST_PROMPT = `
-This tool will get all calendars in the user's Google Calendar list.
-
-It does not take any inputs.
-
-Important notes:
-- Requires valid Google Calendar API authorization token
-- Returns list of calendars with their metadata
-- Includes primary calendar and all subscribed calendars
-`;
 
 /**
  * Get list of calendars from Google Calendar
@@ -99,7 +56,7 @@ export async function getCalendarList(): Promise<
  * Action class for getting Google Calendar list
  */
 export class GetCalendarListAction implements ZapAction<typeof GetCalendarListSchema> {
-  public name = "get_calendar_list";
+  public name = GET_CALENDAR_LIST_ACTION_NAME;
   public description = GET_CALENDAR_LIST_PROMPT;
   public schema = GetCalendarListSchema;
   public func = async (args: {}) => {

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../zap_action";
 import { Browserbase } from "@browserbasehq/sdk";
 import puppeteer from "puppeteer";
+import { ConnectBrowserbaseSchema, CONNECT_BROWSERBASE_PROMPT, CONNECT_BROWSERBASE_ACTION_NAME } from "../../actions_schemas/browserbase/connect_browser";
 
 // Define the configuration class for Browserbase
 export class BrowserbaseConfig {
@@ -44,56 +45,6 @@ export class BrowserbaseConfig {
     return this.projectId || process.env.BROWSERBASE_PROJECT_ID || null;
   }
 }
-
-// Input schema for connecting to Browserbase
-const ConnectBrowserbaseSchema = z
-  .object({
-    project_id: z
-      .string()
-      .optional()
-      .describe("The Browserbase project ID. If not provided, uses the configured default."),
-    session_name: z
-      .string()
-      .optional()
-      .describe("Optional name for the session for easier identification."),
-    timeout: z
-      .number()
-      .optional()
-      .default(60000)
-      .describe("Timeout in milliseconds for the connection (default: 60000)"),
-  })
-  .strict();
-
-const CONNECT_BROWSERBASE_PROMPT = `
-This tool creates and connects to a new Browserbase session.
-
-Optional inputs:
-- project_id: The Browserbase project ID (if not provided, uses the configured default)
-- session_name: Optional name for the session for easier identification
-- timeout: Timeout in milliseconds for the connection (default: 60000)
-
-Important notes:
-- Requires a valid Browserbase API key to be configured
-- Returns a session ID that can be used for browser automation
-- The browser will be launched in the cloud, not locally
-
-Example usage:
-To create a new session in the default project:
-\`\`\`
-{
-  "session_name": "My web automation session"
-}
-\`\`\`
-
-To create a session in a specific project:
-\`\`\`
-{
-  "project_id": "proj_abc123",
-  "session_name": "Product research",
-  "timeout": 120000
-}
-\`\`\`
-`;
 
 /**
  * Creates a new Browserbase session and connects to it.
@@ -153,7 +104,7 @@ Use this session ID for further browser automation operations.`;
  * Action to connect to a Browserbase session.
  */
 export class ConnectBrowserbaseAction implements ZapAction<typeof ConnectBrowserbaseSchema> {
-  public name = "connect_browserbase";
+  public name = CONNECT_BROWSERBASE_ACTION_NAME;
   public description = CONNECT_BROWSERBASE_PROMPT;
   public schema = ConnectBrowserbaseSchema;
 

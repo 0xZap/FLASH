@@ -2,57 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../../zap_action";
 import { HeyGenConfig } from "../../../config/heygen_config";
-
-// Input schema for listing voices
-const ListVoicesSchema = z
-  .object({
-    limit: z
-      .number()
-      .int()
-      .positive()
-      .optional()
-      .default(50)
-      .describe("Maximum number of results to return (default: 50)"),
-    page: z
-      .number()
-      .int()
-      .positive()
-      .optional()
-      .default(1)
-      .describe("Page number for pagination (default: 1)"),
-    gender: z
-      .enum(["female", "male"])
-      .optional()
-      .describe("Filter voices by gender (optional)"),
-    language: z
-      .string()
-      .optional()
-      .describe("Filter voices by language code (e.g., 'en-US', 'es-ES')"),
-  })
-  .strict();
-
-const LIST_VOICES_PROMPT = `
-This tool fetches available voices from HeyGen.
-
-Optional inputs:
-- limit: Maximum number of results to return (default: 50)
-- page: Page number for pagination (default: 1)
-- gender: Filter voices by gender ('female' or 'male')
-- language: Filter voices by language code (e.g., 'en-US', 'es-ES')
-
-The response provides a list of voices with their IDs, names, and other details.
-Use the voice_id in subsequent requests to generate videos.
-
-Example usage:
-\`\`\`
-{
-  "limit": 10,
-  "page": 1,
-  "gender": "female",
-  "language": "en-US"
-}
-\`\`\`
-`;
+import { LIST_VOICES_ACTION_NAME, ListVoicesSchema, LIST_VOICES_PROMPT } from "../../../actions_schemas/video/list_voices";
 
 /**
  * Fetches a list of available voices from HeyGen.
@@ -143,7 +93,7 @@ export async function listVoices(params: z.infer<typeof ListVoicesSchema>): Prom
  * Action to list available HeyGen voices.
  */
 export class ListVoicesAction implements ZapAction<typeof ListVoicesSchema> {
-  public name = "list_heygen_voices";
+  public name = LIST_VOICES_ACTION_NAME;
   public description = LIST_VOICES_PROMPT;
   public schema = ListVoicesSchema;
 

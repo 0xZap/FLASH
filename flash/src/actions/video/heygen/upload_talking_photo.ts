@@ -2,45 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../../zap_action";
 import { HeyGenConfig } from "../../../config/heygen_config";
-
-// Input schema for uploading talking photos
-const UploadTalkingPhotoSchema = z
-  .object({
-    photo_url: z
-      .string()
-      .url()
-      .describe("The URL of the photo to upload"),
-    
-    content_type: z
-      .enum(["image/jpeg", "image/png"])
-      .default("image/jpeg")
-      .describe("Content type of the image (default: image/jpeg)"),
-  })
-  .strict();
-
-const UPLOAD_TALKING_PHOTO_PROMPT = `
-This tool uploads a photo to HeyGen to create a "Talking Photo" that can be animated.
-
-Required inputs:
-- photo_url: The URL of the photo to upload
-
-Optional inputs:
-- content_type: Content type of the image ("image/jpeg" or "image/png", default: "image/jpeg")
-
-The photo should meet these requirements:
-- The face is intact and clearly visible
-- Recommend using real human faces
-- Only one face shows in the photo
-- The resolution of the face area is larger than 200x200 pixels
-
-Example usage:
-\`\`\`
-{
-  "photo_url": "https://example.com/photo.jpg",
-  "content_type": "image/jpeg"
-}
-\`\`\`
-`;
+import { UPLOAD_TALKING_PHOTO_ACTION_NAME, UploadTalkingPhotoSchema, UPLOAD_TALKING_PHOTO_PROMPT } from "../../../actions_schemas/video/upload_talking_photo";
 
 /**
  * Uploads a photo to create a HeyGen Talking Photo.
@@ -96,7 +58,7 @@ export async function uploadTalkingPhoto(params: z.infer<typeof UploadTalkingPho
  * Action to upload a talking photo to HeyGen.
  */
 export class UploadTalkingPhotoAction implements ZapAction<typeof UploadTalkingPhotoSchema> {
-  public name = "upload_heygen_talking_photo";
+  public name = UPLOAD_TALKING_PHOTO_ACTION_NAME;
   public description = UPLOAD_TALKING_PHOTO_PROMPT;
   public schema = UploadTalkingPhotoSchema;
 

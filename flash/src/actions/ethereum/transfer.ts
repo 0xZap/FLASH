@@ -5,38 +5,8 @@ import { WalletProvider } from "./utils/wallet";
 import { SupportedChain } from "./utils/types";
 import { privateKeyToAccount } from "viem/accounts";
 import { Chain, parseEther, type Hex } from "viem";
+import { TransferSchema, TRANSFER_PROMPT, TRANSFER_ACTION_NAME } from "../../actions_schemas/ethereum/transfer";
 
-// Schema for transfer parameters
-const TransferSchema = z.object({
-  fromChain: z
-    .enum(["sepolia", "base"] as const)
-    .describe("Chain to transfer from (e.g., 'sepolia', 'base')"),
-  toAddress: z
-    .string()
-    .describe("Destination wallet address"),
-  amount: z
-    .string()
-    .describe("Amount to transfer in native token units"),
-  data: z
-    .string()
-    .optional()
-    .describe("Additional transaction data")
-}).strict();
-
-const TRANSFER_PROMPT = `
-This tool allows you to transfer tokens between addresses on supported chains.
-
-Required inputs:
-- fromChain: The source chain (e.g., "sepolia", "base")
-- toAddress: The destination wallet address
-- amount: Amount to transfer in native token units
-- data: (Optional) Additional transaction data
-
-Important notes:
-- Requires valid private key for authentication
-- Supports Sepolia and Base networks
-- Returns transaction hash and details
-`;
 
 /**
  * Transfer tokens between addresses on supported chains
@@ -82,7 +52,7 @@ export async function transfer(params: z.infer<typeof TransferSchema>) {
  * Action class for transferring tokens between addresses
  */
 export class TransferAction implements ZapAction<typeof TransferSchema> {
-  public name = "transfer";
+  public name = TRANSFER_ACTION_NAME;
   public description = TRANSFER_PROMPT;
   public schema = TransferSchema;
   public func = (args: { [key: string]: any }) => 

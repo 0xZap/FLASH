@@ -1,34 +1,7 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { CoinGeckoConfig } from "../../../config/coingecko_config";
-
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the CoinGecko trending coins tool inputs
- * This endpoint doesn't require any parameters
- */
-const TrendingCoinsSchema = z.object({}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Documentation for the AI on how to use this tool
- */
-const TRENDING_COINS_PROMPT = `
-This tool fetches the top-7 trending coins on CoinGecko as searched by users in the last 24 hours.
-
-No inputs required.
-
-Example:
-- Basic usage: {}
-
-Important notes:
-- This endpoint is available on the free CoinGecko API plan
-- Rate limits apply (10-50 calls/minute depending on usage)
-- Results are updated every 24 hours
-- Trending coins are based on user search volume
-`;
+import { GET_TRENDING_COINS_ACTION_NAME, TRENDING_COINS_PROMPT, TrendingCoinsSchema } from "../../../actions_schemas/onchain_data/coingecko/get_trending_coins";
 
 /**
  * Interface for CoinGecko API response
@@ -233,7 +206,7 @@ export async function getTrendingCoins(): Promise<string> {
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetTrendingCoinsAction implements ZapAction<typeof TrendingCoinsSchema> {
-  public name = "get_trending_coins";
+  public name = GET_TRENDING_COINS_ACTION_NAME;
   public description = TRENDING_COINS_PROMPT;
   public schema = TrendingCoinsSchema;
   public config = CoinGeckoConfig.getInstance();

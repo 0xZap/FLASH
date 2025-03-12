@@ -2,37 +2,8 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { Alchemy, Network } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
+import { AccountsSchema, ACCOUNTS_PROMPT, GET_ACCOUNTS_ACTION_NAME } from "../../../actions_schemas/onchain_data/alchemy/get_accounts";
 
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the Alchemy accounts tool inputs
- */
-const AccountsSchema = z.object({
-  network: z.string().default("ETH_MAINNET").describe("The network to query (e.g., 'ETH_MAINNET', 'MATIC_MAINNET')"),
-}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Documentation for the AI on how to use this tool
- */
-const ACCOUNTS_PROMPT = `
-This tool fetches the list of addresses owned by the connected client using the Alchemy API (eth_accounts).
-
-Optional inputs:
-- network: The network to query (default: "ETH_MAINNET")
-  Other options: MATIC_MAINNET, MATIC_MUMBAI, ASTAR_MAINNET, OPT_MAINNET, ARB_MAINNET, etc.
-
-Examples:
-- Ethereum Mainnet: { "network": "ETH_MAINNET" }
-- Polygon/Matic: { "network": "MATIC_MAINNET" }
-
-Important notes:
-- Requires a valid Alchemy API key
-- This RPC method often returns an empty list as Alchemy nodes don't manage private keys
-- More useful in environments where the node controls accounts (like MetaMask)
-`;
 
 /**
  * Maps network string to Alchemy Network enum
@@ -120,7 +91,7 @@ export async function getAccounts(inputs: z.infer<typeof AccountsSchema>): Promi
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetAccountsAction implements ZapAction<typeof AccountsSchema> {
-  public name = "get_accounts";
+  public name = GET_ACCOUNTS_ACTION_NAME;
   public description = ACCOUNTS_PROMPT;
   public schema = AccountsSchema;
   public config = AlchemyConfig.getInstance();

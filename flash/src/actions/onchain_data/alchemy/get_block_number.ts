@@ -2,39 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { Alchemy, Network } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
-
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the Alchemy block number tool inputs
- */
-const BlockNumberSchema = z.object({
-  network: z.string().default("ETH_MAINNET").describe("The network to query (e.g., 'ETH_MAINNET', 'MATIC_MAINNET')"),
-}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Documentation for the AI on how to use this tool
- */
-const BLOCK_NUMBER_PROMPT = `
-This tool fetches the latest block number from a specified blockchain network using the Alchemy API.
-
-Optional inputs:
-- network: The network to query (default: "ETH_MAINNET")
-  Other options: MATIC_MAINNET, MATIC_MUMBAI, ASTAR_MAINNET, OPT_MAINNET, ARB_MAINNET, etc.
-
-Examples:
-- Ethereum Mainnet: { "network": "ETH_MAINNET" }
-- Polygon/Matic: { "network": "MATIC_MAINNET" }
-- Arbitrum: { "network": "ARB_MAINNET" }
-
-Important notes:
-- Requires a valid Alchemy API key
-- The block number represents the current height of the blockchain
-- Used for various purposes including transaction confirmation tracking and chain synchronization
-`;
-
+import { BlockNumberSchema, GET_BLOCK_NUMBER_ACTION_NAME, BLOCK_NUMBER_PROMPT } from "../../../actions_schemas/onchain_data/alchemy/get_block_number";
 /**
  * Maps network string to Alchemy Network enum
  * @param networkString Network string (e.g., "ETH_MAINNET")
@@ -112,7 +80,7 @@ export async function getBlockNumber(inputs: z.infer<typeof BlockNumberSchema>):
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetBlockNumberAction implements ZapAction<typeof BlockNumberSchema> {
-  public name = "get_block_number";
+  public name = GET_BLOCK_NUMBER_ACTION_NAME;
   public description = BLOCK_NUMBER_PROMPT;
   public schema = BlockNumberSchema;
   public config = AlchemyConfig.getInstance();

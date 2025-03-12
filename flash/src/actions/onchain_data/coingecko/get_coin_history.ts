@@ -1,37 +1,7 @@
 import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { CoinGeckoConfig } from "../../../config/coingecko_config";
-
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the input parameters of the tool
- */
-const CoinHistorySchema = z.object({
-  id: z.string().describe("The ID of the coin to fetch historical data for (e.g., 'bitcoin', 'ethereum')"),
-  date: z.string().describe("The date in DD-MM-YYYY format (e.g., '30-12-2020')"),
-  localization: z.boolean().optional().describe("Include localized data (default: false)"),
-}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Description of what the tool does and how to use it
- */
-const COIN_HISTORY_PROMPT = `
-Get historical data for a specific cryptocurrency by its ID on a specific date.
-
-This tool fetches snapshot data for a cryptocurrency at a specific point in time, including:
-- Price
-- Market cap
-- Volume
-- Community data
-- Developer data
-
-Example usage:
-- Get Bitcoin data from December 31, 2020: \`{ "id": "bitcoin", "date": "31-12-2020" }\`
-- Get Ethereum data from January 1, 2021: \`{ "id": "ethereum", "date": "01-01-2021" }\`
-`;
+import { CoinHistorySchema, COIN_HISTORY_PROMPT, GET_COIN_HISTORY_ACTION_NAME } from "../../../actions_schemas/onchain_data/coingecko/get_coin_history";
 
 /**
  * Step 3: Implement Function
@@ -173,7 +143,7 @@ function formatHistoryData(data: any, inputs: z.infer<typeof CoinHistorySchema>)
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetCoinHistoryAction implements ZapAction<typeof CoinHistorySchema> {
-  public name = "get_coin_history";
+  public name = GET_COIN_HISTORY_ACTION_NAME;
   public description = COIN_HISTORY_PROMPT;
   public schema = CoinHistorySchema;
   public config = CoinGeckoConfig.getInstance();

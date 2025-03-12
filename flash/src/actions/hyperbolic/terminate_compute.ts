@@ -2,24 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
 import { HyperbolicConfig } from "../../config/hyperbolic_config";
-
-// Schema for terminate compute input
-const TerminateComputeSchema = z
-  .object({
-    instance_id: z.string().describe("The ID of the instance to terminate"),
-  })
-  .strict();
-
-const TERMINATE_COMPUTE_PROMPT = `
-This tool allows you to terminate a GPU instance on the Hyperbolic platform.
-It takes the following input:
-- instance_id: The ID of the instance to terminate (e.g., "respectful-rose-pelican")
-
-Important notes:
-- The instance ID must be valid and active
-- After termination, the instance will no longer be accessible
-- You can get instance IDs using the GetGPUStatus Action
-`;
+import { TerminateComputeSchema, TERMINATE_COMPUTE_PROMPT, TERMINATE_COMPUTE_ACTION_NAME } from "../../actions_schemas/hyperbolic/terminate_compute";
 
 /**
  * Terminates a marketplace instance using the Hyperbolic API.
@@ -67,7 +50,7 @@ export async function terminateCompute(instance_id: string): Promise<string> {
  * Action to terminate compute instances on the Hyperbolic platform.
  */
 export class TerminateComputeAction implements ZapAction<typeof TerminateComputeSchema> {
-  public name = "terminate_compute";
+  public name = TERMINATE_COMPUTE_ACTION_NAME;
   public description = TERMINATE_COMPUTE_PROMPT;
   public schema = TerminateComputeSchema;
   public func = (args: { [key: string]: any }) => terminateCompute(args.instance_id);

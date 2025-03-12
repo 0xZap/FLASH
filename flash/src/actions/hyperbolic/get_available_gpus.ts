@@ -2,37 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
 import { HyperbolicConfig } from "../../config/hyperbolic_config";
-
-// Schema for GPU response data
-const GpuSchema = z.object({
-  model: z.string(),
-  memory: z.number(),
-  price: z.number(),
-  available: z.number(),
-  total: z.number(),
-  location: z.string(),
-  node_id: z.string(),
-  cluster_name: z.string(),
-  compute_power: z.number(),
-  clock_speed: z.number(),
-  storage_capacity: z.number(),
-  ram_capacity: z.number(),
-  cpu_cores: z.number(),
-  status: z.string(),
-});
-
-// Input schema (empty as no inputs required)
-const GetAvailableGpusSchema = z.object({}).strict();
-
-const GET_AVAILABLE_GPUS_PROMPT = `
-This tool will get all the available GPU machines on the Hyperbolic platform.
-
-It does not take any following inputs
-
-Important notes:
-- Authorization key is required for this operation
-- The GPU prices are in CENTS per hour
-`;
+import { GetAvailableGpusSchema, GpuSchema, GET_AVAILABLE_GPUS_PROMPT, GET_AVAILABLE_GPUS_ACTION_NAME } from "../../actions_schemas/hyperbolic/get_available_gpus";
 
 /**
  * Get available GPUs from Hyperbolic platform.
@@ -140,7 +110,7 @@ export async function getAvailableGpus() {
  * Action to get available GPUs from Hyperbolic platform.
  */
 export class getAvailableGpusAction implements ZapAction<typeof GetAvailableGpusSchema> {
-  public name = "get_available_gpus";
+  public name = GET_AVAILABLE_GPUS_ACTION_NAME;
   public description = GET_AVAILABLE_GPUS_PROMPT;
   public schema = GetAvailableGpusSchema;
   public config = HyperbolicConfig.getInstance();

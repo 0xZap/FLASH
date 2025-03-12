@@ -2,31 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../../zap_action";
 import { HeyGenConfig } from "../../../config/heygen_config";
-
-// Input schema for checking video status
-const CheckVideoStatusSchema = z
-  .object({
-    video_id: z
-      .string()
-      .describe("The ID of the video to check"),
-  })
-  .strict();
-
-const CHECK_VIDEO_STATUS_PROMPT = `
-This tool checks the status of a HeyGen video generation process.
-
-Required inputs:
-- video_id: The ID of the video to check (from generate_heygen_avatar_video or generate_heygen_talking_photo_video)
-
-The response provides the current status of the video, and if completed, the URL to access it.
-
-Example usage:
-\`\`\`
-{
-  "video_id": "7f6754ab-cd3e-40a4-8645-e45151c9a9b1"
-}
-\`\`\`
-`;
+import { CheckVideoStatusSchema, CHECK_VIDEO_STATUS_PROMPT, CHECK_VIDEO_STATUS_ACTION_NAME } from "../../../actions_schemas/video/check_video_status";
 
 /**
  * Waits for video generation to complete, with a maximum of specified attempts.
@@ -143,7 +119,7 @@ export async function checkVideoStatus(params: z.infer<typeof CheckVideoStatusSc
  * Action to check the status of a HeyGen video.
  */
 export class CheckVideoStatusAction implements ZapAction<typeof CheckVideoStatusSchema> {
-  public name = "check_heygen_video_status";
+  public name = CHECK_VIDEO_STATUS_ACTION_NAME;
   public description = CHECK_VIDEO_STATUS_PROMPT;
   public schema = CheckVideoStatusSchema;
 

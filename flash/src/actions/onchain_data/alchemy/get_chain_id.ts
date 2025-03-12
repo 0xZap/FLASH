@@ -2,38 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { Alchemy, Network } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
-
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the Alchemy chain ID tool inputs
- */
-const ChainIdSchema = z.object({
-  network: z.string().default("ETH_MAINNET").describe("The network to query (e.g., 'ETH_MAINNET', 'MATIC_MAINNET')"),
-}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Documentation for the AI on how to use this tool
- */
-const CHAIN_ID_PROMPT = `
-This tool fetches the chain ID of a blockchain network using the Alchemy API.
-
-Optional inputs:
-- network: The network to query (default: "ETH_MAINNET")
-  Other options: MATIC_MAINNET, MATIC_MUMBAI, ASTAR_MAINNET, OPT_MAINNET, ARB_MAINNET, etc.
-
-Examples:
-- Ethereum Mainnet: { "network": "ETH_MAINNET" }
-- Polygon/Matic: { "network": "MATIC_MAINNET" }
-- Arbitrum: { "network": "ARB_MAINNET" }
-
-Important notes:
-- Requires a valid Alchemy API key
-- The chain ID is a unique identifier for each blockchain network
-- Used for various purposes including transaction signing and network identification
-`;
+import { ChainIdSchema, CHAIN_ID_PROMPT, GET_CHAIN_ID_ACTION_NAME } from "../../../actions_schemas/onchain_data/alchemy/get_chain_id";
 
 /**
  * Maps network string to Alchemy Network enum
@@ -149,7 +118,7 @@ export async function getChainId(inputs: z.infer<typeof ChainIdSchema>): Promise
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetChainIdAction implements ZapAction<typeof ChainIdSchema> {
-  public name = "get_chain_id";
+  public name = GET_CHAIN_ID_ACTION_NAME;
   public description = CHAIN_ID_PROMPT;
   public schema = ChainIdSchema;
   public config = AlchemyConfig.getInstance();

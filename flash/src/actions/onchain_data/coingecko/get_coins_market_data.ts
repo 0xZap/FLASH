@@ -2,59 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { CoinGeckoConfig } from "../../../config/coingecko_config";
 import { formatNumber, formatLargeNumber, formatSupply } from "./helpers";
-
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the CoinGecko coins market data tool inputs
- */
-const CoinsMarketDataSchema = z.object({
-  vs_currency: z.string().optional().default("usd").describe("The target currency (e.g., 'usd', 'eur', 'jpy')"),
-  ids: z.array(z.string()).optional().describe("List of coin IDs to filter by (e.g., ['bitcoin', 'ethereum'])"),
-  category: z.string().optional().describe("Filter by coin category"),
-  order: z.enum([
-    "market_cap_desc", "market_cap_asc", 
-    "volume_desc", "volume_asc", 
-    "id_desc", "id_asc", 
-    "gecko_desc", "gecko_asc"
-  ]).optional().default("market_cap_desc").describe("Sort results by field"),
-  per_page: z.number().optional().default(10).describe("Number of results per page (max 250)"),
-  page: z.number().optional().default(1).describe("Page number"),
-  sparkline: z.boolean().optional().default(false).describe("Include sparkline 7d data"),
-  price_change_percentage: z.array(z.enum(["1h", "24h", "7d", "14d", "30d", "200d", "1y"])).optional().describe("Include price change percentage for specified time periods"),
-}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Documentation for the AI on how to use this tool
- */
-const COINS_MARKET_DATA_PROMPT = `
-This tool fetches cryptocurrency market data from the CoinGecko API.
-
-Optional inputs:
-- vs_currency: The target currency (default: 'usd')
-- ids: List of coin IDs to filter by (e.g., ['bitcoin', 'ethereum'])
-- category: Filter by coin category
-- order: Sort results by field (default: 'market_cap_desc')
-  Options: 'market_cap_desc', 'market_cap_asc', 'volume_desc', 'volume_asc', 'id_desc', 'id_asc', 'gecko_desc', 'gecko_asc'
-- per_page: Number of results per page, max 250 (default: 10)
-- page: Page number (default: 1)
-- sparkline: Include sparkline 7d data (default: false)
-- price_change_percentage: Include price change percentage for specified time periods
-  Options: ['1h', '24h', '7d', '14d', '30d', '200d', '1y']
-
-Examples:
-- Basic usage: {}
-- Top 5 by market cap: { "per_page": 5 }
-- Specific coins: { "ids": ["bitcoin", "ethereum", "solana"] }
-- With price changes: { "price_change_percentage": ["1h", "24h", "7d"] }
-
-Important notes:
-- This endpoint is available on the free CoinGecko API plan
-- Rate limits apply (10-50 calls/minute depending on usage)
-- For large result sets, use pagination with 'page' and 'per_page' parameters
-`;
+import { CoinsMarketDataSchema, COINS_MARKET_DATA_PROMPT, GET_COINS_MARKET_DATA_ACTION_NAME } from "../../../actions_schemas/onchain_data/coingecko/get_coins_market_data";
 
 /**
  * Interface for CoinGecko API response
@@ -229,7 +177,7 @@ export async function getCoinsMarketData(inputs: z.infer<typeof CoinsMarketDataS
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetCoinsMarketDataAction implements ZapAction<typeof CoinsMarketDataSchema> {
-  public name = "get_coins_market_data";
+  public name = GET_COINS_MARKET_DATA_ACTION_NAME;
   public description = COINS_MARKET_DATA_PROMPT;
   public schema = CoinsMarketDataSchema;
   public config = CoinGeckoConfig.getInstance();

@@ -2,47 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { Alchemy, Network } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
-import { TokenMetadataResponse } from "alchemy-sdk";
-
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the Alchemy token metadata tool inputs
- */
-const TokenMetadataSchema = z.object({
-  contractAddress: z.string().describe("The token contract address to fetch metadata for"),
-  network: z.string().default("ETH_MAINNET").describe("The network to query (e.g., 'ETH_MAINNET', 'MATIC_MAINNET')"),
-}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Documentation for the AI on how to use this tool
- */
-const TOKEN_METADATA_PROMPT = `
-This tool fetches detailed metadata for a token contract using the Alchemy API.
-
-Required inputs:
-- contractAddress: The token contract address to fetch metadata for
-
-Optional inputs:
-- network: The network to query (default: "ETH_MAINNET")
-  Other options: MATIC_MAINNET, MATIC_MUMBAI, ASTAR_MAINNET, etc.
-
-Examples:
-- Basic usage: {
-    "contractAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
-  }
-- On Polygon network: {
-    "contractAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-    "network": "MATIC_MAINNET"
-  }
-
-Important notes:
-- Requires a valid Alchemy API key
-- Returns token metadata including name, symbol, decimals, and logo
-- Some tokens may have incomplete metadata
-`;
+import { TokenMetadataSchema, TOKEN_METADATA_PROMPT, GET_TOKEN_METADATA_ACTION_NAME } from "../../../actions_schemas/onchain_data/alchemy/get_token_metadata";
 
 /**
  * Maps network string to Alchemy Network enum
@@ -128,7 +88,7 @@ export async function getTokenMetadata(inputs: z.infer<typeof TokenMetadataSchem
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetTokenMetadataAction implements ZapAction<typeof TokenMetadataSchema> {
-  public name = "get_token_metadata";
+  public name = GET_TOKEN_METADATA_ACTION_NAME;
   public description = TOKEN_METADATA_PROMPT;
   public schema = TokenMetadataSchema;
   public config = AlchemyConfig.getInstance();

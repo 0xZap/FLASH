@@ -2,41 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { Alchemy } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
-
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the Alchemy token price tool inputs
- */
-const TokenPriceSchema = z.object({
-  symbols: z.array(z.string()).min(1).describe("Array of token symbols to fetch prices for (e.g., ['ETH', 'BTC'])"),
-  currencies: z.array(z.string()).optional().default(["USD"]).describe("Array of currencies to convert to (e.g., ['USD', 'EUR'])"),
-}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Documentation for the AI on how to use this tool
- */
-const TOKEN_PRICE_PROMPT = `
-This tool fetches current cryptocurrency prices using the Alchemy Price API.
-
-Required inputs:
-- symbols: Array of token symbols to fetch prices for (e.g., ['ETH', 'BTC', 'USDT'])
-
-Optional inputs:
-- currencies: Array of currencies to convert to (default: ['USD'])
-
-Examples:
-- Basic price check: { "symbols": ["ETH", "BTC"] }
-- Multi-currency check: { "symbols": ["ETH"], "currencies": ["USD", "EUR"] }
-
-Important notes:
-- Requires a valid Alchemy API key
-- Token symbols are case-sensitive
-- Results include the current price and last update time
-`;
-
+import { TokenPriceSchema, TOKEN_PRICE_PROMPT, GET_TOKEN_PRICES_ACTION_NAME } from "../../../actions_schemas/onchain_data/alchemy/get_token_prices";
 /**
  * Step 3: Implement Tool Function
  * 
@@ -104,7 +70,7 @@ export async function getTokenPrices(inputs: z.infer<typeof TokenPriceSchema>): 
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetTokenPricesAction implements ZapAction<typeof TokenPriceSchema> {
-  public name = "get_token_prices";
+  public name = GET_TOKEN_PRICES_ACTION_NAME;
   public description = TOKEN_PRICE_PROMPT;
   public schema = TokenPriceSchema;
   public config = AlchemyConfig.getInstance();

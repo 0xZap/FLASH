@@ -2,40 +2,7 @@ import { z } from "zod";
 import { ZapAction } from "../../zap_action";
 import { Alchemy, Network, Utils } from "alchemy-sdk";
 import { AlchemyConfig } from "../../../config/alchemy_config";
-
-/**
- * Step 1: Define Input Schema
- * 
- * Schema for the Alchemy gas price tool inputs
- */
-const GasPriceSchema = z.object({
-  network: z.string().default("ETH_MAINNET").describe("The network to query (e.g., 'ETH_MAINNET', 'MATIC_MAINNET')"),
-}).strict();
-
-/**
- * Step 2: Create Tool Prompt
- * 
- * Documentation for the AI on how to use this tool
- */
-const GAS_PRICE_PROMPT = `
-This tool fetches the current gas price from a blockchain network using the Alchemy API (eth_gasPrice).
-
-Optional inputs:
-- network: The network to query (default: "ETH_MAINNET")
-  Other options: MATIC_MAINNET, MATIC_MUMBAI, ASTAR_MAINNET, OPT_MAINNET, ARB_MAINNET, etc.
-
-Examples:
-- Ethereum Mainnet: { "network": "ETH_MAINNET" }
-- Polygon/Matic: { "network": "MATIC_MAINNET" }
-- Arbitrum: { "network": "ARB_MAINNET" }
-
-Important notes:
-- Requires a valid Alchemy API key
-- Returns the current gas price in Wei, Gwei, and native currency units
-- For EIP-1559 networks, this returns the base fee + priority fee estimate
-- Used for estimating transaction costs and determining appropriate gas prices
-`;
-
+import { GasPriceSchema, GAS_PRICE_PROMPT, GET_GAS_PRICE_ACTION_NAME } from "../../../actions_schemas/onchain_data/alchemy/get_gas_price";
 /**
  * Maps network string to Alchemy Network enum
  * @param networkString Network string (e.g., "ETH_MAINNET")
@@ -202,7 +169,7 @@ export async function getGasPrice(inputs: z.infer<typeof GasPriceSchema>): Promi
  * Class that implements the ZapAction interface to register the tool
  */
 export class GetGasPriceAction implements ZapAction<typeof GasPriceSchema> {
-  public name = "get_gas_price";
+  public name = GET_GAS_PRICE_ACTION_NAME;
   public description = GAS_PRICE_PROMPT;
   public schema = GasPriceSchema;
   public config = AlchemyConfig.getInstance();

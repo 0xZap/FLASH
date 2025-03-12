@@ -2,51 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
 import { GoogleConfig } from "../../config/google_config";
-
-// Schema for Gmail messages response
-const GmailMessageSchema = z.object({
-  id: z.string(),
-  threadId: z.string(),
-  labelIds: z.array(z.string()).optional(),
-  snippet: z.string().optional(),
-  historyId: z.string().optional(),
-  internalDate: z.string().optional(),
-  payload: z.any().optional(), // Can be detailed further if needed
-  sizeEstimate: z.number().optional(),
-  raw: z.string().optional(),
-});
-
-const GmailListResponseSchema = z.object({
-  messages: z.array(GmailMessageSchema).optional(),
-  nextPageToken: z.string().optional(),
-  resultSizeEstimate: z.number().optional(),
-});
-
-// Input schema for the list Gmail function
-const ListGmailSchema = z
-  .object({
-    q: z.string().optional().describe("Gmail query string for filtering messages"),
-  })
-  .strict();
-
-const LIST_GMAIL_PROMPT = `
-This tool will list Gmail messages using the Gmail API.
-
-Optional inputs:
-- q: Gmail query string for filtering messages (see https://support.google.com/mail/answer/7190?hl=en)
-
-Example queries:
-- "in:inbox" - Messages in inbox
-- "is:unread" - Unread messages
-- "from:example@domain.com" - Messages from specific sender
-- "subject:hello" - Messages with specific subject
-- "after:2024/01/01" - Messages after date
-
-Important notes:
-- Requires valid Gmail API authorization token
-- Returns list of messages with metadata
-- Query parameter supports complex Gmail search syntax
-`;
+import { ListGmailSchema, LIST_GMAIL_PROMPT, LIST_GMAIL_ACTION_NAME, GmailListResponseSchema } from "../../actions_schemas/google/list_gmail";
 
 /**
  * List Gmail messages with optional query filtering
@@ -104,7 +60,7 @@ export async function listGmail(
  * Action class for listing Gmail messages
  */
 export class ListGmailAction implements ZapAction<typeof ListGmailSchema> {
-  public name = "list_gmail";
+  public name = LIST_GMAIL_ACTION_NAME;
   public description = LIST_GMAIL_PROMPT;
   public schema = ListGmailSchema;
   public func = async (args: { q?: string }) => {

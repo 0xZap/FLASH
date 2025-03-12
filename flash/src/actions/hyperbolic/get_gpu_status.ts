@@ -2,59 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
 import { HyperbolicConfig } from "../../config/hyperbolic_config";
-
-// Schema for GPU instance response data
-const GpuInstanceSchema = z.object({
-  id: z.string(),
-  status: z.string(),
-  start_time: z.string(),
-  ssh_command: z.string(),
-  hardware: z.object({
-    gpus: z.array(
-      z.object({
-        model: z.string(),
-        ram: z.number(),
-        compute_power: z.number(),
-        clock_speed: z.number(),
-      }),
-    ),
-    storage: z.array(
-      z.object({
-        capacity: z.number(),
-      }),
-    ),
-    ram: z.array(
-      z.object({
-        capacity: z.number(),
-      }),
-    ),
-    cpus: z.array(
-      z.object({
-        virtual_cores: z.number(),
-      }),
-    ),
-  }),
-  pricing: z.object({
-    price: z.object({
-      amount: z.number(),
-    }),
-  }),
-});
-
-// Input schema (empty as no inputs required)
-const GetGpuStatusSchema = z.object({}).strict();
-
-const GET_GPU_STATUS_PROMPT = `
-This tool will get the status of all your currently rented GPU instances on the Hyperbolic platform.
-
-It does not take any inputs
-
-Important notes:
-- Authorization key is required for this operation
-- The GPU prices are in CENTS per hour
-- Provides SSH access commands for each instance
-- Shows hardware specifications and current status
-`;
+import { GetGpuStatusSchema, GET_GPU_STATUS_PROMPT, GET_GPU_STATUS_ACTION_NAME } from "../../actions_schemas/hyperbolic/get_gpu_status";
 
 /**
  * Get status of rented GPU instances from Hyperbolic platform.
@@ -137,7 +85,7 @@ ${instance.ssh_command ? `- SSH Access: ${instance.ssh_command}` : "- SSH Access
  * Action to get GPU instance status from Hyperbolic platform.
  */
 export class getGpuStatusAction implements ZapAction<typeof GetGpuStatusSchema> {
-  public name = "get_gpu_status";
+  public name = GET_GPU_STATUS_ACTION_NAME;
   public description = GET_GPU_STATUS_PROMPT;
   public schema = GetGpuStatusSchema;
   public func = getGpuStatus;

@@ -2,35 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../zap_action";
 import { HyperbolicConfig } from "../../config/hyperbolic_config";
-
-// Update the schemas to match the actual API responses
-const BalanceSchema = z.object({
-  credits: z.number(),
-});
-
-const PurchaseHistorySchema = z.object({
-  purchase_history: z.array(
-    z.object({
-      amount: z.number(),
-      timestamp: z.string(),
-    }),
-  ),
-});
-
-// Input schema (empty as no inputs required)
-const GetCurrentBalanceSchema = z.object({}).strict();
-
-const GET_CURRENT_BALANCE_PROMPT = `
-This tool retrieves your current Hyperbolic platform credit balance.
-It shows:
-- Available Hyperbolic platform credits in your account (in USD)
-- Recent credit purchase history
-
-Note: This is NOT for checking cryptocurrency wallet balances (ETH/USDC).
-For crypto wallet balances, please use a different command.
-
-No input parameters required.
-`;
+import { BalanceSchema, PurchaseHistorySchema, GET_CURRENT_BALANCE_PROMPT, GET_CURRENT_BALANCE_ACTION_NAME, GetCurrentBalanceSchema } from "../../actions_schemas/hyperbolic/get_current_balance";
 
 /**
  * Get current balance from Hyperbolic platform.
@@ -107,7 +79,7 @@ export async function getCurrentBalance(httpClient = axios) {
  * Action to get current balance from Hyperbolic platform.
  */
 export class getCurrentBalanceAction implements ZapAction<typeof GetCurrentBalanceSchema> {
-  public name = "get_current_balance";
+  public name = GET_CURRENT_BALANCE_ACTION_NAME;
   public description = GET_CURRENT_BALANCE_PROMPT;
   public schema = GetCurrentBalanceSchema;
   public func = () => getCurrentBalance();

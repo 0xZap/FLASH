@@ -2,45 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import { ZapAction } from "../../zap_action";
 import { HeyGenConfig } from "../../../config/heygen_config";
-
-// Input schema for listing avatars
-const ListAvatarsSchema = z
-  .object({
-    limit: z
-      .number()
-      .int()
-      .positive()
-      .optional()
-      .default(50)
-      .describe("Maximum number of results to return (default: 50)"),
-    page: z
-      .number()
-      .int()
-      .positive()
-      .optional()
-      .default(1)
-      .describe("Page number for pagination (default: 1)"),
-  })
-  .strict();
-
-const LIST_AVATARS_PROMPT = `
-This tool fetches available avatars from HeyGen, including instant avatars.
-
-Optional inputs:
-- limit: Maximum number of results to return (default: 50)
-- page: Page number for pagination (default: 1)
-
-The response provides a list of avatars with their IDs, names, and other details.
-Use the avatar_id in subsequent requests to generate videos.
-
-Example usage:
-\`\`\`
-{
-  "limit": 10,
-  "page": 1
-}
-\`\`\`
-`;
+import { ListAvatarsSchema, LIST_AVATARS_PROMPT, LIST_AVATARS_ACTION_NAME } from "../../../actions_schemas/video/list_avatars";
 
 /**
  * Fetches a list of available avatars from HeyGen.
@@ -112,7 +74,7 @@ export async function listAvatars(params: z.infer<typeof ListAvatarsSchema>): Pr
  * Action to list available HeyGen avatars.
  */
 export class ListAvatarsAction implements ZapAction<typeof ListAvatarsSchema> {
-  public name = "list_heygen_avatars";
+  public name = LIST_AVATARS_ACTION_NAME;
   public description = LIST_AVATARS_PROMPT;
   public schema = ListAvatarsSchema;
 
